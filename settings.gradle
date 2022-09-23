@@ -1,0 +1,3 @@
+rootProject.name = 'cargotracking'
+include 'core'
+include 'web'
