@@ -1,6 +1,7 @@
-about:
-  applicationName: Cargo Tracking
-  version: 0.0.1-SNAPSHOT
+app:
+  info:
+    applicationName: Cargo Tracking
+    version: 0.0.1-SNAPSHOT
 spring:
   jpa:
     show-sql: true
