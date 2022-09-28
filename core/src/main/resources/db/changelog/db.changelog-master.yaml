@@ -1,0 +1,14 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: _fakeId
+      author: _fakeAuthor
+      changes:
+        - createTable:
+            tableName: _fakeTable
+            remarks: _fake
+            columns:
+              - column:
+                  name: _fakeId
+                  type: integer
+                  autoIncrement: true
