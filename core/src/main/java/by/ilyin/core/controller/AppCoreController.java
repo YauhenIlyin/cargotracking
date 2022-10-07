@@ -10,16 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-public class CargoTrackingCoreController {
+public class AppCoreController {
 
     private final AppInfoService appInfoService;
 
     @GetMapping("/about")
     public AppInfoDTO getAppInfo() {
-        System.out.println(appInfoService);
-        AppInfoDTO appInfoDTO;
-        appInfoDTO = appInfoService.getAppInfo();
-        return appInfoDTO;
+        return appInfoService.getAppInfo();
     }
 
 }
