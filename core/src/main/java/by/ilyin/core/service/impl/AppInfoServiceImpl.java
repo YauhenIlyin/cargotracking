@@ -14,8 +14,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 
     @Override
     public AppInfoDTO getAppInfo() {
-        AppInfoDTO appInfoDTO;
-        appInfoDTO = new AppInfoDTO(applicationName, version);
-        return appInfoDTO;
+        return new AppInfoDTO(applicationName, version);
     }
+
 }
