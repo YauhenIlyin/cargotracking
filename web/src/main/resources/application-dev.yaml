@@ -4,3 +4,6 @@ feign:
   client:
     core:
       url: localhost:8090
+cors:
+  allowed:
+    origins: localhost:8080, localhost:8181
