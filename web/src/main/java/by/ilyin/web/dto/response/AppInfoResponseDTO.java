@@ -1,9 +1,9 @@
-package by.ilyin.web.entity.dto;
+package by.ilyin.web.dto.response;
 
 import lombok.Data;
 
 @Data
-public class AppInfoDTO {
+public class AppInfoResponseDTO {
 
     private String applicationName;
     private String version;
