@@ -132,7 +132,6 @@ public class CustomUserService {
 
     //todo fieldNames storage
     private Specification takeGetUsersSpecification(GetUsersRequestDTO getUsersRequestDTO) {
-        System.out.println(getUsersRequestDTO);
         FiltrationBuilder filtrationBuilder = FiltrationBuilder.getBuilder()
                 .addCriteria(
                         getUsersRequestDTO.getName() != null,
