@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "profileCoreFeignClient", url = "${feign.client.core.url}")
-public interface ProfileFeignClient {
+public interface ProfileCoreFeignClient {
 
     @PutMapping(value = "/api/profile", consumes = "application/json")
     CustomUser updateCurrentProfile(@RequestParam("userId") Long userId,
