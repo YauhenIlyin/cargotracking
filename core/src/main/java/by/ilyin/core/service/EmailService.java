@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    
+
     private final EmailProcessManager emailProcessManager;
     private final EmailDTOMapper emailDTOMapper;
 
