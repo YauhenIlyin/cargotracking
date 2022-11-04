@@ -1,20 +1,14 @@
 package by.ilyin.web.dto.response;
 
-import by.ilyin.web.dto.request.CreateUserRequestDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import by.ilyin.web.dto.CustomUserDTO;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class GetUsersResponseDTO {
 
-    private List<CreateUserRequestDTO> content;
+    private List<CustomUserDTO> content;
     private long totalElements;
 
 }

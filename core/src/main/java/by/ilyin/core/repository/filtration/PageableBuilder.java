@@ -30,7 +30,7 @@ public class PageableBuilder {
 
     public PageableBuilder addSortParameter(String sortField, String sortType) {
         //todo validate field
-        Sort.Order currentOrder = null;
+        Sort.Order currentOrder;
         if (Sort.Direction.DESC.name().equals(sortType)) {
             currentOrder = Sort.Order.desc(sortField);
         } else {

@@ -5,13 +5,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-public class CustomUser {
+@Data
+public class CustomUser extends BaseEntity {
 
     private long id;
     private String name;

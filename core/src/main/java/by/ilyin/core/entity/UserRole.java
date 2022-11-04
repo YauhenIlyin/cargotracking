@@ -1,5 +1,6 @@
 package by.ilyin.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "user_roles")
-public class UserRole {
+public class UserRole extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -23,6 +24,7 @@ public class UserRole {
     @Enumerated(EnumType.STRING)
     private UserRoleType roleType;
 
+    @JsonIgnore
     @ToString.Exclude
     @ManyToMany(mappedBy = "userRoles")
     private List<CustomUser> users;
@@ -33,7 +35,7 @@ public class UserRole {
         DISPATCHER,
         MANAGER,
         DRIVER,
-        COMPANY_OWNER;
+        COMPANY_OWNER
     }
 
     @Override

@@ -1,18 +1,13 @@
-package by.ilyin.web.dto.request;
+package by.ilyin.core.dto;
 
-import by.ilyin.web.entity.UserRole;
+import by.ilyin.core.entity.UserRole;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-@ToString
-public class CreateUserRequestDTO {
+@Data
+public class CustomUserDTO {
 
     private String name;
     private String surname;

@@ -1,16 +1,21 @@
 package by.ilyin.core.dto.response;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class CreateUserResponseDTO {
 
     private String currentUserURI;
 
     public CreateUserResponseDTO(long id) {
-        this.currentUserURI = "api/users/{" + id + "}"; //todo ask Egor how to store "current uri"
+        StringBuilder currentUrnSB = new StringBuilder();
+        currentUrnSB
+                .append("/api/users/{")
+                .append(id)
+                .append("}");
+        this.currentUserURI = currentUrnSB.toString();
     }
 
 }

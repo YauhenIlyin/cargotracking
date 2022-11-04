@@ -1,9 +1,7 @@
 package by.ilyin.core.service;
 
+import by.ilyin.core.dto.CustomUserDTO;
 import by.ilyin.core.dto.mapper.CustomUserDTOMapper;
-import by.ilyin.core.dto.request.CreateUserRequestDTO;
-import by.ilyin.core.dto.request.DeleteUserRequestDTO;
-import by.ilyin.core.dto.request.GetUsersRequestDTO;
 import by.ilyin.core.dto.request.UpdateUserRequestDTO;
 import by.ilyin.core.dto.response.*;
 import by.ilyin.core.entity.CustomUser;
@@ -12,16 +10,18 @@ import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.repository.CustomUserRepository;
 import by.ilyin.core.repository.UserRoleRepository;
 import by.ilyin.core.repository.filtration.FiltrationBuilder;
-import by.ilyin.core.repository.filtration.PageableBuilder;
 import by.ilyin.core.repository.filtration.specification.FieldCriteriaTypes;
+import by.ilyin.core.util.ResponseManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -34,29 +34,22 @@ public class CustomUserService {
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
-    public CreateUserResponseDTO createUser(CreateUserRequestDTO createUserRequestDTO) {
-        CustomUser customUser = customUserDTOMapper.createUserRequestDtoToCustomUser(createUserRequestDTO);
-        List<UserRole> realUserRoleList = getRealUserRoles(createUserRequestDTO.getUserRoles());
+    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
+        CustomUser customUser = customUserDTOMapper.mapDtoToUser(customUserDTO);
+        List<UserRole> realUserRoleList = getRealUserRoles(customUserDTO.getUserRoles());
         if (realUserRoleList.size() > 0) {
             customUser.setUserRoles(new HashSet<>(realUserRoleList));
         } else {
             //todo throw exception
         }
-        Optional<CustomUser> optionalRealUser = Optional.of(customUserRepository.save(customUser));
-        CreateUserResponseDTO createUserResponseDTO = null;
-        if (optionalRealUser.isPresent()) {
-            long userId = optionalRealUser.get().getId();
-            createUserResponseDTO = new CreateUserResponseDTO(userId);
-        } else {
-            //todo throw exception
-        }
-        return createUserResponseDTO;
+        CustomUser realUser = customUserRepository.save(customUser);
+        return new CreateUserResponseDTO(realUser.getId());
     }
 
     @Transactional
-    public UpdateUserResponseDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity updateUser(long id, UpdateUserRequestDTO updateUserRequestDTO) {
         Optional<CustomUser> optionalCustomUser;
-        optionalCustomUser = customUserRepository.findCustomUserById(updateUserRequestDTO.getId());
+        optionalCustomUser = customUserRepository.findById(id);
         if (optionalCustomUser.isPresent()) {
             CustomUser customUser = optionalCustomUser.get();
             List<UserRole> realRolesList = getRealUserRoles(updateUserRequestDTO.getUserRoles());
@@ -72,7 +65,7 @@ public class CustomUserService {
             customUser.setHouse(updateUserRequestDTO.getHouse());
             customUser.setFlat(updateUserRequestDTO.getFlat());
             customUser.setLogin(updateUserRequestDTO.getLogin());
-            if (updateUserRequestDTO.isChangePassword()) {
+            if (updateUserRequestDTO.getIsChangePassword()) {
                 customUser.setPassword(updateUserRequestDTO.getPassword());
             }
             customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
@@ -82,131 +75,142 @@ public class CustomUserService {
         } else {
             //todo throw exception
         }
-        return new UpdateUserResponseDTO();
+        return ResponseManager.getEmptyJsonResponseEntity();
     }
 
     @Transactional
-    public DeleteUserResponseDTO deleteUser(DeleteUserRequestDTO deleteUserRequestDTO) {
-        customUserRepository.deleteCustomUsersByIdIsIn(deleteUserRequestDTO.getUserIdList());
-        return new DeleteUserResponseDTO();
+    public ResponseEntity deleteUser(List<Long> userIdList) {
+        customUserRepository.deleteCustomUsersByIdIsIn(userIdList);
+        return ResponseManager.getEmptyJsonResponseEntity();
     }
 
-    public GetUsersResponseDTO getUsers(GetUsersRequestDTO getUsersRequestDTO) {
-        Pageable pageable = takeGetUsersPageable(getUsersRequestDTO);
-        Specification specification = takeGetUsersSpecification(getUsersRequestDTO);
-        Page page = customUserRepository.findAll(specification, pageable);
-        List<CustomUser> userList = page.getContent();
-        List<CreateUserRequestDTO> createUserRequestDTOList = new ArrayList<>();
-        CreateUserRequestDTO createUserRequestDTO;
-        for (CustomUser user : userList) {
-            createUserRequestDTO = customUserDTOMapper.customUserToCreateUserRequestDto(user);
-            List<UserRole.UserRoleType> userRoleTypeList;
-            userRoleTypeList = convertRolesSetToRolesTypeList(user.getUserRoles());
-            createUserRequestDTO.setUserRoles(userRoleTypeList);
-            createUserRequestDTOList.add(createUserRequestDTO);
+    public Page<CustomUser> getUsers(
+            String name,
+            String surname,
+            String patronymic,
+            String beforeBornDate,
+            String afterBornDate,
+            String town,
+            String street,
+            String house,
+            String flat,
+            List<String> userRoles,
+            Pageable pageable) {
+        Map<String, Object> filterValues = new HashMap<>();
+        if (beforeBornDate != null) {
+            filterValues.put("beforeBornDate", LocalDate.parse(beforeBornDate));
         }
-        GetUsersResponseDTO getUsersResponseDTO = new GetUsersResponseDTO();
-        getUsersResponseDTO.setContent(createUserRequestDTOList);
-        getUsersResponseDTO.setTotalElements(page.getTotalElements());
-        return getUsersResponseDTO;
+        if (afterBornDate != null) {
+            filterValues.put("afterBornDate", LocalDate.parse(afterBornDate));
+        }
+        filterValues.put("name", name);
+        filterValues.put("surname", surname);
+        filterValues.put("patronymic", patronymic);
+        filterValues.put("town", town);
+        filterValues.put("street", street);
+        filterValues.put("house", house);
+        filterValues.put("flat", flat);
+        if (userRoles != null) {
+            List<UserRole.UserRoleType> roleTypeList = new ArrayList<>();
+            UserRole.UserRoleType typeContainer;
+            for (String currentUserRole : userRoles) {
+                typeContainer = UserRole.UserRoleType.valueOf(currentUserRole);
+                roleTypeList.add(typeContainer);
+            }
+            filterValues.put("userRoles", roleTypeList);
+        }
+        Specification<CustomUser> specification = takeGetUsersSpecification(filterValues);
+        return customUserRepository.findAll(specification, pageable);
     }
 
-    public GetUserResponseDTO getUser(long id) {
-        Optional<CustomUser> optionalUser = customUserRepository.findCustomUserById(id);
-        if (optionalUser.isEmpty()) {
+    public CustomUserDTO getUser(long id) {
+        Optional<CustomUser> optionalUser = customUserRepository.findById(id);
+        CustomUserDTO customUserDTO = null;
+        if (optionalUser.isPresent()) {
+            CustomUser user = optionalUser.get();
+            customUserDTO = customUserDTOMapper.mapUserToDto(user);
+            List<UserRole.UserRoleType> userRoleTypeList;
+            userRoleTypeList = convertRolesSetToList(user.getUserRoles());
+            customUserDTO.setUserRoles(userRoleTypeList);
+        } else {
             //todo throw exception
         }
-        CustomUser user = optionalUser.get();
-        GetUserResponseDTO getUserResponseDTO = customUserDTOMapper.customUserToGetUserResponseDTO(user);
-        List<UserRole.UserRoleType> userRoleTypeList;
-        userRoleTypeList = convertRolesSetToRolesTypeList(user.getUserRoles());
-        getUserResponseDTO.setUserRoles(userRoleTypeList);
-        return getUserResponseDTO;
+        return customUserDTO;
     }
 
-    private Pageable takeGetUsersPageable(GetUsersRequestDTO getUsersRequestDTO) {
-        return PageableBuilder.getBuilder()
-                .addPageSizeNumber(getUsersRequestDTO.getPageNumber(), getUsersRequestDTO.getPageSize())
-                .build();
-    }
-
-    //todo fieldNames storage
-    private Specification takeGetUsersSpecification(GetUsersRequestDTO getUsersRequestDTO) {
-        FiltrationBuilder filtrationBuilder = FiltrationBuilder.getBuilder()
+    private Specification<CustomUser> takeGetUsersSpecification(Map<String, Object> filterValues) {
+        FiltrationBuilder<CustomUser> filtrationBuilder = ((FiltrationBuilder<CustomUser>) FiltrationBuilder
+                .getBuilder())
                 .addCriteria(
-                        getUsersRequestDTO.getName() != null,
+                        filterValues.get("name") != null,
                         "name",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getName())
+                        filterValues.get("name"))
                 .addCriteria(
-                        getUsersRequestDTO.getSurname() != null,
+                        filterValues.get("surname") != null,
                         "surname",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getSurname())
+                        filterValues.get("surname"))
                 .addCriteria(
-                        getUsersRequestDTO.getPatronymic() != null,
+                        filterValues.get("patronymic") != null,
                         "patronymic",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getPatronymic())
+                        filterValues.get("patronymic"))
                 .addCriteria(
-                        getUsersRequestDTO.getBeforeBornDate() != null,
+                        filterValues.get("beforeBornDate") != null,
                         "bornDate",
                         KeyWords.FILTER_OPERATION_MORE,
-                        getUsersRequestDTO.getBeforeBornDate())
+                        filterValues.get("beforeBornDate"))
                 .addCriteria(
-                        getUsersRequestDTO.getAfterBornDate() != null,
+                        filterValues.get("afterBornDate") != null,
                         "bornDate",
                         KeyWords.FILTER_OPERATION_LESS,
-                        getUsersRequestDTO.getAfterBornDate())
+                        filterValues.get("afterBornDate"))
                 .addCriteria(
-                        getUsersRequestDTO.getTown() != null,
+                        filterValues.get("town") != null,
                         "town",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getTown())
+                        filterValues.get("town"))
                 .addCriteria(
-                        getUsersRequestDTO.getStreet() != null,
+                        filterValues.get("street") != null,
                         "street",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getStreet())
+                        filterValues.get("street"))
                 .addCriteria(
-                        getUsersRequestDTO.getHouse() != null,
+                        filterValues.get("house") != null,
                         "house",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getHouse())
+                        filterValues.get("house"))
                 .addCriteria(
-                        getUsersRequestDTO.getFlat() != null,
+                        filterValues.get("flat") != null,
                         "flat",
                         KeyWords.FILTER_OPERATION_EQUALS,
-                        getUsersRequestDTO.getFlat());
-        List<UserRole> realUserRoles = getRealUserRoles(getUsersRequestDTO.getUserRoles());
-        if (realUserRoles != null && realUserRoles.size() > 0) {
-            int sizeUserRoles = realUserRoles.size();
-            for (int index = 0; index < sizeUserRoles; ++index) {
-                filtrationBuilder.addCriteria(
-                        realUserRoles.get(index) != null,
-                        "userRoles",
-                        KeyWords.FILTER_OPERATION_EQUALS_SET_FIELD_ELEMENT,
-                        index + "",
-                        realUserRoles);
-            }
+                        filterValues.get("flat"));
+        List<UserRole> realUserRoles = getRealUserRoles((List<UserRole.UserRoleType>) filterValues.get("userRoles"));
+        for (UserRole currentUserRole : realUserRoles) {
+            filtrationBuilder.addCriteria(
+                    currentUserRole != null,
+                    "userRoles",
+                    KeyWords.FILTER_OPERATION_EQUALS_SET_FIELD_ELEMENT,
+                    currentUserRole);
         }
         return filtrationBuilder.build(fieldCriteriaTypes);
     }
 
     private List<UserRole> getRealUserRoles(List<UserRole.UserRoleType> dtoUserRoles) {
-        List<UserRole> userRoleList = null;
+        List<UserRole> realUserRoleList = null;
         if (dtoUserRoles != null) {
-            userRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
+            realUserRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
         }
-        return userRoleList;
+        return realUserRoleList;
     }
 
-    private List<UserRole.UserRoleType> convertRolesSetToRolesTypeList(Set<UserRole> userRolesSet) {
+    private List<UserRole.UserRoleType> convertRolesSetToList(Set<UserRole> userRolesSet) {
         List<UserRole.UserRoleType> userRoleTypeList = null;
         if (userRolesSet != null) {
             userRoleTypeList = new ArrayList<>();
-            for (UserRole userRole : userRolesSet) {
-                userRoleTypeList.add(userRole.getRoleType());
+            for (UserRole currentUserRole : userRolesSet) {
+                userRoleTypeList.add(currentUserRole.getRoleType());
             }
         }
         return userRoleTypeList;

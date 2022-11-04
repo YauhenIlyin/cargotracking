@@ -1,8 +1,6 @@
 package by.ilyin.core.dto.mapper;
 
-import by.ilyin.core.dto.request.CreateUserRequestDTO;
-import by.ilyin.core.dto.request.UpdateUserRequestDTO;
-import by.ilyin.core.dto.response.GetUserResponseDTO;
+import by.ilyin.core.dto.CustomUserDTO;
 import by.ilyin.core.entity.CustomUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,15 +9,9 @@ import org.mapstruct.Mapping;
 public interface CustomUserDTOMapper {
 
     @Mapping(target = "userRoles", ignore = true)
-    CustomUser createUserRequestDtoToCustomUser(CreateUserRequestDTO createUserRequestDTO);
+    CustomUser mapDtoToUser(CustomUserDTO customUserDTO);
 
     @Mapping(target = "userRoles", ignore = true)
-    CreateUserRequestDTO customUserToCreateUserRequestDto(CustomUser customUser);
-
-    CustomUser updateUserRequestDtoToCustomUser(UpdateUserRequestDTO updateUserRequestDTO);
-
-    @Mapping(target = "userRoles", ignore = true)
-    GetUserResponseDTO customUserToGetUserResponseDTO(CustomUser customUser);
-
+    CustomUserDTO mapUserToDto(CustomUser customUser);
 
 }

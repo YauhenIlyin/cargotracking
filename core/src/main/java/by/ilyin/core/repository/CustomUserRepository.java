@@ -6,24 +6,31 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CustomUserRepository extends JpaRepository<CustomUser, Long>, JpaSpecificationExecutor<CustomUser> {
 
-    CustomUser save(CustomUser customUser);
+    @NonNull
+    CustomUser save(@NonNull CustomUser customUser);
 
-    void delete(CustomUser customUser);
+    @Override
+    void delete(@NonNull CustomUser customUser);
 
     void deleteCustomUsersByIdIsIn(List<Long> idList);
 
-    Page<CustomUser> findAll(Pageable pageable);
+    @NonNull
+    @Override
+    Page<CustomUser> findAll(@NonNull Pageable pageable);
 
-    Page<CustomUser> findAll(Specification specification, Pageable pageable);
+    @NonNull
+    @Override
+    Page<CustomUser> findAll(Specification specification, @NonNull Pageable pageable);
 
-    Optional<CustomUser> findCustomUserById(long id);
-
-    Optional<CustomUser> findCustomUserByLogin(String login);
+    @NonNull
+    @Override
+    Optional<CustomUser> findById(@NonNull Long id);
 
 }

@@ -1,14 +1,14 @@
 package by.ilyin.web.controller;
 
+import by.ilyin.web.dto.CustomUserDTO;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
-import by.ilyin.web.exception.CustomUserWebException;
 import by.ilyin.web.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,30 +17,23 @@ public class UserWebController {
 
     private final CustomUserService customUserService;
 
-    @PostMapping("")
-    public String createUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO,
-                             BindingResult bindingResult) throws CustomUserWebException {
-        CreateUserResponseDTO createUserResponseDTO = customUserService.createUser(createUserRequestDTO, bindingResult);
-        return createUserResponseDTO.getCurrentUserURI();
+    @PostMapping
+    public String createUser(@RequestBody @Valid CustomUserDTO customUserDTO) {
+        return customUserService.createUser(customUserDTO).getCurrentUserURI();
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable("id") long id,
-                             @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
-        updateUserRequestDTO.setId(id);
-        UpdateUserResponseDTO updateUserResponseDTO = customUserService.updateUser(updateUserRequestDTO);
-        return updateUserResponseDTO.getResultStr();
+    public UpdateUserResponseDTO updateUser(@PathVariable("id") long id,
+                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        return customUserService.updateUser(id, updateUserRequestDTO);
     }
 
-    @DeleteMapping("")
-    public String deleteUser(@RequestBody DeleteUsersRequestDTO deleteUsersRequestDTO) {
-        DeleteUsersResponseDTO deleteUsersResponseDTO = customUserService.deleteUser(deleteUsersRequestDTO);
-        return deleteUsersResponseDTO.getResultStr();
+    @DeleteMapping
+    public DeleteUsersResponseDTO deleteUser(@RequestBody List<Long> userIdList) {
+        return customUserService.deleteUser(userIdList);
     }
 
-    //todo ddos attack case?
-    //todo validate size of array ?
-    @GetMapping("")
+    @GetMapping
     public GetUsersResponseDTO getUsers(
             @RequestParam(required = false, value = "name") String name,
             @RequestParam(required = false, value = "surname") String surname,
@@ -51,27 +44,26 @@ public class UserWebController {
             @RequestParam(required = false, value = "street") String street,
             @RequestParam(required = false, value = "house") String house,
             @RequestParam(required = false, value = "flat") String flat,
-            @RequestParam(required = false, value = "userRoles") String[] userRoles,
-            @RequestParam(required = false, value = "pageSize") String pageSize,
-            @RequestParam(required = false, value = "pageNumber") String pageNumber) {
-        GetUsersRequestDTO getUsersRequestDTO = new GetUsersRequestDTO();
-        getUsersRequestDTO.setName(name);
-        getUsersRequestDTO.setSurname(surname);
-        getUsersRequestDTO.setPatronymic(patronymic);
-        getUsersRequestDTO.setBeforeBornDate(beforeBornDate);
-        getUsersRequestDTO.setAfterBornDate(afterBornDate);
-        getUsersRequestDTO.setTown(town);
-        getUsersRequestDTO.setStreet(street);
-        getUsersRequestDTO.setHouse(house);
-        getUsersRequestDTO.setFlat(flat);
-        getUsersRequestDTO.setUserRoles(userRoles);
-        getUsersRequestDTO.setPageSize(pageSize);
-        getUsersRequestDTO.setPageNumber(pageNumber);
-        return customUserService.getUsers(getUsersRequestDTO);
+            @RequestParam(required = false, value = "userRoles") List<String> userRoles,
+            @RequestParam(required = false, value = "pageSize") Integer pageSize,
+            @RequestParam(required = false, value = "pageNumber") Integer pageNumber) {
+        return customUserService.getUsers(
+                name,
+                surname,
+                patronymic,
+                beforeBornDate,
+                afterBornDate,
+                town,
+                street,
+                house,
+                flat,
+                userRoles,
+                pageSize,
+                pageNumber);
     }
 
     @GetMapping("/{id}")
-    public GetUserResponseDTO getUser(@PathVariable("id") long id) {
+    public CustomUserDTO getUser(@PathVariable("id") long id) {
         return customUserService.getUserById(id);
     }
 

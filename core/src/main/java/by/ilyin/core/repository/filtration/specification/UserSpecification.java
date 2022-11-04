@@ -1,33 +1,32 @@
 package by.ilyin.core.repository.filtration.specification;
 
+import by.ilyin.core.entity.BaseEntity;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.evidence.KeyWords;
+import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.*;
 
-//todo generics
-public class UserSpecification implements Specification<CustomUser> {
+@AllArgsConstructor
+public class UserSpecification<T extends BaseEntity> implements Specification<CustomUser>{
 
     private SearchCriteria criteria;
 
-    public UserSpecification(SearchCriteria userSearchCriteria) {
-        this.criteria = userSearchCriteria;
-    }
-
     @Override
-    public Predicate toPredicate(Root<CustomUser> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(@NonNull Root<CustomUser> root, @NonNull CriteriaQuery<?> query, @NonNull CriteriaBuilder builder) {
         Predicate predicate;
         String criteriaOperation = criteria.getOperation();
         switch (criteriaOperation) {
             case KeyWords.FILTER_OPERATION_MORE:
                 predicate = builder.greaterThanOrEqualTo(
-                        root.<String>get(criteria.getFieldName()), criteria.getValue().toString()
+                        root.get(criteria.getFieldName()), criteria.getValue().toString()
                 );
                 break;
             case KeyWords.FILTER_OPERATION_LESS:
                 predicate = builder.lessThanOrEqualTo(
-                        root.<String>get(criteria.getFieldName()), criteria.getValue().toString()
+                        root.get(criteria.getFieldName()), criteria.getValue().toString()
                 );
                 break;
             case KeyWords.FILTER_OPERATION_EQUALS:

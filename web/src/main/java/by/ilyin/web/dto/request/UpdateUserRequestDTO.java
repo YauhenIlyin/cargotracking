@@ -9,15 +9,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Data
 public class UpdateUserRequestDTO {
-
-    private long id;
 
     @Size(max = 20, message = "Name must be no more than 20 characters long")
     private String name;
@@ -63,10 +56,10 @@ public class UpdateUserRequestDTO {
     @Size(max = 50, message = "Issued by field must be no more than 50 characters long")
     private String issuedBy;
 
-    @Size(min = 1, message = "User roles count must not be less than 1")
+    @Size(min = 1, message = "User roles amount must not be less than 1")
     private List<UserRole.UserRoleType> userRoles;
 
     @NotEmpty
-    private boolean isChangePassword;
+    private Boolean isChangePassword;
 
 }

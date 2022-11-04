@@ -4,11 +4,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 public class DeleteUserRequestDTO {
 
     private List<Long> userIdList;

@@ -2,11 +2,7 @@ package by.ilyin.web.dto.request;
 
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 public class GetUsersRequestDTO {
 
     private String name;

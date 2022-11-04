@@ -1,16 +1,12 @@
 package by.ilyin.web.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserRole {
+public class UserRole extends BaseEntity {
 
     private long id;
-    private UserRoleType userRole;
+    private UserRoleType roleType;
 
     public enum UserRoleType {
         SYS_ADMIN,
@@ -18,7 +14,24 @@ public class UserRole {
         DISPATCHER,
         MANAGER,
         DRIVER,
-        COMPANY_OWNER;
+        COMPANY_OWNER
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserRole userRole1 = (UserRole) o;
+        return roleType == userRole1.roleType;
+    }
+
+    @Override
+    public int hashCode() {
+        return roleType.hashCode();
     }
 
 }

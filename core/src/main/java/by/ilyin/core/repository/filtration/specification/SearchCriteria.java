@@ -1,18 +1,15 @@
 package by.ilyin.core.repository.filtration.specification;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import by.ilyin.core.entity.BaseEntity;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class SearchCriteria {
+@Data
+public class SearchCriteria<T extends BaseEntity> {
 
     private String fieldName;
     private String operation;
     private Object value;
-    private boolean isAndCriteria = Boolean.FALSE;
+    private boolean fieldConditionCriterionIsAnd = Boolean.FALSE;
 
     public SearchCriteria(String fieldName, String operation, Object value) {
         this.fieldName = fieldName;
