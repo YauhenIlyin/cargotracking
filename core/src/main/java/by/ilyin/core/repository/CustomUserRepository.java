@@ -13,23 +13,14 @@ import java.util.Optional;
 
 public interface CustomUserRepository extends JpaRepository<CustomUser, Long>, JpaSpecificationExecutor<CustomUser> {
 
-    @NonNull
-    CustomUser save(@NonNull CustomUser customUser);
+    void deleteByIdIsIn(List<Long> idList);
 
-    @Override
-    void delete(@NonNull CustomUser customUser);
-
-    void deleteCustomUsersByIdIsIn(List<Long> idList);
-
-    @NonNull
     @Override
     Page<CustomUser> findAll(@NonNull Pageable pageable);
 
-    @NonNull
     @Override
     Page<CustomUser> findAll(Specification specification, @NonNull Pageable pageable);
 
-    @NonNull
     @Override
     Optional<CustomUser> findById(@NonNull Long id);
 

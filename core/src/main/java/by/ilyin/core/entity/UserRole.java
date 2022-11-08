@@ -43,16 +43,18 @@ public class UserRole extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        UserRole userRole1 = (UserRole) o;
-        return roleType == userRole1.roleType;
+        UserRole userRole = (UserRole) o;
+        return id == userRole.id && roleType == userRole.roleType;
     }
 
     @Override
     public int hashCode() {
-        return roleType.hashCode();
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (roleType != null ? roleType.hashCode() : 0);
+        return result;
     }
 
 }

@@ -8,7 +8,6 @@ import by.ilyin.core.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +26,13 @@ public class UserCoreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable("id") long id,
-                                     @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<UpdateUserResponseDTO> updateUser(@PathVariable("id") long id,
+                                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         return customUserService.updateUser(id, updateUserRequestDTO);
     }
 
     @DeleteMapping
-    public ResponseEntity deleteUsers(@RequestBody List<Long> userIdList) {
+    public ResponseEntity<DeleteUserResponseDTO> deleteUsers(@RequestBody List<Long> userIdList) {
         return customUserService.deleteUser(userIdList);
     }
 
@@ -48,7 +47,7 @@ public class UserCoreController {
                                      @RequestParam(required = false, value = "house") String house,
                                      @RequestParam(required = false, value = "flat") String flat,
                                      @RequestParam(required = false, value = "userRoles") List<String> userRoles,
-                                     @PageableDefault(page = 0, size = 10) Pageable pageable) {
+                                     Pageable pageable) {
         return customUserService.getUsers(
                 name,
                 surname,
@@ -64,7 +63,7 @@ public class UserCoreController {
     }
 
     @GetMapping("/{id}")
-    public CustomUserDTO getUserById(@PathVariable("id") long id) {
+    public CustomUser getUserById(@PathVariable("id") long id) {
         return customUserService.getUser(id);
     }
 

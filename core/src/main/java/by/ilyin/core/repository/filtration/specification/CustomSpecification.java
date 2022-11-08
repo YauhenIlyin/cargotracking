@@ -1,7 +1,6 @@
 package by.ilyin.core.repository.filtration.specification;
 
 import by.ilyin.core.entity.BaseEntity;
-import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.evidence.KeyWords;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,12 +9,12 @@ import org.springframework.lang.NonNull;
 import javax.persistence.criteria.*;
 
 @AllArgsConstructor
-public class UserSpecification<T extends BaseEntity> implements Specification<CustomUser>{
+public class CustomSpecification<T extends BaseEntity> implements Specification<T> {
 
-    private SearchCriteria criteria;
+    private SearchCriteria<T> criteria;
 
     @Override
-    public Predicate toPredicate(@NonNull Root<CustomUser> root, @NonNull CriteriaQuery<?> query, @NonNull CriteriaBuilder builder) {
+    public Predicate toPredicate(@NonNull Root<T> root, @NonNull CriteriaQuery<?> query, @NonNull CriteriaBuilder builder) {
         Predicate predicate;
         String criteriaOperation = criteria.getOperation();
         switch (criteriaOperation) {

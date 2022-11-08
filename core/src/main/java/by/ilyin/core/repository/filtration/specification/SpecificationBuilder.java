@@ -35,13 +35,12 @@ public class SpecificationBuilder<T extends BaseEntity> {
         if (params.size() > 0) {
             List<Specification<T>> specs = new ArrayList<>();
             for (SearchCriteria<T> currentCriteria : params) {
-                specs.add(new UserSpecification(currentCriteria));
+                specs.add(new CustomSpecification<>(currentCriteria));
             }
             String currentCriteriaName = params.get(0).getFieldName();
             boolean currentConditionIsAnd = fieldCriteriaTypes.fieldConditionIsAnd(currentCriteriaName);
             result = specs.get(0);
-            int paramsSize = params.size();
-            for (int i = 1; i < paramsSize; i++) {
+            for (int i = 1; i < params.size(); i++) {
                 result = currentConditionIsAnd ?
                         Specification.where(result).and(specs.get(i)) :
                         Specification.where(result).or(specs.get(i));

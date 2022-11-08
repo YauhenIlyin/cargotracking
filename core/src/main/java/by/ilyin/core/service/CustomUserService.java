@@ -11,12 +11,12 @@ import by.ilyin.core.repository.CustomUserRepository;
 import by.ilyin.core.repository.UserRoleRepository;
 import by.ilyin.core.repository.filtration.FiltrationBuilder;
 import by.ilyin.core.repository.filtration.specification.FieldCriteriaTypes;
-import by.ilyin.core.util.ResponseManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -31,29 +31,24 @@ public class CustomUserService {
     private final CustomUserRepository customUserRepository;
     private final UserRoleRepository userRoleRepository;
     private final CustomUserDTOMapper customUserDTOMapper;
+    private final FiltrationBuilder<CustomUser> userFiltrationBuilder;
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
     public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
         CustomUser customUser = customUserDTOMapper.mapDtoToUser(customUserDTO);
-        List<UserRole> realUserRoleList = getRealUserRoles(customUserDTO.getUserRoles());
-        if (realUserRoleList.size() > 0) {
-            customUser.setUserRoles(new HashSet<>(realUserRoleList));
-        } else {
-            //todo throw exception
-        }
+        customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
         CustomUser realUser = customUserRepository.save(customUser);
         return new CreateUserResponseDTO(realUser.getId());
     }
 
     @Transactional
-    public ResponseEntity updateUser(long id, UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<UpdateUserResponseDTO> updateUser(long id, UpdateUserRequestDTO updateUserRequestDTO) {
         Optional<CustomUser> optionalCustomUser;
         optionalCustomUser = customUserRepository.findById(id);
         if (optionalCustomUser.isPresent()) {
             CustomUser customUser = optionalCustomUser.get();
-            List<UserRole> realRolesList = getRealUserRoles(updateUserRequestDTO.getUserRoles());
-            HashSet<UserRole> realRolesSet = new HashSet<>(realRolesList);
+            Set<UserRole> realRolesSet = getRealUserRoleSet(updateUserRequestDTO.getUserRoles());
             customUser.setName(updateUserRequestDTO.getName());
             customUser.setSurname(updateUserRequestDTO.getSurname());
             customUser.setPatronymic(updateUserRequestDTO.getPatronymic());
@@ -75,13 +70,13 @@ public class CustomUserService {
         } else {
             //todo throw exception
         }
-        return ResponseManager.getEmptyJsonResponseEntity();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity deleteUser(List<Long> userIdList) {
-        customUserRepository.deleteCustomUsersByIdIsIn(userIdList);
-        return ResponseManager.getEmptyJsonResponseEntity();
+    public ResponseEntity<DeleteUserResponseDTO> deleteUser(List<Long> userIdList) {
+        customUserRepository.deleteByIdIsIn(userIdList);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public Page<CustomUser> getUsers(
@@ -123,24 +118,16 @@ public class CustomUserService {
         return customUserRepository.findAll(specification, pageable);
     }
 
-    public CustomUserDTO getUser(long id) {
+    public CustomUser getUser(long id) {
         Optional<CustomUser> optionalUser = customUserRepository.findById(id);
-        CustomUserDTO customUserDTO = null;
-        if (optionalUser.isPresent()) {
-            CustomUser user = optionalUser.get();
-            customUserDTO = customUserDTOMapper.mapUserToDto(user);
-            List<UserRole.UserRoleType> userRoleTypeList;
-            userRoleTypeList = convertRolesSetToList(user.getUserRoles());
-            customUserDTO.setUserRoles(userRoleTypeList);
-        } else {
+        if (optionalUser.isEmpty()) {
             //todo throw exception
         }
-        return customUserDTO;
+        return optionalUser.get();
     }
 
     private Specification<CustomUser> takeGetUsersSpecification(Map<String, Object> filterValues) {
-        FiltrationBuilder<CustomUser> filtrationBuilder = ((FiltrationBuilder<CustomUser>) FiltrationBuilder
-                .getBuilder())
+        userFiltrationBuilder
                 .addCriteria(
                         filterValues.get("name") != null,
                         "name",
@@ -186,34 +173,26 @@ public class CustomUserService {
                         "flat",
                         KeyWords.FILTER_OPERATION_EQUALS,
                         filterValues.get("flat"));
-        List<UserRole> realUserRoles = getRealUserRoles((List<UserRole.UserRoleType>) filterValues.get("userRoles"));
+        Set<UserRole> realUserRoles = getRealUserRoleSet((List<UserRole.UserRoleType>) filterValues.get("userRoles"));
         for (UserRole currentUserRole : realUserRoles) {
-            filtrationBuilder.addCriteria(
+            userFiltrationBuilder.addCriteria(
                     currentUserRole != null,
                     "userRoles",
                     KeyWords.FILTER_OPERATION_EQUALS_SET_FIELD_ELEMENT,
                     currentUserRole);
         }
-        return filtrationBuilder.build(fieldCriteriaTypes);
+        return userFiltrationBuilder.build(fieldCriteriaTypes);
     }
 
-    private List<UserRole> getRealUserRoles(List<UserRole.UserRoleType> dtoUserRoles) {
-        List<UserRole> realUserRoleList = null;
-        if (dtoUserRoles != null) {
-            realUserRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
+    private Set<UserRole> getRealUserRoleSet(List<UserRole.UserRoleType> dtoUserRoles) {
+        List<UserRole> realUserRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
+        HashSet<UserRole> realRoleSet = null;
+        if (realUserRoleList.size() > 0) {
+            realRoleSet = new HashSet<>(realUserRoleList);
+        } else {
+            //todo throw exception
         }
-        return realUserRoleList;
-    }
-
-    private List<UserRole.UserRoleType> convertRolesSetToList(Set<UserRole> userRolesSet) {
-        List<UserRole.UserRoleType> userRoleTypeList = null;
-        if (userRolesSet != null) {
-            userRoleTypeList = new ArrayList<>();
-            for (UserRole currentUserRole : userRolesSet) {
-                userRoleTypeList.add(currentUserRole.getRoleType());
-            }
-        }
-        return userRoleTypeList;
+        return realRoleSet;
     }
 
 }

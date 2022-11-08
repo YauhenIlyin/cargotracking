@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class CustomUser extends BaseEntity {
 
     private long id;
