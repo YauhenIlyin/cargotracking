@@ -105,7 +105,7 @@ public class CustomUserService {
         filterValues.put("street", street);
         filterValues.put("house", house);
         filterValues.put("flat", flat);
-        if (userRoles != null) {
+        if (userRoles != null && userRoles.size() > 0) {
             List<UserRole.UserRoleType> roleTypeList = new ArrayList<>();
             UserRole.UserRoleType typeContainer;
             for (String currentUserRole : userRoles) {
@@ -174,23 +174,23 @@ public class CustomUserService {
                         KeyWords.FILTER_OPERATION_EQUALS,
                         filterValues.get("flat"));
         Set<UserRole> realUserRoles = getRealUserRoleSet((List<UserRole.UserRoleType>) filterValues.get("userRoles"));
-        for (UserRole currentUserRole : realUserRoles) {
-            userFiltrationBuilder.addCriteria(
-                    currentUserRole != null,
-                    "userRoles",
-                    KeyWords.FILTER_OPERATION_EQUALS_SET_FIELD_ELEMENT,
-                    currentUserRole);
+        if (realUserRoles != null) {
+            for (UserRole currentUserRole : realUserRoles) {
+                userFiltrationBuilder.addCriteria(
+                        currentUserRole != null,
+                        "userRoles",
+                        KeyWords.FILTER_OPERATION_EQUALS_SET_FIELD_ELEMENT,
+                        currentUserRole);
+            }
         }
         return userFiltrationBuilder.build(fieldCriteriaTypes);
     }
 
     private Set<UserRole> getRealUserRoleSet(List<UserRole.UserRoleType> dtoUserRoles) {
-        List<UserRole> realUserRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
         HashSet<UserRole> realRoleSet = null;
-        if (realUserRoleList.size() > 0) {
+        if (dtoUserRoles != null) {
+            List<UserRole> realUserRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
             realRoleSet = new HashSet<>(realUserRoleList);
-        } else {
-            //todo throw exception
         }
         return realRoleSet;
     }

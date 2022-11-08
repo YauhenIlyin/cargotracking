@@ -15,13 +15,4 @@ public interface CustomUserRepository extends JpaRepository<CustomUser, Long>, J
 
     void deleteByIdIsIn(List<Long> idList);
 
-    @Override
-    Page<CustomUser> findAll(@NonNull Pageable pageable);
-
-    @Override
-    Page<CustomUser> findAll(Specification specification, @NonNull Pageable pageable);
-
-    @Override
-    Optional<CustomUser> findById(@NonNull Long id);
-
 }

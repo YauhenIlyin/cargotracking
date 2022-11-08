@@ -34,8 +34,8 @@ public interface UsersCoreFeignClient {
                                  @RequestParam(required = false, value = "house") String house,
                                  @RequestParam(required = false, value = "flat") String flat,
                                  @RequestParam(required = false, value = "userRoles") List<String> userRoles,
-                                 @RequestParam(required = false, value = "size") int size,
-                                 @RequestParam(required = false, value = "page") int page
+                                 @RequestParam(required = false, value = "size") Integer size,
+                                 @RequestParam(required = false, value = "page") Integer page
     );
 
     @GetMapping(value = "/api/users/{id}")
