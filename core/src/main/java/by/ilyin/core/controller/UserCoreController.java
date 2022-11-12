@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,14 +27,20 @@ public class UserCoreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateUserResponseDTO> updateUser(@PathVariable("id") long id,
-                                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
-        return customUserService.updateUser(id, updateUserRequestDTO);
+    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id,
+                                           @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        customUserService.updateUser(id, updateUserRequestDTO);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
     @DeleteMapping
-    public ResponseEntity<DeleteUserResponseDTO> deleteUsers(@RequestBody List<Long> userIdList) {
-        return customUserService.deleteUser(userIdList);
+    public ResponseEntity<Void> deleteUsers(@RequestBody List<Long> userIdList) {
+        customUserService.deleteUser(userIdList);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
     @GetMapping
@@ -46,7 +53,7 @@ public class UserCoreController {
                                      @RequestParam(required = false, value = "street") String street,
                                      @RequestParam(required = false, value = "house") String house,
                                      @RequestParam(required = false, value = "flat") String flat,
-                                     @RequestParam(required = false, value = "userRoles") List<String> userRoles,
+                                     @RequestParam(required = false, value = "userRoles") Set<String> userRoles,
                                      Pageable pageable) {
         return customUserService.getUsers(
                 name,
@@ -63,7 +70,7 @@ public class UserCoreController {
     }
 
     @GetMapping("/{id}")
-    public CustomUser getUserById(@PathVariable("id") long id) {
+    public CustomUser getUserById(@PathVariable("id") Long id) {
         return customUserService.getUser(id);
     }
 

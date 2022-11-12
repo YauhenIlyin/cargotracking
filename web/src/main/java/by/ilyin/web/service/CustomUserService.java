@@ -10,9 +10,11 @@ import by.ilyin.web.entity.UserRole;
 import by.ilyin.web.feign.UsersCoreFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,11 +43,11 @@ public class CustomUserService {
         return createUserResponseDTO;
     }
 
-    public UpdateUserResponseDTO updateUser(long id, UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<Void> updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO) {
         return usersCoreFeignClient.updateUser(id, updateUserRequestDTO);
     }
 
-    public DeleteUsersResponseDTO deleteUser(List<Long> userIdList) {
+    public ResponseEntity<Void> deleteUser(List<Long> userIdList) {
         return usersCoreFeignClient.deleteUser(userIdList);
     }
 
@@ -58,7 +60,7 @@ public class CustomUserService {
                                         String street,
                                         String house,
                                         String flat,
-                                        List<String> userRoles,
+                                        Set<String> userRoles,
                                         Integer pageSize,
                                         Integer pageNumber) {
         PageDTO<CustomUser> pageDTO = usersCoreFeignClient.getUsers(
@@ -78,8 +80,8 @@ public class CustomUserService {
         List<CustomUserDTO> userDTOList = new ArrayList<>();
         CustomUserDTO currentUserDto;
         for (CustomUser currentUser : realUserList) {
-            currentUserDto = customUserDTOMapper.mapUserToDTO(currentUser);
-            currentUserDto.setUserRoles(convertRolesSetToTypeList(currentUser.getUserRoles()));
+            currentUserDto = customUserDTOMapper.mapToDto(currentUser);
+            currentUserDto.setUserRoles(convertRoleSetToTypeSet(currentUser.getUserRoles()));
             userDTOList.add(currentUserDto);
         }
         GetUsersResponseDTO getUsersResponseDTO = new GetUsersResponseDTO();
@@ -88,22 +90,22 @@ public class CustomUserService {
         return getUsersResponseDTO;
     }
 
-    public CustomUserDTO getUserById(long id) {
+    public CustomUserDTO getUserById(Long id) {
         CustomUser realUser = usersCoreFeignClient.getUserById(id);
-        CustomUserDTO userDto = customUserDTOMapper.mapUserToDTO(realUser);
-        userDto.setUserRoles(convertRolesSetToTypeList(realUser.getUserRoles()));
+        CustomUserDTO userDto = customUserDTOMapper.mapToDto(realUser);
+        userDto.setUserRoles(convertRoleSetToTypeSet(realUser.getUserRoles()));
         return userDto;
     }
 
-    private List<UserRole.UserRoleType> convertRolesSetToTypeList(Set<UserRole> userRolesSet) {
-        List<UserRole.UserRoleType> userRoleTypeList = null;
-        if (userRolesSet != null) {
-            userRoleTypeList = new ArrayList<>();
-            for (UserRole currentUserRole : userRolesSet) {
-                userRoleTypeList.add(currentUserRole.getRoleType());
+    private Set<UserRole.UserRoleType> convertRoleSetToTypeSet(Set<UserRole> userRoleSet) {
+        Set<UserRole.UserRoleType> userRoleTypeSet = null;
+        if (userRoleSet != null) {
+            userRoleTypeSet = new HashSet<>();
+            for (UserRole currentUserRole : userRoleSet) {
+                userRoleTypeSet.add(currentUserRole.getRoleType());
             }
         }
-        return userRoleTypeList;
+        return userRoleTypeSet;
     }
 
 }

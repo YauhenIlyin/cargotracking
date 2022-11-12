@@ -2,15 +2,11 @@ package by.ilyin.core.repository.filtration.specification;
 
 import by.ilyin.core.entity.BaseEntity;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@Scope("prototype")
 @NoArgsConstructor
 public class SpecificationBuilder<T extends BaseEntity> {
 

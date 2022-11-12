@@ -6,14 +6,14 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class CustomUser extends BaseEntity {
+@EqualsAndHashCode
+public class CustomUser {
 
-    private long id;
+    private Long id;
     private String name;
     private String surname;
     private String patronymic;
-    private long clientId;
+    private Long clientId;
     private LocalDate bornDate;
     private String email;
     private String town;

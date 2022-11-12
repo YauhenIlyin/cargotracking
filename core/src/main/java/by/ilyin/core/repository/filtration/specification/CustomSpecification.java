@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 public class CustomSpecification<T extends BaseEntity> implements Specification<T> {
@@ -15,21 +16,38 @@ public class CustomSpecification<T extends BaseEntity> implements Specification<
 
     @Override
     public Predicate toPredicate(@NonNull Root<T> root, @NonNull CriteriaQuery<?> query, @NonNull CriteriaBuilder builder) {
-        Predicate predicate;
+        Predicate predicate = null;
         String criteriaOperation = criteria.getOperation();
+        Class<?> currentFiledType = root.get(criteria.getFieldName()).getJavaType();
         switch (criteriaOperation) {
             case KeyWords.FILTER_OPERATION_MORE:
-                predicate = builder.greaterThanOrEqualTo(
-                        root.get(criteria.getFieldName()), criteria.getValue().toString()
-                );
+                if (currentFiledType == String.class) {
+                    predicate = builder.greaterThanOrEqualTo(
+                            root.get(criteria.getFieldName()), criteria.getValue().toString()
+                    );
+                } else if (currentFiledType == LocalDate.class) {
+                    predicate = builder.greaterThanOrEqualTo(
+                            root.get(criteria.getFieldName()), (LocalDate) criteria.getValue()
+                    );
+                } else {
+                    //todo warning log
+                }
                 break;
             case KeyWords.FILTER_OPERATION_LESS:
-                predicate = builder.lessThanOrEqualTo(
-                        root.get(criteria.getFieldName()), criteria.getValue().toString()
-                );
+                if (currentFiledType == String.class) {
+                    predicate = builder.lessThanOrEqualTo(
+                            root.get(criteria.getFieldName()), criteria.getValue().toString()
+                    );
+                } else if (currentFiledType == LocalDate.class) {
+                    predicate = builder.lessThanOrEqualTo(
+                            root.get(criteria.getFieldName()), (LocalDate) criteria.getValue()
+                    );
+                } else {
+                    //todo warning log
+                }
                 break;
             case KeyWords.FILTER_OPERATION_EQUALS:
-                if (root.get(criteria.getFieldName()).getJavaType() == String.class) {
+                if (currentFiledType == String.class) {
                     predicate = builder.like(
                             root.get(criteria.getFieldName()), "%" + criteria.getValue() + "%");
                 } else {
@@ -41,7 +59,7 @@ public class CustomSpecification<T extends BaseEntity> implements Specification<
                 predicate = builder.isMember(criteria.getValue(), root.get(criteria.getFieldName()));
                 break;
             default:
-                predicate = null;
+                //todo warning log
         }
         return predicate;
     }

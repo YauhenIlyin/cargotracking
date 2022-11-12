@@ -5,10 +5,12 @@ import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
 import by.ilyin.web.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,13 +25,13 @@ public class UserWebController {
     }
 
     @PutMapping("/{id}")
-    public UpdateUserResponseDTO updateUser(@PathVariable("id") long id,
-                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id,
+                                           @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         return customUserService.updateUser(id, updateUserRequestDTO);
     }
 
     @DeleteMapping
-    public DeleteUsersResponseDTO deleteUser(@RequestBody List<Long> userIdList) {
+    public ResponseEntity<Void> deleteUser(@RequestBody List<Long> userIdList) {
         return customUserService.deleteUser(userIdList);
     }
 
@@ -44,7 +46,7 @@ public class UserWebController {
             @RequestParam(required = false, value = "street") String street,
             @RequestParam(required = false, value = "house") String house,
             @RequestParam(required = false, value = "flat") String flat,
-            @RequestParam(required = false, value = "userRoles") List<String> userRoles,
+            @RequestParam(required = false, value = "userRoles") Set<String> userRoles,
             @RequestParam(required = false, value = "pageSize") Integer pageSize,
             @RequestParam(required = false, value = "pageNumber") Integer pageNumber) {
         return customUserService.getUsers(
@@ -63,7 +65,7 @@ public class UserWebController {
     }
 
     @GetMapping("/{id}")
-    public CustomUserDTO getUser(@PathVariable("id") long id) {
+    public CustomUserDTO getUser(@PathVariable("id") Long id) {
         return customUserService.getUserById(id);
     }
 

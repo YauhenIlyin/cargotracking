@@ -21,8 +21,7 @@ public class UserFieldCriteriaTypesImpl implements FieldCriteriaTypes {
         conditionCriteriaTypes.put("street", Boolean.TRUE);
         conditionCriteriaTypes.put("house", Boolean.TRUE);
         conditionCriteriaTypes.put("flat", Boolean.TRUE);
-        conditionCriteriaTypes.put("beforeBornDate", Boolean.TRUE);
-        conditionCriteriaTypes.put("afterBornDate", Boolean.TRUE);
+        conditionCriteriaTypes.put("bornDate", Boolean.TRUE);
         conditionCriteriaTypes.put("userRoles", Boolean.TRUE);
     }
 
@@ -34,4 +33,5 @@ public class UserFieldCriteriaTypesImpl implements FieldCriteriaTypes {
         }
         return result;
     }
+
 }

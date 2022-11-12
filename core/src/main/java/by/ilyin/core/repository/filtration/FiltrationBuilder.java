@@ -4,12 +4,8 @@ import by.ilyin.core.entity.BaseEntity;
 import by.ilyin.core.repository.filtration.specification.FieldCriteriaTypes;
 import by.ilyin.core.repository.filtration.specification.SearchCriteria;
 import by.ilyin.core.repository.filtration.specification.SpecificationBuilder;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope(value = "prototype")
 public class FiltrationBuilder<T extends BaseEntity> {
 
     private final SpecificationBuilder<T> currentSpecBuilder;

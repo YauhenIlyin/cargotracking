@@ -4,10 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class UserRole extends BaseEntity {
+@EqualsAndHashCode
+public class UserRole {
 
-    private long id;
+    private Long id;
     private UserRoleType roleType;
 
     public enum UserRoleType {

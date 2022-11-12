@@ -20,50 +20,35 @@ public class CustomUser extends BaseEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
     @Column(name = "first_name")
     private String name;
-
     @Column(name = "last_name")
     private String surname;
-
     @Column(name = "patronymic")
     private String patronymic;
-
     @Column(name = "client_id")
     private long clientId;
-
     @Column(name = "born_date")
     private LocalDate bornDate;
-
     @Column(name = "email")
     private String email;
-
     @Column(name = "town")
     private String town;
-
     @Column(name = "street")
     private String street;
-
     @Column(name = "house")
     private String house;
-
     @Column(name = "flat")
     private String flat;
-
     @Column(name = "login")
     private String login;
-
     @Column(name = "user_password")
     private String password;
-
     @Column(name = "passport_num")
     private String passportNum;
-
     @Column(name = "issued_by")
     private String issuedBy;
-
     @Size(min = 1)
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -77,12 +62,12 @@ public class CustomUser extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || this.getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         CustomUser that = (CustomUser) o;
-        if (id != that.id) return false;
         if (clientId != that.clientId) return false;
+        if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(surname, that.surname)) return false;
         if (!Objects.equals(patronymic, that.patronymic)) return false;
@@ -101,7 +86,7 @@ public class CustomUser extends BaseEntity {
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);

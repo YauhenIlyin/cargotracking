@@ -1,6 +1,5 @@
 package by.ilyin.web.controller;
 
-
 import by.ilyin.web.dto.response.AppInfoResponseDTO;
 import by.ilyin.web.service.AppInfoService;
 import lombok.RequiredArgsConstructor;

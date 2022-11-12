@@ -7,7 +7,7 @@ public class CreateUserResponseDTO {
 
     private String currentUserURI;
 
-    public CreateUserResponseDTO(long id) {
+    public CreateUserResponseDTO(Long id) {
         this.currentUserURI = "/api/users/" + id;
     }
 

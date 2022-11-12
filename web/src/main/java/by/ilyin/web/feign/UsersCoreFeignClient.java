@@ -6,9 +6,11 @@ import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
 import by.ilyin.web.entity.CustomUser;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @FeignClient(name = "usersCoreFeignClient", url = "${feign.client.core.url}")
 public interface UsersCoreFeignClient {
@@ -17,11 +19,11 @@ public interface UsersCoreFeignClient {
     CreateUserResponseDTO createUser(CustomUserDTO customUserDTO);
 
     @PutMapping(value = "/api/users/{id}", consumes = "application/json")
-    UpdateUserResponseDTO updateUser(@PathVariable("id") long id,
-                                     UpdateUserRequestDTO updateUserRequestDTO);
+    ResponseEntity<Void> updateUser(@PathVariable("id") Long id,
+                                    UpdateUserRequestDTO updateUserRequestDTO);
 
     @DeleteMapping("/api/users")
-    DeleteUsersResponseDTO deleteUser(List<Long> userIdList);
+    ResponseEntity<Void> deleteUser(List<Long> userIdList);
 
     @GetMapping("api/users")
     PageDTO<CustomUser> getUsers(@RequestParam(required = false, value = "name") String name,
@@ -33,12 +35,12 @@ public interface UsersCoreFeignClient {
                                  @RequestParam(required = false, value = "street") String street,
                                  @RequestParam(required = false, value = "house") String house,
                                  @RequestParam(required = false, value = "flat") String flat,
-                                 @RequestParam(required = false, value = "userRoles") List<String> userRoles,
+                                 @RequestParam(required = false, value = "userRoles") Set<String> userRoles,
                                  @RequestParam(required = false, value = "size") Integer size,
                                  @RequestParam(required = false, value = "page") Integer page
     );
 
     @GetMapping(value = "/api/users/{id}")
-    CustomUser getUserById(@PathVariable("id") long id);
+    CustomUser getUserById(@PathVariable("id") Long id);
 
 }

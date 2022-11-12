@@ -13,9 +13,10 @@ public class PageableBuilder {
     private final int DEFAULT_PAGE_SIZE = 2;
     private int currentPageNumber = -1;
     private int currentPageSize = -1;
-    List<Sort.Order> currentOrderList = new ArrayList<>();
+    private final List<Sort.Order> currentOrderList;
 
     private PageableBuilder() {
+        this.currentOrderList = new ArrayList<>();
     }
 
     public static PageableBuilder getBuilder() {

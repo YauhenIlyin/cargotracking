@@ -16,11 +16,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.InvalidClassException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,52 +31,47 @@ public class CustomUserService {
     private final CustomUserRepository customUserRepository;
     private final UserRoleRepository userRoleRepository;
     private final CustomUserDTOMapper customUserDTOMapper;
-    private final FiltrationBuilder<CustomUser> userFiltrationBuilder;
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
     public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
-        CustomUser customUser = customUserDTOMapper.mapDtoToUser(customUserDTO);
+        CustomUser customUser = customUserDTOMapper.mapFromDto(customUserDTO);
         customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
         CustomUser realUser = customUserRepository.save(customUser);
         return new CreateUserResponseDTO(realUser.getId());
     }
 
     @Transactional
-    public ResponseEntity<UpdateUserResponseDTO> updateUser(long id, UpdateUserRequestDTO updateUserRequestDTO) {
+    public void updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO) {
         Optional<CustomUser> optionalCustomUser;
         optionalCustomUser = customUserRepository.findById(id);
-        if (optionalCustomUser.isPresent()) {
-            CustomUser customUser = optionalCustomUser.get();
-            Set<UserRole> realRolesSet = getRealUserRoleSet(updateUserRequestDTO.getUserRoles());
-            customUser.setName(updateUserRequestDTO.getName());
-            customUser.setSurname(updateUserRequestDTO.getSurname());
-            customUser.setPatronymic(updateUserRequestDTO.getPatronymic());
-            customUser.setClientId(updateUserRequestDTO.getClientId());
-            customUser.setBornDate(updateUserRequestDTO.getBornDate());
-            customUser.setEmail(updateUserRequestDTO.getEmail());
-            customUser.setTown(updateUserRequestDTO.getTown());
-            customUser.setStreet(updateUserRequestDTO.getStreet());
-            customUser.setHouse(updateUserRequestDTO.getHouse());
-            customUser.setFlat(updateUserRequestDTO.getFlat());
-            customUser.setLogin(updateUserRequestDTO.getLogin());
-            if (updateUserRequestDTO.getIsChangePassword()) {
-                customUser.setPassword(updateUserRequestDTO.getPassword());
-            }
-            customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
-            customUser.setIssuedBy(updateUserRequestDTO.getIssuedBy());
-            customUser.setUserRoles(realRolesSet);
-            customUserRepository.save(customUser);
-        } else {
-            //todo throw exception
+        CustomUser customUser = optionalCustomUser.orElseThrow(); //todo catch this exception
+        Set<UserRole> realRolesSet = getRealUserRoleSet(updateUserRequestDTO.getUserRoles());
+        customUser.setName(updateUserRequestDTO.getName());
+        customUser.setSurname(updateUserRequestDTO.getSurname());
+        customUser.setPatronymic(updateUserRequestDTO.getPatronymic());
+        customUser.setClientId(updateUserRequestDTO.getClientId());
+        customUser.setBornDate(updateUserRequestDTO.getBornDate());
+        customUser.setEmail(updateUserRequestDTO.getEmail());
+        customUser.setTown(updateUserRequestDTO.getTown());
+        customUser.setStreet(updateUserRequestDTO.getStreet());
+        customUser.setHouse(updateUserRequestDTO.getHouse());
+        customUser.setFlat(updateUserRequestDTO.getFlat());
+        customUser.setLogin(updateUserRequestDTO.getLogin());
+        if (updateUserRequestDTO.getIsChangePassword()) {
+            customUser.setPassword(updateUserRequestDTO.getPassword());
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
+        customUser.setIssuedBy(updateUserRequestDTO.getIssuedBy());
+        customUser.setUserRoles(realRolesSet);
+        customUserRepository.save(customUser);
+        //todo info log
     }
 
     @Transactional
-    public ResponseEntity<DeleteUserResponseDTO> deleteUser(List<Long> userIdList) {
+    public void deleteUser(List<Long> userIdList) {
         customUserRepository.deleteByIdIsIn(userIdList);
-        return new ResponseEntity<>(HttpStatus.OK);
+        //todo info log
     }
 
     public Page<CustomUser> getUsers(
@@ -89,14 +84,16 @@ public class CustomUserService {
             String street,
             String house,
             String flat,
-            List<String> userRoles,
+            Set<String> userRoles,
             Pageable pageable) {
         Map<String, Object> filterValues = new HashMap<>();
         if (beforeBornDate != null) {
-            filterValues.put("beforeBornDate", LocalDate.parse(beforeBornDate));
+            LocalDate localDate = LocalDate.parse(beforeBornDate);
+            filterValues.put("beforeBornDate", localDate);
         }
         if (afterBornDate != null) {
-            filterValues.put("afterBornDate", LocalDate.parse(afterBornDate));
+            LocalDate localDate = LocalDate.parse(afterBornDate);
+            filterValues.put("afterBornDate", localDate);
         }
         filterValues.put("name", name);
         filterValues.put("surname", surname);
@@ -106,27 +103,25 @@ public class CustomUserService {
         filterValues.put("house", house);
         filterValues.put("flat", flat);
         if (userRoles != null && userRoles.size() > 0) {
-            List<UserRole.UserRoleType> roleTypeList = new ArrayList<>();
+            Set<UserRole.UserRoleType> roleTypeSet = new HashSet<>();
             UserRole.UserRoleType typeContainer;
             for (String currentUserRole : userRoles) {
                 typeContainer = UserRole.UserRoleType.valueOf(currentUserRole);
-                roleTypeList.add(typeContainer);
+                roleTypeSet.add(typeContainer);
             }
-            filterValues.put("userRoles", roleTypeList);
+            filterValues.put("userRoles", roleTypeSet);
         }
         Specification<CustomUser> specification = takeGetUsersSpecification(filterValues);
         return customUserRepository.findAll(specification, pageable);
     }
 
-    public CustomUser getUser(long id) {
+    public CustomUser getUser(Long id) {
         Optional<CustomUser> optionalUser = customUserRepository.findById(id);
-        if (optionalUser.isEmpty()) {
-            //todo throw exception
-        }
-        return optionalUser.get();
+        return optionalUser.orElseThrow(); //todo catch this exception
     }
 
     private Specification<CustomUser> takeGetUsersSpecification(Map<String, Object> filterValues) {
+        FiltrationBuilder<CustomUser> userFiltrationBuilder = new FiltrationBuilder<>();
         userFiltrationBuilder
                 .addCriteria(
                         filterValues.get("name") != null,
@@ -173,7 +168,7 @@ public class CustomUserService {
                         "flat",
                         KeyWords.FILTER_OPERATION_EQUALS,
                         filterValues.get("flat"));
-        Set<UserRole> realUserRoles = getRealUserRoleSet((List<UserRole.UserRoleType>) filterValues.get("userRoles"));
+        Set<UserRole> realUserRoles = getRealUserRoleSet((Set<UserRole.UserRoleType>) filterValues.get("userRoles"));
         if (realUserRoles != null) {
             for (UserRole currentUserRole : realUserRoles) {
                 userFiltrationBuilder.addCriteria(
@@ -186,10 +181,10 @@ public class CustomUserService {
         return userFiltrationBuilder.build(fieldCriteriaTypes);
     }
 
-    private Set<UserRole> getRealUserRoleSet(List<UserRole.UserRoleType> dtoUserRoles) {
+    private Set<UserRole> getRealUserRoleSet(Set<UserRole.UserRoleType> dtoUserRoles) {
         HashSet<UserRole> realRoleSet = null;
         if (dtoUserRoles != null) {
-            List<UserRole> realUserRoleList = userRoleRepository.findUserRolesByRoleTypeIsIn(dtoUserRoles);
+            Set<UserRole> realUserRoleList = userRoleRepository.findByRoleTypeIsIn(dtoUserRoles);
             realRoleSet = new HashSet<>(realUserRoleList);
         }
         return realRoleSet;

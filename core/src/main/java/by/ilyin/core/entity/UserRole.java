@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,12 +19,10 @@ public class UserRole extends BaseEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
     @Column(name = "role_name")
     @Enumerated(EnumType.STRING)
     private UserRoleType roleType;
-
     @JsonIgnore
     @ToString.Exclude
     @ManyToMany(mappedBy = "userRoles")
@@ -43,16 +42,19 @@ public class UserRole extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || this.getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         UserRole userRole = (UserRole) o;
-        return id == userRole.id && roleType == userRole.roleType;
+        if (!Objects.equals(id, userRole.id)) {
+            return false;
+        }
+        return this.roleType == userRole.roleType;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (roleType != null ? roleType.hashCode() : 0);
         return result;
     }
