@@ -18,14 +18,14 @@ public class CustomSpecification<T extends BaseEntity> implements Specification<
     public Predicate toPredicate(@NonNull Root<T> root, @NonNull CriteriaQuery<?> query, @NonNull CriteriaBuilder builder) {
         Predicate predicate = null;
         String criteriaOperation = criteria.getOperation();
-        Class<?> currentFiledType = root.get(criteria.getFieldName()).getJavaType();
+        Class<?> currentFieldType = root.get(criteria.getFieldName()).getJavaType();
         switch (criteriaOperation) {
             case KeyWords.FILTER_OPERATION_MORE:
-                if (currentFiledType == String.class) {
+                if (currentFieldType == String.class) {
                     predicate = builder.greaterThanOrEqualTo(
                             root.get(criteria.getFieldName()), criteria.getValue().toString()
                     );
-                } else if (currentFiledType == LocalDate.class) {
+                } else if (currentFieldType == LocalDate.class) {
                     predicate = builder.greaterThanOrEqualTo(
                             root.get(criteria.getFieldName()), (LocalDate) criteria.getValue()
                     );
@@ -34,11 +34,11 @@ public class CustomSpecification<T extends BaseEntity> implements Specification<
                 }
                 break;
             case KeyWords.FILTER_OPERATION_LESS:
-                if (currentFiledType == String.class) {
+                if (currentFieldType == String.class) {
                     predicate = builder.lessThanOrEqualTo(
                             root.get(criteria.getFieldName()), criteria.getValue().toString()
                     );
-                } else if (currentFiledType == LocalDate.class) {
+                } else if (currentFieldType == LocalDate.class) {
                     predicate = builder.lessThanOrEqualTo(
                             root.get(criteria.getFieldName()), (LocalDate) criteria.getValue()
                     );
@@ -47,7 +47,7 @@ public class CustomSpecification<T extends BaseEntity> implements Specification<
                 }
                 break;
             case KeyWords.FILTER_OPERATION_EQUALS:
-                if (currentFiledType == String.class) {
+                if (currentFieldType == String.class) {
                     predicate = builder.like(
                             root.get(criteria.getFieldName()), "%" + criteria.getValue() + "%");
                 } else {
