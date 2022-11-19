@@ -4,8 +4,10 @@ import by.ilyin.web.dto.CustomUserDTO;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
 import by.ilyin.web.service.CustomUserService;
+import by.ilyin.web.util.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,16 +20,20 @@ import java.util.Set;
 public class UserWebController {
 
     private final CustomUserService customUserService;
+    private final UserValidator userValidator;
 
     @PostMapping
-    public String createUser(@RequestBody @Valid CustomUserDTO customUserDTO) {
-        return customUserService.createUser(customUserDTO).getCurrentUserURI();
+    public String createUser(@RequestBody @Valid CustomUserDTO customUserDTO,
+                             BindingResult bindingResult) {
+        userValidator.userValidationProcess(bindingResult);
+        return customUserService.createUser(customUserDTO, bindingResult).getCurrentUserURI();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id,
-                                           @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
-        return customUserService.updateUser(id, updateUserRequestDTO);
+                                           @RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO,
+                                           BindingResult bindingResult) {
+        return customUserService.updateUser(id, updateUserRequestDTO, bindingResult);
     }
 
     @DeleteMapping

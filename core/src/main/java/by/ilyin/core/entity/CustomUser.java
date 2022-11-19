@@ -41,7 +41,7 @@ public class CustomUser extends BaseEntity {
     private String house;
     @Column(name = "flat")
     private String flat;
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     private String login;
     @Column(name = "user_password")
     private String password;
