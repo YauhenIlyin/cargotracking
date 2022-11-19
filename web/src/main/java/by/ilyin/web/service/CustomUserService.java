@@ -8,10 +8,12 @@ import by.ilyin.web.dto.response.*;
 import by.ilyin.web.entity.CustomUser;
 import by.ilyin.web.entity.UserRole;
 import by.ilyin.web.feign.UsersCoreFeignClient;
+import by.ilyin.web.util.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,12 +26,14 @@ public class CustomUserService {
 
     private final UsersCoreFeignClient usersCoreFeignClient;
     private final CustomUserDTOMapper customUserDTOMapper;
+    private final UserValidator userValidator;
     @Value("${server.address}")
     private String serverAddress;
     @Value("${server.port}")
     private String serverPort;
 
-    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
+    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO, BindingResult bindingResult) {
+        userValidator.userValidationProcess(bindingResult);
         CreateUserResponseDTO createUserResponseDTO = usersCoreFeignClient.createUser(customUserDTO);
         String currentUrn = createUserResponseDTO.getCurrentUserURI();
         StringBuilder currentUrlSB = new StringBuilder();
@@ -43,7 +47,10 @@ public class CustomUserService {
         return createUserResponseDTO;
     }
 
-    public ResponseEntity<Void> updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<Void> updateUser(Long id,
+                                           UpdateUserRequestDTO updateUserRequestDTO,
+                                           BindingResult bindingResult) {
+        userValidator.userValidationProcess(bindingResult);
         return usersCoreFeignClient.updateUser(id, updateUserRequestDTO);
     }
 
