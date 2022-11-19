@@ -28,6 +28,7 @@ public class CustomUserService {
     private final UsersCoreFeignClient usersCoreFeignClient;
     private final CustomUserDTOMapper customUserDTOMapper;
     private final CustomBindingResultValidator customBindingResultValidator;
+
     @Value("${server.address}")
     private String serverAddress;
     @Value("${server.port}")
