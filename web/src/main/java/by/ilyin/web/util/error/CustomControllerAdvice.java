@@ -40,6 +40,7 @@ public class CustomControllerAdvice {
             BindException.class,
             HttpMessageNotReadableException.class,
             IncorrectValueFormatException.class,
+            MethodArgumentNotValidException.class,
             MissingServletRequestParameterException.class,
             MissingServletRequestPartException.class,
             TypeMismatchException.class,
