@@ -1,22 +1,22 @@
 databaseChangeLog:
   - changeSet:
-    - id: 1
-    - author: Ilyin_Yauhen
+      - id: 1
+      - author: Ilyin_Yauhen
   - include:
-    - file: 001_crud_users.postgresql.sql
-    - relativeToChangelogFile: true
+      - file: 001_crud_users.postgresql.sql
+      - relativeToChangelogFile: true
   - changeSet:
-    - id: 2
-    - author: Ilyin_Yauhen
+      - id: 2
+      - author: Ilyin_Yauhen
   - include:
-    - file: 002_jwt_authentication.postgresql.sql
-    - relativeToChangelogFile: true
+      - file: 002_jwt_authentication.postgresql.sql
+      - relativeToChangelogFile: true
   - changeSet:
-    - id: 3
-    - author: Ilyin_Yauhen
+      - id: 3
+      - author: Ilyin_Yauhen
   - include:
-    - file: 003_custom_uuid.postgresql.sql
-    - relativeToChangelogFile: true
+      - file: 003_custom_uuid.postgresql.sql
+      - relativeToChangelogFile: true
   - changeSet:
       - id: 12
       - author: Ilyin_Yauhen
