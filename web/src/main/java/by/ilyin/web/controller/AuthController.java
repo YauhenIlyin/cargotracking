@@ -22,7 +22,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public String signIn(@RequestBody @Valid SignInDTO signInDTO,
                          BindingResult bindingResult) {
-        return authService.signInProcess(signInDTO, bindingResult);
+        return authService.signInProcess(signInDTO);
     }
 
     @PostMapping("/refresh")
