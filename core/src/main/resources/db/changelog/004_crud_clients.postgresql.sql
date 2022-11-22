@@ -9,7 +9,7 @@ CREATE TABLE public.clients
     client_name VARCHAR(20)        NOT NULL,
     status      VARCHAR(20)        NOT NULL,
     admin_id    BIGINT,
-    delete_date TIMESTAMP DEFAULT NULL,
+    delete_date  TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (admin_id) REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
