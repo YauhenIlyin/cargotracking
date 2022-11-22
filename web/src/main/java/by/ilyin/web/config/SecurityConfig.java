@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/users").hasAnyRole("ADMIN", "DISPATCHER")
                 .antMatchers(HttpMethod.POST, "/api/users/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("ADMIN")
+<<<<<<< HEAD
 
                 .antMatchers(HttpMethod.GET, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
@@ -38,6 +39,10 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/restore").permitAll()
 
 
+=======
+                .antMatchers("api/logout").authenticated()
+                .antMatchers("/api/sign-in", "/api/refresh").permitAll()
+>>>>>>> b5f572a (CTB-6_JWT_authentication is created)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
