@@ -36,6 +36,7 @@ public class CustomControllerAdvice {
 
     //todo add javadoc 400
 
+<<<<<<< HEAD
     @ExceptionHandler({
             BindException.class,
             HttpMessageNotReadableException.class,
@@ -179,4 +180,5 @@ public class CustomControllerAdvice {
                 httpStatus
         );
     }
+
 }

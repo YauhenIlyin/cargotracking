@@ -43,7 +43,6 @@ public class JwtUtil {
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .sign(Algorithm.HMAC256(secret));
     }
-
     public DecodedJWT decodeValidateToken(String token) {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject("User details")
