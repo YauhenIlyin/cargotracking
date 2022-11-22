@@ -1,11 +1,8 @@
 package by.ilyin.core.service.auth;
 
 import by.ilyin.core.dto.SignInDTO;
-<<<<<<< HEAD
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
-=======
->>>>>>> b5f572a (CTB-6_JWT_authentication is created)
 import by.ilyin.core.entity.CustomJWT;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
@@ -13,10 +10,7 @@ import by.ilyin.core.repository.AuthRepository;
 import by.ilyin.core.repository.CustomUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
-=======
 
->>>>>>> b5f572a (CTB-6_JWT_authentication is created)
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
