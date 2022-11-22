@@ -145,5 +145,4 @@ public class CustomControllerAdvice {
                 httpStatus
         );
     }
-
 }
