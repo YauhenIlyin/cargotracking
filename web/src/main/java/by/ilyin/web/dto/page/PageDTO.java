@@ -1,5 +1,6 @@
 package by.ilyin.web.dto.page;
 
+import by.ilyin.web.dto.page.PageableDTO;
 import lombok.Data;
 
 import java.util.List;
