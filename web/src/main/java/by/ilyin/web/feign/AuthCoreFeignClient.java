@@ -9,6 +9,7 @@ import by.ilyin.web.entity.CustomUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashSet;
 
 @FeignClient(name = "authCoreFeignClient", url = "${feign.client.core.url}")
