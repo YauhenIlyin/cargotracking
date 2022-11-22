@@ -1,7 +1,7 @@
 package by.ilyin.web.feign;
 
 import by.ilyin.web.dto.CustomUserDTO;
-import by.ilyin.web.dto.PageDTO;
+import by.ilyin.web.dto.page.PageDTO;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.entity.CustomUser;
 import org.springframework.cloud.openfeign.FeignClient;
