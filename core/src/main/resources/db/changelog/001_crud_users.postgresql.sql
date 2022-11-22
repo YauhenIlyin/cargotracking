@@ -58,4 +58,7 @@ INSERT INTO public.user_roles (role_name)
 values ('DRIVER');
 INSERT INTO public.user_roles (role_name)
 values ('COMPANY_OWNER');
+<<<<<<< HEAD
 
+=======
+>>>>>>> b6027f0 (CTB-6_JWT_authentication is created)
