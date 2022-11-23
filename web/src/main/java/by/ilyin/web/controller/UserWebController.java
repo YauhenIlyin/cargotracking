@@ -4,6 +4,7 @@ import by.ilyin.web.dto.CustomUserDTO;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
 import by.ilyin.web.service.CustomUserService;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,13 @@ import java.util.Set;
 public class UserWebController {
 
     private final CustomUserService customUserService;
+    private final CustomBindingResultValidator customBindingResultValidator;
 
     @PostMapping
-    public ResponseEntity<URI> createUser(@RequestBody @Valid CustomUserDTO customUserDTO) {
-        return customUserService.createUser(customUserDTO);
+    public String createUser(@RequestBody @Valid CustomUserDTO customUserDTO,
+                             BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
+        return customUserService.createUser(customUserDTO, bindingResult).getCurrentUserURI();
     }
 
     @PutMapping("/{id}")
