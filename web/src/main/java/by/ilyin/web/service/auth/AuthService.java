@@ -10,6 +10,7 @@ import by.ilyin.web.security.JwtUtil;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,8 @@ public class AuthService {
     private final UsersCoreFeignClient usersCoreFeignClient;
 
     //todo need logout with next sign-in ?
-    public String signInProcess(SignInDTO signInDTO) {
+    public String signInProcess(SignInDTO signInDTO, BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
         CustomUser customUser = authCoreFeignClient.signIn(signInDTO);
         return new StringBuilder()
                 .append(jwtUtil.generateAccessToken(customUser))
