@@ -2,6 +2,7 @@ package by.ilyin.web.controller;
 
 import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.service.auth.AuthService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestParam(value = "userId") Long userId) {
+    public ResponseEntity<Void> logout(@RequestParam(value = "userId") @NonNull Long userId) {
         authService.logoutProcess(userId);
         return ResponseEntity
                 .ok()
