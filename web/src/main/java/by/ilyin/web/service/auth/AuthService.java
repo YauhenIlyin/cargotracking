@@ -8,10 +8,12 @@ import by.ilyin.web.feign.AuthCoreFeignClient;
 import by.ilyin.web.feign.UsersCoreFeignClient;
 import by.ilyin.web.security.JwtUtil;
 import by.ilyin.web.security.JwtBlackListManager;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.Set;
 
@@ -21,8 +23,9 @@ public class AuthService {
 
     private final AuthCoreFeignClient authCoreFeignClient;
     private final JwtUtil jwtUtil;
-    private JwtBlackListManager jwtBlackListManager;
     private final UsersCoreFeignClient usersCoreFeignClient;
+    private final CustomBindingResultValidator customBindingResultValidator;
+    private JwtBlackListManager jwtBlackListManager;
 
     @Autowired
     public void setJwtBlackListManager(JwtBlackListManager jwtBlackListManager) {
@@ -30,7 +33,8 @@ public class AuthService {
     }
 
     //todo need logout with next sign-in ?
-    public String signInProcess(SignInDTO signInDTO) {
+    public String signInProcess(SignInDTO signInDTO, BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
         CustomUser customUser = authCoreFeignClient.signIn(signInDTO);
         String accessToken = jwtUtil.generateAccessToken(customUser);
         String refreshToken = jwtUtil.generateRefreshToken(customUser.getId());

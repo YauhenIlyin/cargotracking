@@ -4,7 +4,7 @@ import by.ilyin.web.dto.CustomUserDTO;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
 import by.ilyin.web.service.CustomUserService;
-import by.ilyin.web.util.validator.UserValidator;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,12 +20,12 @@ import java.util.Set;
 public class UserWebController {
 
     private final CustomUserService customUserService;
-    private final UserValidator userValidator;
+    private final CustomBindingResultValidator customBindingResultValidator;
 
     @PostMapping
     public String createUser(@RequestBody @Valid CustomUserDTO customUserDTO,
                              BindingResult bindingResult) {
-        userValidator.userValidationProcess(bindingResult);
+        customBindingResultValidator.validationProcess(bindingResult);
         return customUserService.createUser(customUserDTO, bindingResult).getCurrentUserURI();
     }
 

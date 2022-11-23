@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserValidator {
+public class CustomBindingResultValidator {
 
-    public void userValidationProcess(BindingResult bindingResult) {
+    public void validationProcess(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<ObjectError> errors = bindingResult.getAllErrors();
             List<String> errorMessages = new ArrayList<>();
