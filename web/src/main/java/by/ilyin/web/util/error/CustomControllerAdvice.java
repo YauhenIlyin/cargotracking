@@ -35,7 +35,7 @@ public class CustomControllerAdvice {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     //todo add javadoc 400
-    
+
     @ExceptionHandler({
             BindException.class,
             HttpMessageNotReadableException.class,
