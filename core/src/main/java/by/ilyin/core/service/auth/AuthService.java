@@ -9,6 +9,7 @@ import by.ilyin.core.repository.CustomUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +32,7 @@ public class AuthService {
         return customUser;
     }
 
+    @Transactional
     public Set<CustomJWT> logoutProcess(Long userId) {
         Set<CustomJWT> jwtSet = authRepository.findAllByUserId(userId)
                 .stream()
@@ -40,6 +42,7 @@ public class AuthService {
         return jwtSet;
     }
 
+    @Transactional
     public void cleanUpExpiredJWT(LocalDateTime localDateTime) {
         authRepository.deleteAllByExpiredDateBefore(localDateTime);
     }
@@ -48,10 +51,12 @@ public class AuthService {
         return new HashSet<>(authRepository.findAllByIsNotBlocked(Boolean.FALSE));
     }
 
+    @Transactional
     public void saveJWT(CustomJWT customJwt) {
         authRepository.save(customJwt);
     }
 
+    @Transactional
     public Set<CustomJWT> blockAccessJWT(CustomJWT refreshJWT) {
         Set<CustomJWT> blockedJWTSet =
                 authRepository.findAllByUserId(refreshJWT.getUserId())
