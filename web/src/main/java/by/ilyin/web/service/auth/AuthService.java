@@ -1,5 +1,7 @@
 package by.ilyin.web.service.auth;
 
+import by.ilyin.web.dto.auth.LogoutDTO;
+import by.ilyin.web.dto.auth.RefreshJwtDTO;
 import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.entity.CustomJWT;
 import by.ilyin.web.entity.CustomUser;
@@ -47,26 +49,28 @@ public class AuthService {
                 .toString();
     }
 
-    public String refreshProcess(Long userId, String refreshToken) {
-        DecodedJWT decodedJWT = jwtUtil.decodeValidateToken(refreshToken);
+    public String refreshProcess(RefreshJwtDTO refreshJwtDTO, BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
+        DecodedJWT decodedJWT = jwtUtil.decodeValidateToken(refreshJwtDTO.getToken());
         Long tokenUserId = decodedJWT.getClaim("userId").as(Long.class);
-        if (!tokenUserId.equals(userId)) {
+        if (!tokenUserId.equals(refreshJwtDTO.getUserId())) {
             throw new ResourceNotFoundException("Incorrect userId");
         }
-        CustomUser customUser = usersCoreFeignClient.getUserById(userId);
-        Set<CustomJWT> blockedJWTSet = authCoreFeignClient.blockAccessJWT(jwtUtil.buildCustomJwt(refreshToken));
+        CustomUser customUser = usersCoreFeignClient.getUserById(refreshJwtDTO.getUserId());
+        Set<CustomJWT> blockedJWTSet = authCoreFeignClient.blockAccessJWT(jwtUtil.buildCustomJwt(refreshJwtDTO.getToken()));
         jwtBlackListManager.addToBlackList(blockedJWTSet);
         String currentAccessJWT = jwtUtil.generateAccessToken(customUser);
         authCoreFeignClient.saveJWT(jwtUtil.buildCustomJwt(currentAccessJWT));
         return new StringBuilder()
                 .append(currentAccessJWT)
                 .append(" ")
-                .append(refreshToken)
+                .append(refreshJwtDTO.getToken())
                 .toString();
     }
 
-    public void logoutProcess(Long id) {
-        Set<CustomJWT> blockedJWTSet = authCoreFeignClient.logoutProcess(id);
+    public void logoutProcess(LogoutDTO logoutDTO, BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
+        Set<CustomJWT> blockedJWTSet = authCoreFeignClient.logoutProcess(logoutDTO.getUserId());
         jwtBlackListManager.addToBlackList(blockedJWTSet);
     }
 
