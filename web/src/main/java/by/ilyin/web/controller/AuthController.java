@@ -4,8 +4,10 @@ import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
@@ -18,8 +20,9 @@ public class AuthController {
     //todo add @Valid
     //todo string to byte[];
     @PostMapping("/sign-in")
-    public String signIn(SignInDTO signInDTO) {
-        return authService.signInProcess(signInDTO);
+    public String signIn(@RequestBody @Valid SignInDTO signInDTO,
+                         BindingResult bindingResult) {
+        return authService.signInProcess(signInDTO, bindingResult);
     }
 
     @PostMapping("/refresh")
