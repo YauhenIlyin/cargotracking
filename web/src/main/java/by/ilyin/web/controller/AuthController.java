@@ -26,10 +26,6 @@ public class AuthController {
     public String signIn(@RequestBody @Valid SignInDTO signInDTO,
                          BindingResult bindingResult) {
         return authService.signInProcess(signInDTO, bindingResult);
-    public String signIn(SignInDTO signInDTO) {
-        return authService.signInProcess(signInDTO);
-    public String signIn(SignInDTO signInDTO) {
-        return authService.signInProcess(signInDTO);
     }
 
     @PostMapping("/refresh")
