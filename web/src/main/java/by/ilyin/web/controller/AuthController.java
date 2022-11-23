@@ -1,5 +1,7 @@
 package by.ilyin.web.controller;
 
+import by.ilyin.web.dto.auth.LogoutDTO;
+import by.ilyin.web.dto.auth.RefreshJwtDTO;
 import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.service.auth.AuthService;
 import lombok.NonNull;
@@ -27,14 +29,15 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public String refresh(@RequestParam(value = "userId") @NotNull Long userId,
-                          @RequestParam(value = "token") String token) {
-        return authService.refreshProcess(userId, token);
+    public String refresh(@RequestBody @Valid RefreshJwtDTO refreshJwtDTO,
+                          BindingResult bindingResult) {
+        return authService.refreshProcess(refreshJwtDTO, bindingResult);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestParam(value = "userId") @NonNull Long userId) {
-        authService.logoutProcess(userId);
+    public ResponseEntity<Void> logout(@RequestBody @Valid LogoutDTO logoutDTO,
+                                       BindingResult bindingResult) {
+        authService.logoutProcess(logoutDTO, bindingResult);
         return ResponseEntity
                 .ok()
                 .build();
