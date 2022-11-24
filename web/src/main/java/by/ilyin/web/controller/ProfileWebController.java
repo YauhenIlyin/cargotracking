@@ -3,7 +3,6 @@ package by.ilyin.web.controller;
 import by.ilyin.web.dto.ChangePassProfileDTO;
 import by.ilyin.web.dto.request.UpdateUserProfileDTO;
 import by.ilyin.web.dto.UserProfileDTO;
-import by.ilyin.web.service.UserProfileService;
 import by.ilyin.web.util.validation.custom.ValidChangePasswordData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

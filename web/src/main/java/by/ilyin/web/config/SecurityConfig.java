@@ -46,11 +46,11 @@ public class SecurityConfig {
 
                 .antMatchers("api/logout").authenticated()
                 .antMatchers("/api/sign-in", "/api/refresh").permitAll()
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
 }
