@@ -33,6 +33,8 @@ public class SecurityConfig {
 
                 .antMatchers("/api/sign-in", "api/logout", "/api/refresh").permitAll()
 
+                .antMatchers(HttpMethod.POST, "/api/email").permitAll()
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
