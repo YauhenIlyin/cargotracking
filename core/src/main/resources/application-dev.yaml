@@ -6,6 +6,19 @@ spring:
     url: jdbc:postgresql://localhost:5432/cargotracking_db
     username: postgres
     password: adminpass
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ilyin.testemail@gmail.com
+    password: qftjaebtvnakoqff
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug : true
+
 liquibase:
   changelog-file: classpath:/db/changelog/db.changelog-master.yaml generate-changelog
 server:

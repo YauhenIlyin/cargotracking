@@ -31,6 +31,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.PUT, "/api/profile/change-password").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
 
+                .antMatchers(HttpMethod.POST, "/api/email").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
 
