@@ -26,4 +26,5 @@ public interface EmailCoreFeignClient {
     @GetMapping(value = "/api/profile/confirm-change-email/{uuid}", consumes = "application/json")
     void confirmEmail(@RequestParam("userId") Long userId,
                       @PathVariable("uuid") String uuid);
+
 }

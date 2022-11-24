@@ -13,5 +13,6 @@ public interface EmailDTOMapper {
 
     @Mapping(target = "attachment", ignore = true)
     EmailDetails mapFromDto(ChangeEmailDTO changeEmailDTO);
+
 }
 
