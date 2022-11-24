@@ -1,6 +1,7 @@
 package by.ilyin.core.service;
 
 import by.ilyin.core.dto.request.UpdateUserProfileDTO;
+import by.ilyin.core.dto.UpdateUserProfileDTO;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUserRepository;

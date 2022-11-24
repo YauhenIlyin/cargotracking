@@ -7,6 +7,12 @@ import by.ilyin.web.util.validation.custom.ValidChangePasswordData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import by.ilyin.web.dto.UpdateUserProfileDTO;
+import by.ilyin.web.dto.UserProfileDTO;
+import by.ilyin.web.service.UserProfileService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
