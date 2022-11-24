@@ -26,12 +26,17 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/users").hasAnyRole("ADMIN", "DISPATCHER")
                 .antMatchers(HttpMethod.POST, "/api/users/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
+                .antMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
+                .antMatchers(HttpMethod.PUT, "/api/profile/change-password").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
+
                 .antMatchers("/api/sign-in", "api/logout", "/api/refresh").permitAll()
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
 }
