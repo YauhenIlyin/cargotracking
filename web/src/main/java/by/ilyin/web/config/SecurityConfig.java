@@ -33,6 +33,8 @@ public class SecurityConfig {
                 
                 .antMatchers(HttpMethod.POST, "/api/email").permitAll()
 
+                .antMatchers(HttpMethod.POST, "/api/email").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
 
