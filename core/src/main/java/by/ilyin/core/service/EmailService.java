@@ -26,7 +26,6 @@ public class EmailService {
     private final EmailDTOMapper emailDTOMapper;
     private final CustomUserRepository customUserRepository;
     private final CustomUUIDRepository customUUIDRepository;
-
     @Value("${external.web.server.address}")
     private String webAddress;
     @Value("${external.web.server.port}")
