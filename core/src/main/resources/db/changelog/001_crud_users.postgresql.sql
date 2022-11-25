@@ -57,4 +57,5 @@ values ('MANAGER');
 INSERT INTO public.user_roles (role_name)
 values ('DRIVER');
 INSERT INTO public.user_roles (role_name)
+<<<<<<< HEAD:core/src/main/resources/db/changelog/001_crud_users.postgresql.sql
 values ('COMPANY_OWNER');

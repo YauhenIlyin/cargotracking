@@ -15,4 +15,13 @@ public class EmailService {
         emailCoreFeignClient.sendEmail(sendEmailDTO);
     }
 
+    public void repairEmail(SendEmailDTO sendEmailDTO, BindingResult bindingResult) {
+        bindingResultValidator.validationProcess(bindingResult);
+        emailCoreFeignClient.repairEmail(sendEmailDTO);
+    }
+
+    public void restoreAccount(String uuid, String password) {
+        emailCoreFeignClient.restoreAccount(uuid, password);
+    }
+
 }
