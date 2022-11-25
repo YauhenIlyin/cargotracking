@@ -85,6 +85,23 @@ public class CustomControllerAdvice {
         return result;
     }
 
+    //todo add javadoc 400 for requestParameters
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<RealErrorResponse> handleConstraintViolationExceptions(ConstraintViolationException e) {
+        ResponseEntity<RealErrorResponse> result;
+        List<String> errorMessages = e.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());
+        if (errorMessages.size() > 0) {
+            result = buildSimpleErrorResponse(LocalDateTime.now().format(formatter),
+                    HttpStatus.BAD_REQUEST,
+                    errorMessages);
+        } else {
+            result = buildSimpleErrorResponse(e, HttpStatus.BAD_REQUEST);
+        }
+        return result;
+    }
+
     //todo add javadoc 401
 
     @ExceptionHandler(UnauthorizedRequestException.class)

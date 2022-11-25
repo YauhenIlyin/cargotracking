@@ -70,5 +70,5 @@ public class EmailService {
         emailDetails.setText(messageSB.toString());
         emailProcessManager.sendSimpleMail(emailDetails);
     }
-
+    
 }
