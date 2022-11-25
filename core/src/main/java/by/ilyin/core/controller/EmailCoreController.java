@@ -44,7 +44,7 @@ public class EmailCoreController {
                 .ok()
                 .build();
     }
-
+    
     @PostMapping("/profile/change-email")
     @ConsistentChangeEmailParameters
     public ResponseEntity<Void> changeEmail(@RequestParam("userId") Long userId,
