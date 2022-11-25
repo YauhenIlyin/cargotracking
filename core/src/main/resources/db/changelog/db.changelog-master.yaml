@@ -12,8 +12,8 @@ databaseChangeLog:
       - file: 002_jwt_authentication.postgresql.sql
       - relativeToChangelogFile: true
   - changeSet:
-      - id: 3
-      - author: Ilyin_Yauhen
+    - id: 3
+    - author: Ilyin_Yauhen
   - include:
       - file: 003_custom_uuid.postgresql.sql
       - relativeToChangelogFile: true
