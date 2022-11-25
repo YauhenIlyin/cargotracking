@@ -115,40 +115,4 @@ public class EmailService {
         customUserRepository.save(customUser);
     }
 
-    @Transactional
-    public void repairEmail(SendEmailDTO sendEmailDTO) {
-        CustomUser customUser = customUserRepository.findByEmail(sendEmailDTO.getRecipient())
-                .orElseThrow(() -> new ResourceNotFoundException("Email " +
-                        sendEmailDTO.getRecipient() + " not found"));
-        UUID uuid = UUID.randomUUID();
-        customUUIDRepository.save(
-                new CustomUUID(customUser.getId(),
-                        LocalDateTime.now(),
-                        LocalDateTime.now().plusHours(1),
-                        uuid.toString(),
-                        CustomUUID.Destination.RESTORE_ACCOUNT));
-        StringBuilder messageSB = new StringBuilder();
-        messageSB.append(sendEmailDTO.getText())
-                .append(" ")
-                .append("http://") //todo https ?
-                .append(webAddress)
-                .append(":")
-                .append(webPort)
-                .append("/api/restore/")
-                .append(uuid);
-        EmailDetails emailDetails = emailDTOMapper.mapFromDto(sendEmailDTO);
-        emailDetails.setText(messageSB.toString());
-        emailProcessService.sendSimpleMail(emailDetails);
-    }
-
-    @Transactional
-    public void restoreAccount(String uuid, String password) {
-        CustomUUID customUUID = customUUIDRepository.findByUuidValueAndExpiredDateAfter(uuid, LocalDateTime.now())
-                .orElseThrow(() -> new ResourceNotFoundException("Incorrect UUID."));
-        CustomUser customUser = customUserRepository.findById(customUUID.getUserId())
-                .orElseThrow(() -> new RuntimeException("Internal server error. Account not found."));
-        customUser.setPassword(password);
-        customUserRepository.save(customUser);
-    }
-
 }
