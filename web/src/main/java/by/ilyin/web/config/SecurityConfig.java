@@ -34,6 +34,9 @@ public class SecurityConfig {
                 .antMatchers("/api/sign-in", "api/logout", "/api/refresh").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/email").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/email/repairing").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/restore").permitAll()
+
 
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
