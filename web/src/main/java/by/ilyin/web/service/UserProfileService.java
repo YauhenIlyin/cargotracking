@@ -37,7 +37,7 @@ public class UserProfileService {
         profileCoreFeignClient.changePassword(changePassProfileDTO.getNewPassword(), getCurrentCustomUser().getId());
     }
 
-    private CustomUser getCurrentCustomUser() {
+    CustomUser getCurrentCustomUser() {
         return ((CustomUserDetails) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getCustomUser();
     }

@@ -24,4 +24,13 @@ public class EmailService {
         emailCoreFeignClient.restoreAccount(uuid, restoreAccountDTO);
     }
 
+    public void changeEmail(ChangeEmailDTO changeEmailDTO, BindingResult bindingResult) {
+        bindingResultValidator.validationProcess(bindingResult);
+        emailCoreFeignClient.changeEmail(userProfileService.getCurrentCustomUser().getId(), changeEmailDTO);
+    }
+
+    public void confirmEmail(String uuid) {
+        emailCoreFeignClient.confirmEmail(userProfileService.getCurrentCustomUser().getId(), uuid);
+    }
+
 }
