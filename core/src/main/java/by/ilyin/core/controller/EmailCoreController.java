@@ -38,7 +38,7 @@ public class EmailCoreController {
                 .ok()
                 .build();
     }
-
+    
     @PostMapping("/profile/change-email")
     public ResponseEntity<Void> changeEmail(@RequestParam("userId") Long userId,
                                             @RequestBody ChangeEmailDTO changeEmailDTO) {
