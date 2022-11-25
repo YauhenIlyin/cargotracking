@@ -1,10 +1,13 @@
 package by.ilyin.core.service;
 
+import by.ilyin.core.dto.ChangeEmailDTO;
 import by.ilyin.core.dto.RestoreAccountDTO;
 import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.dto.mapper.EmailDTOMapper;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.uuid.CustomUUID;
+import by.ilyin.core.exception.http.client.IncorrectValueFormatException;
+import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUUIDRepository;
 import by.ilyin.core.repository.CustomUserRepository;
@@ -55,7 +58,8 @@ public class EmailService {
                         LocalDateTime.now(),
                         LocalDateTime.now().plusHours(1),
                         uuid.toString(),
-                        CustomUUID.Destination.RESTORE_ACCOUNT));
+                        CustomUUID.Destination.RESTORE_ACCOUNT,
+                        null));
         StringBuilder messageSB = new StringBuilder();
         messageSB.append(sendEmailDTO.getText())
                 .append(" ")
@@ -69,5 +73,47 @@ public class EmailService {
         emailDetails.setText(messageSB.toString());
         emailProcessManager.sendSimpleMail(emailDetails);
     }
-    
+
+    @Transactional
+    public void changeEmail(Long userId, ChangeEmailDTO changeEmailDTO) {
+        CustomUser customUser = customUserRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Account not found by id. Internal server error"));
+        if (customUserRepository.existsByEmail(changeEmailDTO.getRecipient())) {
+            throw new ResourceAlreadyExists("Email " + changeEmailDTO.getRecipient() + " is not free.");
+        }
+        if (!customUser.getPassword().equals(changeEmailDTO.getPassword())) {
+            throw new IncorrectValueFormatException("Incorrect password.");
+        }
+        String uuidStr = UUID.randomUUID().toString();
+        customUUIDRepository.deleteByUserIdAndDestination(customUser.getId(), CustomUUID.Destination.CHANGE_EMAIL);
+        customUUIDRepository.save(
+                new CustomUUID(userId,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusHours(1),
+                        uuidStr,
+                        CustomUUID.Destination.CHANGE_EMAIL,
+                        changeEmailDTO.getRecipient()));
+        StringBuilder messageSB = new StringBuilder();
+        messageSB.append(changeEmailDTO.getText())
+                .append(" ")
+                .append("http://") //todo https ?
+                .append(webAddress)
+                .append(":")
+                .append(webPort)
+                .append("/api/profile/confirm-change-email/")
+                .append(uuidStr);
+        EmailDetails emailDetails = emailDTOMapper.mapFromDto(changeEmailDTO);
+        emailDetails.setText(messageSB.toString());
+        emailProcessService.sendSimpleMail(emailDetails);
+    }
+
+    public void confirmEmail(Long userId, String uuid) {
+        CustomUUID customUUID = customUUIDRepository.findByUuidValueAndExpiredDateAfter(uuid, LocalDateTime.now())
+                .orElseThrow(() -> new ResourceNotFoundException("Your request has expired"));
+        CustomUser customUser = customUserRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Account not found by id. Internal server error"));
+        customUser.setEmail(customUUID.getEmail());
+        customUserRepository.save(customUser);
+    }
+
 }

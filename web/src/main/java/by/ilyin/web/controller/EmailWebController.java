@@ -66,4 +66,21 @@ public class EmailWebController {
                 .build();
     }
 
+    @PostMapping("/profile/change-email")
+    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ChangeEmailDTO changeEmailDTO,
+                                            BindingResult bindingResult) {
+        emailService.changeEmail(changeEmailDTO, bindingResult);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @GetMapping("/profile/confirm-change-email/{uuid}")
+    public ResponseEntity<Void> confirmEmail(@PathVariable("uuid") String uuid) {
+        emailService.confirmEmail(uuid);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
 }
