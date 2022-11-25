@@ -12,4 +12,6 @@ public interface CustomUUIDRepository extends JpaRepository<CustomUUID, UUIDCust
 
     Optional<CustomUUID> findByUuidValueAndExpiredDateAfter(String uuid, LocalDateTime expiredDate);
 
+    void deleteByUserIdAndDestination(Long userId, CustomUUID.Destination destination);
+
 }

@@ -17,3 +17,9 @@ databaseChangeLog:
   - include:
     - file: 003_custom_uuid.postgresql.sql
     - relativeToChangelogFile: true
+  - changeSet:
+    - id: 5
+    - author: Ilyin_Yauhen
+  - include:
+    - file: 005_alter_custom_uuid.postgresql.sql
+    - relativeToChangelogFile: true

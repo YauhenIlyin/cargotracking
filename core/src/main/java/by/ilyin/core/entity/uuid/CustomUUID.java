@@ -27,6 +27,8 @@ public class CustomUUID {
     @Enumerated(EnumType.STRING)
     @Column(name = "destination")
     private Destination destination;
+    @Column(name ="email")
+    private String email;
 
     public enum Destination {
         RESTORE_ACCOUNT,

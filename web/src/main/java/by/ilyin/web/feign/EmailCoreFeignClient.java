@@ -1,5 +1,6 @@
 package by.ilyin.web.feign;
 
+import by.ilyin.web.dto.ChangeEmailDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,15 @@ public interface EmailCoreFeignClient {
     @PostMapping(value = "/api/email/repairing", consumes = "application/json")
     void repairEmail(SendEmailDTO sendEmailDTO);
 
-    @GetMapping(value = "api/restore/{uuid}", consumes = "application/json")
+    @GetMapping(value = "/api/restore/{uuid}", consumes = "application/json")
     void restoreAccount(@PathVariable("uuid") String uuid,
                         @RequestParam("password") String password);
 
+    @PostMapping(value = "/api/profile/change-email", consumes = "application/json")
+    void changeEmail(@RequestParam("userId") Long userId,
+                     ChangeEmailDTO changeEmailDTO);
+
+    @GetMapping(value = "/api/profile/confirm-change-email/{uuid}", consumes = "application/json")
+    void confirmEmail(@RequestParam("userId") Long userId,
+                      @PathVariable("uuid") String uuid);
 }

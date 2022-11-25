@@ -1,5 +1,6 @@
 package by.ilyin.web.controller;
 
+import by.ilyin.web.dto.ChangeEmailDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import by.ilyin.web.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,23 @@ public class EmailWebController {
                                                @Size(min = 5, max = 20, message = "Password length " +
                                                        "must be between 5 and 20 characters") String password) {
         emailService.restoreAccount(uuid, password);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @PostMapping("/profile/change-email")
+    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ChangeEmailDTO changeEmailDTO,
+                                            BindingResult bindingResult) {
+        emailService.changeEmail(changeEmailDTO, bindingResult);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @GetMapping("/profile/confirm-change-email/{uuid}")
+    public ResponseEntity<Void> confirmEmail(@PathVariable("uuid") String uuid) {
+        emailService.confirmEmail(uuid);
         return ResponseEntity
                 .ok()
                 .build();
