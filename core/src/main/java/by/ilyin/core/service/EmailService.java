@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -115,6 +116,25 @@ public class EmailService {
                 .orElseThrow(() -> new RuntimeException("Account not found by id. Internal server error"));
         customUser.setEmail(customUUID.getEmail());
         customUserRepository.save(customUser);
+    }
+
+    //todo rebuild to template from frontend ???
+    //delete ?
+    public void happyBirthday(LocalDate fromBornDate, LocalDate toBornDate) {
+        String text = "Hello! HappyBirthday, ";
+        String subject = "This beautiful day";
+        customUserRepository.findAllByBornDateAfterAndBornDateBefore(fromBornDate, toBornDate)
+                .stream()
+                .map(o -> new EmailDetails(
+                        o.getEmail(),
+                        subject,
+                        text + o.getName(),
+                        null
+                ))
+                .map(e -> {
+                    emailProcessService.sendSimpleMail(e);
+                    return null;
+                }).close();
     }
 
 }
