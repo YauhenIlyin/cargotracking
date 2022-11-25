@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.net.BindException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 //todo add logs
 @ControllerAdvice
@@ -51,6 +54,23 @@ public class CustomControllerAdvice {
         ResponseEntity<RealErrorResponse> result;
         List<String> errorMessages = e.getErrorMessages();
         if (errorMessages != null && errorMessages.size() > 0) {
+            result = buildSimpleErrorResponse(LocalDateTime.now().format(formatter),
+                    HttpStatus.BAD_REQUEST,
+                    errorMessages);
+        } else {
+            result = buildSimpleErrorResponse(e, HttpStatus.BAD_REQUEST);
+        }
+        return result;
+    }
+
+    //todo add javadoc 400 for requestParameters
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<RealErrorResponse> handleConstraintViolationExceptions(ConstraintViolationException e) {
+        ResponseEntity<RealErrorResponse> result;
+        List<String> errorMessages = e.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());
+        if (errorMessages.size() > 0) {
             result = buildSimpleErrorResponse(LocalDateTime.now().format(formatter),
                     HttpStatus.BAD_REQUEST,
                     errorMessages);
