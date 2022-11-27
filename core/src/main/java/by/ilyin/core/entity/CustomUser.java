@@ -1,5 +1,6 @@
 package by.ilyin.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "users")
 public class CustomUser extends BaseEntity {
@@ -28,7 +28,7 @@ public class CustomUser extends BaseEntity {
     @Column(name = "patronymic")
     private String patronymic;
     @Column(name = "client_id")
-    private long clientId;
+    private Long clientId;
     @Column(name = "born_date")
     private LocalDate bornDate;
     @Column(name = "email")
@@ -56,21 +56,26 @@ public class CustomUser extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_role_id"))
     private Set<UserRole> userRoles;
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Client client;
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToOne(mappedBy = "generalAdmin")
+    private Client client1;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         CustomUser that = (CustomUser) o;
-        if (clientId != that.clientId) return false;
         if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(surname, that.surname)) return false;
         if (!Objects.equals(patronymic, that.patronymic)) return false;
+        if (!Objects.equals(clientId, that.clientId)) return false;
         if (!Objects.equals(bornDate, that.bornDate)) return false;
         if (!Objects.equals(email, that.email)) return false;
         if (!Objects.equals(town, that.town)) return false;
@@ -90,7 +95,7 @@ public class CustomUser extends BaseEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
-        result = 31 * result + (int) (clientId ^ (clientId >>> 32));
+        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
         result = 31 * result + (bornDate != null ? bornDate.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (town != null ? town.hashCode() : 0);
@@ -103,6 +108,29 @@ public class CustomUser extends BaseEntity {
         result = 31 * result + (issuedBy != null ? issuedBy.hashCode() : 0);
         result = 31 * result + (userRoles != null ? userRoles.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CustomUser{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", surname='").append(surname).append('\'');
+        sb.append(", patronymic='").append(patronymic).append('\'');
+        sb.append(", clientId=").append(clientId);
+        sb.append(", bornDate=").append(bornDate);
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", town='").append(town).append('\'');
+        sb.append(", street='").append(street).append('\'');
+        sb.append(", house='").append(house).append('\'');
+        sb.append(", flat='").append(flat).append('\'');
+        sb.append(", login='").append(login).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", passportNum='").append(passportNum).append('\'');
+        sb.append(", issuedBy='").append(issuedBy).append('\'');
+        sb.append(", userRoles=").append(userRoles);
+        sb.append('}');
+        return sb.toString();
     }
 
 }
