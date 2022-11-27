@@ -9,7 +9,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-//todo delete extends WebSecurityConfigurerAdapter deprecated
 @RequiredArgsConstructor
 public class SecurityConfig {
 

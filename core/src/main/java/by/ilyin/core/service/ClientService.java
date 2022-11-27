@@ -52,7 +52,9 @@ public class ClientService {
 
     @Transactional
     public void updateClient(Long clientId, UpdateClientDTO updateClientDTO) {
-        Client client = clientRepository.findById(clientId).orElseThrow();
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
+                        clientId + " not found."));
         client.setName(updateClientDTO.getName());
         client.setStatus(updateClientDTO.getStatus());
         clientRepository.save(client);
@@ -74,7 +76,9 @@ public class ClientService {
 
     @Transactional
     public void activateClient(Long clientId) {
-        Client client = clientRepository.findById(clientId).orElseThrow();
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
+                        clientId + " not found."));
         client.setStatus(Client.ClientStatus.LEGAL);
         clientRepository.save(client);
     }

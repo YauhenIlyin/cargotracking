@@ -31,7 +31,6 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.PUT, "/api/profile/change-password").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
 
-<<<<<<< HEAD
                 .antMatchers("/api/sign-in", "api/logout", "/api/refresh").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/email").permitAll()
@@ -47,10 +46,12 @@ public class SecurityConfig {
 
                 .antMatchers("api/logout").authenticated()
                 .antMatchers("/api/sign-in", "/api/refresh").permitAll()
-=======
-                .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
->>>>>>> b6027f0 (CTB-6_JWT_authentication is created)
+
+                .antMatchers(HttpMethod.POST, "/api/clients").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/clients/{id}").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/clients").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/clients/activate/{clientId}").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/clients").hasRole("SYS_ADMIN")
 
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

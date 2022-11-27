@@ -2,6 +2,7 @@ package by.ilyin.web.controller;
 
 import by.ilyin.web.dto.ClientDTO;
 import by.ilyin.web.dto.request.UpdateClientDTO;
+import by.ilyin.web.dto.response.CreateClientResponseDTO;
 import by.ilyin.web.dto.response.GetClientByIdResponseDTO;
 import by.ilyin.web.dto.response.GetClientsResponseDTO;
 import by.ilyin.web.entity.Client;
