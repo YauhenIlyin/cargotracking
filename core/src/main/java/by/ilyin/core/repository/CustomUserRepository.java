@@ -13,4 +13,6 @@ public interface CustomUserRepository extends JpaRepository<CustomUser, Long>, J
 
     Optional<CustomUser> findByLogin(String login);
 
+    Boolean existsByLogin(String login);
+
 }
