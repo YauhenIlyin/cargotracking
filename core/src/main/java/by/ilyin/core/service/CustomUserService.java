@@ -177,7 +177,7 @@ public class CustomUserService {
         return userFiltrationBuilder.build(fieldCriteriaTypes);
     }
 
-    private Set<UserRole> getRealUserRoleSet(Set<UserRole.UserRoleType> dtoUserRoles) {
+    public Set<UserRole> getRealUserRoleSet(Set<UserRole.UserRoleType> dtoUserRoles) {
         HashSet<UserRole> realRoleSet = null;
         if (dtoUserRoles != null) {
             Set<UserRole> realUserRoleList = userRoleRepository.findByRoleTypeIsIn(dtoUserRoles);
