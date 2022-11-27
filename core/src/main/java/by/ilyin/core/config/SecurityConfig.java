@@ -9,7 +9,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-//todo delete extends WebSecurityConfigurerAdapter deprecated
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -18,7 +17,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("api/*", "/api/about", "/api/users", "/api/users/*").permitAll();
+                .antMatchers("/api/**", "/api/about", "/api/users", "/api/users/*", "/api/clients").permitAll();
         return http.build();
     }
 
