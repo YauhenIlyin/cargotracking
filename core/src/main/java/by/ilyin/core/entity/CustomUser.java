@@ -84,6 +84,7 @@ public class CustomUser extends BaseEntity {
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(surname, that.surname)) return false;
         if (!Objects.equals(patronymic, that.patronymic)) return false;
+        if (!Objects.equals(clientId, that.clientId)) return false;
         if (!Objects.equals(bornDate, that.bornDate)) return false;
         if (!Objects.equals(email, that.email)) return false;
         if (!Objects.equals(town, that.town)) return false;
