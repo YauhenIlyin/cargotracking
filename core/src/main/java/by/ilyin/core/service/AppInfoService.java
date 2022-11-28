@@ -1,9 +1,18 @@
 package by.ilyin.core.service;
 
-import by.ilyin.core.entity.dto.AppInfoDTO;
+import by.ilyin.core.dto.response.AppInfoResponseDTO;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-public interface AppInfoService {
+@Service
+public class AppInfoService {
+    @Value(value = "${app.info.applicationName}")
+    private String applicationName;
+    @Value(value = "${app.info.version}")
+    private String version;
 
-    AppInfoDTO getAppInfo();
+    public AppInfoResponseDTO getAppInfo() {
+        return new AppInfoResponseDTO(applicationName, version);
+    }
 
 }

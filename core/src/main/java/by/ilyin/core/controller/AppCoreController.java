@@ -1,11 +1,9 @@
 package by.ilyin.core.controller;
 
-import by.ilyin.core.entity.dto.AppInfoDTO;
+import by.ilyin.core.dto.response.AppInfoResponseDTO;
 import by.ilyin.core.service.AppInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -15,7 +13,7 @@ public class AppCoreController {
     private final AppInfoService appInfoService;
 
     @GetMapping("/about")
-    public AppInfoDTO getAppInfo() {
+    public AppInfoResponseDTO getAppInfo() {
         return appInfoService.getAppInfo();
     }
 
