@@ -25,7 +25,7 @@ public class UserWebController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id,
+    public ResponseEntity<Void> updateUser(@PathVariable Long id,
                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         return customUserService.updateUser(id, updateUserRequestDTO);
     }
@@ -37,18 +37,18 @@ public class UserWebController {
 
     @GetMapping
     public GetUsersResponseDTO getUsers(
-            @RequestParam(required = false, value = "name") String name,
-            @RequestParam(required = false, value = "surname") String surname,
-            @RequestParam(required = false, value = "patronymic") String patronymic,
-            @RequestParam(required = false, value = "beforeBornDate") String beforeBornDate,
-            @RequestParam(required = false, value = "afterBornDate") String afterBornDate,
-            @RequestParam(required = false, value = "town") String town,
-            @RequestParam(required = false, value = "street") String street,
-            @RequestParam(required = false, value = "house") String house,
-            @RequestParam(required = false, value = "flat") String flat,
-            @RequestParam(required = false, value = "userRoles") Set<String> userRoles,
-            @RequestParam(required = false, value = "pageSize") Integer pageSize,
-            @RequestParam(required = false, value = "pageNumber") Integer pageNumber) {
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String surname,
+            @RequestParam(required = false) String patronymic,
+            @RequestParam(required = false) String beforeBornDate,
+            @RequestParam(required = false) String afterBornDate,
+            @RequestParam(required = false) String town,
+            @RequestParam(required = false) String street,
+            @RequestParam(required = false) String house,
+            @RequestParam(required = false) String flat,
+            @RequestParam(required = false) Set<String> userRoles,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer pageNumber) {
         return customUserService.getUsers(
                 name,
                 surname,
@@ -65,7 +65,7 @@ public class UserWebController {
     }
 
     @GetMapping("/{id}")
-    public CustomUserDTO getUser(@PathVariable("id") Long id) {
+    public CustomUserDTO getUser(@PathVariable Long id) {
         return customUserService.getUserById(id);
     }
 

@@ -1,6 +1,5 @@
 package by.ilyin.web.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -9,8 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Value("${cors.allowed.origins}")
-    private String[] allowedOrigins;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -23,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
                         .allowedHeaders(
                                 "Content-Type",
                                 "Authenticated")
-                        .allowedOrigins(allowedOrigins);
+                        .allowedOrigins("*");
             }
         };
     }

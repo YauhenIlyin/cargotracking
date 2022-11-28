@@ -34,7 +34,7 @@ public class CustomUserService {
         String currentUrn = createUserResponseDTO.getCurrentUserURI();
         StringBuilder currentUrlSB = new StringBuilder();
         currentUrlSB
-                .append("https://")
+                .append("http://")
                 .append(serverAddress)
                 .append(":")
                 .append(serverPort)
