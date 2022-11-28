@@ -1,3 +1,7 @@
 databaseChangeLog:
+  - changeSet:
+    - id: 1
+    - author: Ilyin_Yauhen
   - include:
-      file: classpath:db/changelog/db.ctb-4.changelog.postgresql.sql
+    - file: 001_crud_users.postgresql.sql
+    - relativeToChangelogFile: true

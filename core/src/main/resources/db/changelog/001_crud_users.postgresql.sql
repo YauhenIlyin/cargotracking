@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset ctb-4:create-users
+--changeset part1:create-users
 --preconditions onFail:MARK_RAN onError:MARK_RAN
 --precondition tableExists public.users
 CREATE TABLE public.users
@@ -22,7 +22,7 @@ CREATE TABLE public.users
     issued_by     VARCHAR(50)
 );
 
---changeset ctb-4:create-user_roles
+--changeset part2:create-user_roles
 --preconditions onFail:MARK_RAN onError:MARK_RAN
 --precondition tableExists public.user_roles
 CREATE TABLE public.user_roles
@@ -31,7 +31,7 @@ CREATE TABLE public.user_roles
     role_name VARCHAR(15) UNIQUE NOT NULL
 );
 
---changeset ctb-4:create-users_user_roles
+--changeset part3:create-users_user_roles
 --preconditions onFail:MARK_RAN onError:MARK_RAN
 --precondition tableExists public.users_user_roles
 CREATE TABLE public.users_user_roles
@@ -43,7 +43,7 @@ CREATE TABLE public.users_user_roles
     CONSTRAINT user_user_role_pk PRIMARY KEY (user_id, user_role_id)
 );
 
---changeset ctb-4:initialize-user_roles
+--changeset part4:insert-user_roles
 --preconditions onFail:MARK_RAN onError:MARK_RAN
 --precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM users_user_roles
 INSERT INTO public.user_roles (role_name)
