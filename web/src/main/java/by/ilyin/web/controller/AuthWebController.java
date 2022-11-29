@@ -4,19 +4,17 @@ import by.ilyin.web.dto.auth.LogoutDTO;
 import by.ilyin.web.dto.auth.RefreshJwtDTO;
 import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.service.auth.AuthService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-public class AuthController {
+public class AuthWebController {
 
     private final AuthService authService;
 

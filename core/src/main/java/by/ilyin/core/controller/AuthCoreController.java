@@ -13,7 +13,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class AuthController {
+public class AuthCoreController {
 
     private final AuthService authService;
 

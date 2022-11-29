@@ -5,3 +5,9 @@ databaseChangeLog:
   - include:
     - file: 001_crud_users.postgresql.sql
     - relativeToChangelogFile: true
+  - changeSet:
+    - id: 1
+    - author: Ilyin_Yauhen
+  - include:
+    - file: 002_jwt_authentication.postgresql.sql
+    - relativeToChangelogFile: true
