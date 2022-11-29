@@ -1,17 +1,19 @@
 package by.ilyin.web.service;
 
 import by.ilyin.web.dto.CustomUserDTO;
-import by.ilyin.web.dto.PageDTO;
+import by.ilyin.web.dto.page.PageDTO;
 import by.ilyin.web.dto.mapper.CustomUserDTOMapper;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
 import by.ilyin.web.entity.CustomUser;
 import by.ilyin.web.entity.UserRole;
 import by.ilyin.web.feign.UsersCoreFeignClient;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,12 +26,14 @@ public class CustomUserService {
 
     private final UsersCoreFeignClient usersCoreFeignClient;
     private final CustomUserDTOMapper customUserDTOMapper;
+    private final CustomBindingResultValidator customBindingResultValidator;
     @Value("${server.address}")
     private String serverAddress;
     @Value("${server.port}")
     private String serverPort;
 
-    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
+    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO, BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
         CreateUserResponseDTO createUserResponseDTO = usersCoreFeignClient.createUser(customUserDTO);
         String currentUrn = createUserResponseDTO.getCurrentUserURI();
         StringBuilder currentUrlSB = new StringBuilder();
@@ -43,7 +47,10 @@ public class CustomUserService {
         return createUserResponseDTO;
     }
 
-    public ResponseEntity<Void> updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<Void> updateUser(Long id,
+                                           UpdateUserRequestDTO updateUserRequestDTO,
+                                           BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
         return usersCoreFeignClient.updateUser(id, updateUserRequestDTO);
     }
 
@@ -97,7 +104,7 @@ public class CustomUserService {
         return userDto;
     }
 
-    private Set<UserRole.UserRoleType> convertRoleSetToTypeSet(Set<UserRole> userRoleSet) {
+    public Set<UserRole.UserRoleType> convertRoleSetToTypeSet(Set<UserRole> userRoleSet) {
         Set<UserRole.UserRoleType> userRoleTypeSet = null;
         if (userRoleSet != null) {
             userRoleTypeSet = new HashSet<>();
