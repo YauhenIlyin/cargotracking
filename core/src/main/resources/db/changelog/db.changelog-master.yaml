@@ -42,8 +42,8 @@ databaseChangeLog:
       - file: 013_happy_birthday_template.postgresql.sql
       - relativeToChangelogFile: true
   - include:
-    - file: 002_jwt_authentication.postgresql.sql
-    - relativeToChangelogFile: true
+      - file: 002_jwt_authentication.postgresql.sql
+      - relativeToChangelogFile: true
   - changeSet:
       - id: 4
       - author: Ilyin_Yauhen
