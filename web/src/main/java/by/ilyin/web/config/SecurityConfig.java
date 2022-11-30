@@ -73,6 +73,12 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE, "/api/product-owners").permitAll()
 >>>>>>> dd56a77 (CTB-11 CRUD product owners added)
 
+                .antMatchers(HttpMethod.POST, "/api/cars").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/cars").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/cars/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/cars").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/cars").hasRole("ADMIN")
+
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
 

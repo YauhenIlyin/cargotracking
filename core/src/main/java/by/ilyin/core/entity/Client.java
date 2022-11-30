@@ -51,6 +51,12 @@ public class Client extends BaseEntity {
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "client")
     private List<ProductOwner> productOwners;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "client")
+    private List<Car> cars;
 
     public enum ClientStatus {
         PRIVATE,
