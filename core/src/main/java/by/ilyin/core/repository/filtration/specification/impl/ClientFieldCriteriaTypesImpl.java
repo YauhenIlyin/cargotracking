@@ -1,9 +1,11 @@
 package by.ilyin.core.repository.filtration.specification.impl;
 
 import by.ilyin.core.repository.filtration.specification.FieldCriteriaTypes;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+@Component
 public class ClientFieldCriteriaTypesImpl implements FieldCriteriaTypes {
 
     private final HashMap<String, Boolean> conditionCriteriaTypes;
