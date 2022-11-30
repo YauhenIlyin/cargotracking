@@ -32,8 +32,16 @@ public class Client extends BaseEntity {
     private CustomUser generalAdmin;
     @JsonIgnore
     @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "client")
     private List<CustomUser> customUsers;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "client")
+    private List<Storage> storages;
 
     public enum ClientStatus {
         PRIVATE,
@@ -44,9 +52,7 @@ public class Client extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Client client = (Client) o;
-
         if (!Objects.equals(id, client.id)) return false;
         if (!Objects.equals(name, client.name)) return false;
         if (status != client.status) return false;

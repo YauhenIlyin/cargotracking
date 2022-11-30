@@ -58,11 +58,15 @@ public class CustomUser extends BaseEntity {
     private Set<UserRole> userRoles;
     @JsonIgnore
     @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Client client;
     @JsonIgnore
     @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @OneToOne(mappedBy = "generalAdmin")
     private Client client1;
 
