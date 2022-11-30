@@ -56,3 +56,9 @@ databaseChangeLog:
   - include:
       - file: 006_crud_storages.postgresql.sql
       - relativeToChangelogFile: true
+  - changeSet:
+      - id: 7
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 007_crud_product_owners.postgresql.sql
+      - relativeToChangelogFile: true
