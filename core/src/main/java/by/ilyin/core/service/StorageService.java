@@ -4,10 +4,7 @@ import by.ilyin.core.dto.StorageDTO;
 import by.ilyin.core.dto.mapper.StorageDTOMapper;
 import by.ilyin.core.dto.request.UpdateStorageRequestDTO;
 import by.ilyin.core.dto.response.CreateStorageResponseDTO;
-<<<<<<< HEAD
 import by.ilyin.core.entity.Client;
-=======
->>>>>>> 861246e (CTB-10 CRUD Storage created)
 import by.ilyin.core.entity.Storage;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
