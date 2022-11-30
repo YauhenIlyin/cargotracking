@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class UpdateUserRequestDTO {
     private String surname;
     @Size(max = 20, message = "Patronymic must be no more than 20 characters long")
     private String patronymic;
-    private long clientId;
+    private Long clientId;
     private LocalDate bornDate;
     @Email(message = "String doesn't look like email")
     @Size(max = 50, message = "Email must be no more than 50 characters long")
@@ -44,7 +45,7 @@ public class UpdateUserRequestDTO {
     private String issuedBy;
     @Size(min = 1, message = "User roles amount must not be less than 1")
     private Set<UserRole.UserRoleType> userRoles;
-    @NotEmpty
+    @NotNull(message = "Field \"isChangePassword\" cannot be empty")
     private Boolean isChangePassword;
 
 }
