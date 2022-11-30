@@ -59,11 +59,19 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/storages").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/storages").hasRole("ADMIN")
 
+<<<<<<< HEAD
                 .antMatchers(HttpMethod.POST, "/api/product-owners").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/product-owners").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/product-owners/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/product-owners").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/product-owners").hasRole("ADMIN")
+=======
+                .antMatchers(HttpMethod.POST, "/api/product-owners").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/product-owners").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/product-owners/{id}").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/product-owners").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/product-owners").permitAll()
+>>>>>>> dd56a77 (CTB-11 CRUD product owners added)
 
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
