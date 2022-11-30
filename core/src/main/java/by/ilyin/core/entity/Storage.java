@@ -1,6 +1,5 @@
 package by.ilyin.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,8 +22,6 @@ public class Storage extends BaseEntity {
     private String name;
     @Column(name = "address")
     private String address;
-    @JsonIgnore
-    @ToString.Exclude
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
