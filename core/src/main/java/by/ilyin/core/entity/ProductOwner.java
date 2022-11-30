@@ -68,4 +68,5 @@ public class ProductOwner extends BaseEntity {
         sb.append('}');
         return sb.toString();
     }
+
 }
