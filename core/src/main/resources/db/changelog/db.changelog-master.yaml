@@ -50,3 +50,9 @@ databaseChangeLog:
   - include:
       - file: 004_crud_clients.postgresql.sql
       - relativeToChangelogFile: true
+  - changeSet:
+      - id: 6
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 006_crud_storages.postgresql.sql
+      - relativeToChangelogFile: true

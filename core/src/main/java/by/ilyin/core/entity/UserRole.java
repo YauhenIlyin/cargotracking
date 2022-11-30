@@ -25,6 +25,8 @@ public class UserRole extends BaseEntity {
     private UserRoleType roleType;
     @JsonIgnore
     @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @ManyToMany(mappedBy = "userRoles")
     private List<CustomUser> users;
 

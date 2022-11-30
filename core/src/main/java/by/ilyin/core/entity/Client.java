@@ -43,6 +43,8 @@ public class Client extends BaseEntity {
     @Setter(AccessLevel.NONE)
     @OneToOne(mappedBy = "client")
     private HappyBirthdayTemplate happyBirthdayTemplate;
+    @OneToMany(mappedBy = "client")
+    private List<Storage> storages;
 
     public enum ClientStatus {
         PRIVATE,
