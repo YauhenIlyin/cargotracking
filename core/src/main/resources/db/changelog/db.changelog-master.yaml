@@ -9,7 +9,6 @@ databaseChangeLog:
       - id: 2
       - author: Ilyin_Yauhen
   - include:
-<<<<<<< HEAD
       - file: 002_jwt_authentication.postgresql.sql
       - relativeToChangelogFile: true
   - changeSet:
@@ -42,13 +41,12 @@ databaseChangeLog:
   - include:
       - file: 013_happy_birthday_template.postgresql.sql
       - relativeToChangelogFile: true
-=======
+  - include:
     - file: 002_jwt_authentication.postgresql.sql
     - relativeToChangelogFile: true
   - changeSet:
-    - id: 4
-    - author: Ilyin_Yauhen
+      - id: 4
+      - author: Ilyin_Yauhen
   - include:
-    - file: 004_jwt_authentication.postgresql.sql
-    - relativeToChangelogFile: true
->>>>>>> b6027f0 (CTB-6_JWT_authentication is created)
+      - file: 004_crud_clients.postgresql.sql
+      - relativeToChangelogFile: true

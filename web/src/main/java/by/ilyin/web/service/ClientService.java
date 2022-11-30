@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ClientService {
-    
+
     @Value("${server.port}")
     private String serverPort;
     @Value("${server.address}")
