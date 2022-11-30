@@ -53,10 +53,11 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/clients/activate/{clientId}").hasRole("SYS_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/clients").hasRole("SYS_ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/storages").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/storages").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/storages").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/storages").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/storages").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/storages").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/storages/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/storages").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/storages").hasRole("ADMIN")
 
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
