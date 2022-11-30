@@ -23,9 +23,8 @@ public class AuthService {
     private final AuthRepository authRepository;
 
     public CustomUser getUserByCredentials(SignInDTO signInDTO) {
-        CustomUser customUser = customUserRepository.findByLogin(signInDTO.getLogin()).orElseThrow(() -> {
-            throw new ResourceNotFoundException("Incorrect login"); //todo maybe other exception and message
-        });
+        CustomUser customUser = customUserRepository.findByLogin(signInDTO.getLogin())
+                .orElseThrow(() -> new ResourceNotFoundException("Incorrect login"));//todo maybe other exception and message);
         if (!customUser.getPassword().equals(signInDTO.getPassword())) {
             throw new ResourceNotFoundException("Incorrect password"); //todo maybe other exception and message
         }
