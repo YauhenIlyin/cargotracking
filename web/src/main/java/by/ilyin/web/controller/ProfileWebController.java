@@ -1,7 +1,7 @@
 package by.ilyin.web.controller;
 
 import by.ilyin.web.dto.ChangePassProfileDTO;
-import by.ilyin.web.dto.UpdateUserProfileDTO;
+import by.ilyin.web.dto.request.UpdateUserProfileDTO;
 import by.ilyin.web.dto.UserProfileDTO;
 import by.ilyin.web.service.UserProfileService;
 import lombok.RequiredArgsConstructor;

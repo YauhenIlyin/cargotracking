@@ -1,4 +1,4 @@
-package by.ilyin.core.dto;
+package by.ilyin.core.dto.request;
 
 import lombok.Data;
 

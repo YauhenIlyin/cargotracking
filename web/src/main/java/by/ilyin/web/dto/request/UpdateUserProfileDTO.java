@@ -1,4 +1,4 @@
-package by.ilyin.web.dto;
+package by.ilyin.web.dto.request;
 
 import lombok.Data;
 
