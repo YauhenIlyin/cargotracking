@@ -1,11 +1,18 @@
 package by.ilyin.core.entity;
 
+<<<<<<<HEAD
+        =======
+import com.fasterxml.jackson.annotation.JsonIgnore;
+>>>>>>>608e3d2(CTB-13CRUD invoices added)
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+<<<<<<<HEAD
 import java.util.Objects;
+=======
+        >>>>>>>608e3d2(CTB-13CRUD invoices added)
 
 @AllArgsConstructor
 @NoArgsConstructor
