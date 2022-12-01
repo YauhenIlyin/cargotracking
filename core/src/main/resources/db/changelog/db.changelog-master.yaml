@@ -1,7 +1,43 @@
 databaseChangeLog:
   - changeSet:
-    - id: 1
-    - author: Ilyin_Yauhen
+      - id: 1
+      - author: Ilyin_Yauhen
   - include:
-    - file: 001_crud_users.postgresql.sql
-    - relativeToChangelogFile: true
+      - file: 001_crud_users.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 2
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 002_jwt_authentication.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 4
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 004_crud_clients.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 6
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 006_crud_storages.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 7
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 007_crud_product_owners.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 8
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 008_crud_cars.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 9
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 009_crud_invoices.postgresql.sql
+      - relativeToChangelogFile: true
