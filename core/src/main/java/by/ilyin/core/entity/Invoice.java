@@ -55,7 +55,7 @@ public class Invoice extends BaseEntity {
         DELIVERED,
         VERIFICATION_COMPLETE
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

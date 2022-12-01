@@ -3,6 +3,7 @@ package by.ilyin.core.repository;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.Invoice;
 import org.springframework.data.jpa.domain.Specification;
+import by.ilyin.core.entity.Invoice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
