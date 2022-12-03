@@ -30,6 +30,9 @@ public class Car extends BaseEntity {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
+    @OneToOne(mappedBy = "car")
+    private Waybill waybill;
+
     public enum CarType {
         REFRIGERATOR,
         CISTERN,

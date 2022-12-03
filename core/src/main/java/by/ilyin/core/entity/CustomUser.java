@@ -75,6 +75,9 @@ public class CustomUser extends BaseEntity {
     @OneToMany(mappedBy = "driver")
     private List<Invoice> invoices1;
 
+    @OneToOne(mappedBy = "verifier")
+    private Waybill waybill;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

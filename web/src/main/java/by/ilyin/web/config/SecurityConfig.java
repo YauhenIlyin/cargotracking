@@ -78,6 +78,12 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/invoices").hasRole("DISPATCHER")
                 .antMatchers(HttpMethod.DELETE, "/api/invoices").hasAnyRole("DISPATCHER", "MANAGER")
 
+                .antMatchers(HttpMethod.POST, "/api/waybills").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/waybills").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/waybills/{id}").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/waybills").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/waybills").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
 

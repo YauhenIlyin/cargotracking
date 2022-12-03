@@ -74,3 +74,9 @@ databaseChangeLog:
   - include:
       - file: 009_crud_invoices.postgresql.sql
       - relativeToChangelogFile: true
+  - changeSet:
+      - id: 10
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 010_crud_waybills.postgresql.sql
+      - relativeToChangelogFile: true
