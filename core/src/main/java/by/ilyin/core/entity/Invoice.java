@@ -50,6 +50,9 @@ public class Invoice extends BaseEntity {
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private CustomUser driver;
 
+    @OneToOne(mappedBy = "invoice")
+    private Waybill waybill;
+
     public enum Status {
         MADE_OUT,
         DELIVERED,
