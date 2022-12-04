@@ -59,6 +59,8 @@ public class CustomUser extends BaseEntity {
     private Set<UserRole> userRoles;
     @JsonIgnore
     @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @OneToOne(mappedBy = "generalAdmin")
     private Client client1;
 
