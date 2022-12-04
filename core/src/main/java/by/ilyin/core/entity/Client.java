@@ -27,11 +27,14 @@ public class Client extends BaseEntity {
     private ClientStatus status;
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private CustomUser generalAdmin;
     @JsonIgnore
     @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "client")
     private List<CustomUser> customUsers;
 
@@ -44,12 +47,11 @@ public class Client extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Client client = (Client) o;
-
         if (!Objects.equals(id, client.id)) return false;
         if (!Objects.equals(name, client.name)) return false;
         if (status != client.status) return false;
+        if (!Objects.equals(deleteDate, client.deleteDate)) return false;
         return Objects.equals(generalAdmin, client.generalAdmin);
     }
 
@@ -58,6 +60,7 @@ public class Client extends BaseEntity {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (deleteDate != null ? deleteDate.hashCode() : 0);
         result = 31 * result + (generalAdmin != null ? generalAdmin.hashCode() : 0);
         return result;
     }
