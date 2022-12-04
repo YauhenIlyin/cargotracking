@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/clients").hasRole("SYS_ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/clients/activate/{clientId}").hasRole("SYS_ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/clients").hasRole("SYS_ADMIN")
-                
+
                 .antMatchers(HttpMethod.POST, "/api/storages").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/storages").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/storages/{id}").hasRole("ADMIN")

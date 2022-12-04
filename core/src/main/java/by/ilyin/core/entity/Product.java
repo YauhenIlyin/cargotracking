@@ -22,14 +22,9 @@ public class Product extends BaseEntity {
     private String name;
     @Column(name = "amount")
     private Integer amount;
-    @Column(name = "invoice_id")
-    private Long invoiceId;
     @JsonIgnore
-    @ToString.Exclude
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     @ManyToOne
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
 
     @Override
@@ -40,7 +35,9 @@ public class Product extends BaseEntity {
         if (!Objects.equals(id, product.id)) return false;
         if (!Objects.equals(name, product.name)) return false;
         if (!Objects.equals(amount, product.amount)) return false;
-        return Objects.equals(invoiceId, product.invoiceId);
+        return Objects.equals(
+                invoice != null ? invoice.getId() : null,
+                product.invoice != null ? product.invoice.getId() : null);
     }
 
     @Override
@@ -48,7 +45,7 @@ public class Product extends BaseEntity {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
-        result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
+        result = 31 * result + (invoice != null ? invoice.getId().hashCode() : 0);
         return result;
     }
 
@@ -58,7 +55,7 @@ public class Product extends BaseEntity {
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
         sb.append(", amount=").append(amount);
-        sb.append(", invoiceId=").append(invoiceId);
+        sb.append(", invoiceId=").append(invoice != null ? invoice.getId() : "null");
         sb.append('}');
         return sb.toString();
     }
