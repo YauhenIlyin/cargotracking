@@ -48,7 +48,7 @@ public class CustomUser extends BaseEntity {
     @Column(name = "issued_by")
     private String issuedBy;
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
     @Size(min = 1)
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
