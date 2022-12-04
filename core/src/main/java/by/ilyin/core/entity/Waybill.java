@@ -27,6 +27,7 @@ public class Waybill extends BaseEntity {
     private LocalDateTime startDate;
     @Column(name = "end_date")
     private LocalDateTime endDate;
+    @OrderBy("id ASC")
     @OneToMany(mappedBy = "waybill", cascade = {CascadeType.PERSIST})
     private List<Checkpoint> checkpoints;
     @OneToOne

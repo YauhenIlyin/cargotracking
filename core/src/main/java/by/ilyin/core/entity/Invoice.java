@@ -1,18 +1,12 @@
 package by.ilyin.core.entity;
 
-<<<<<<<HEAD
-        =======
 import com.fasterxml.jackson.annotation.JsonIgnore;
->>>>>>>608e3d2(CTB-13CRUD invoices added)
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-<<<<<<<HEAD
 import java.util.Objects;
-=======
-        >>>>>>>608e3d2(CTB-13CRUD invoices added)
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,7 +43,7 @@ public class Invoice extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private CustomUser driver;
-
+    @JsonIgnore
     @OneToOne(mappedBy = "invoice")
     private Waybill waybill;
 

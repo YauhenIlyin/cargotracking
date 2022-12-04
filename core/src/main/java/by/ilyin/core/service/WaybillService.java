@@ -6,10 +6,7 @@ import by.ilyin.core.dto.response.CreateWaybillResponseDTO;
 import by.ilyin.core.entity.*;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
-import by.ilyin.core.repository.CarRepository;
-import by.ilyin.core.repository.CustomUserRepository;
-import by.ilyin.core.repository.InvoiceRepository;
-import by.ilyin.core.repository.WaybillRepository;
+import by.ilyin.core.repository.*;
 import by.ilyin.core.repository.filtration.FiltrationBuilder;
 import by.ilyin.core.repository.filtration.specification.FieldCriteriaTypes;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +18,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +31,7 @@ public class WaybillService {
     private final CarRepository carRepository;
     private final CustomUserRepository customUserRepository;
     private final InvoiceRepository invoiceRepository;
+    private final CheckpointRepository checkpointRepository;
     private final @Qualifier("waybillFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
@@ -71,6 +67,19 @@ public class WaybillService {
         }
         Specification<Waybill> specification = takeGetInvoicesSpecification(filterValues);
         return waybillRepository.findAll(specification, pageable);
+    }
+
+    @Transactional
+    public void reachCheckpoint(Long id) {
+        validateAndGetResourceById(waybillRepository, id, "Waybill");
+        Checkpoint checkpoint = checkpointRepository.findFirstByWaybillIdAndCheckpointDate(id, null);
+        checkpoint.setCheckpointDate(LocalDateTime.now());
+        checkpointRepository.save(checkpoint);
+    }
+
+    public List<Checkpoint> getCheckpoints(Long waybillId) {
+        Waybill waybill = (Waybill) validateAndGetResourceById(waybillRepository, waybillId, "Waybill");
+        return waybill.getCheckpoints();
     }
 
     private Specification<Waybill> takeGetInvoicesSpecification(Map<String, Object> filterValues) {

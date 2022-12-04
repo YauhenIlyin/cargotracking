@@ -1,9 +1,11 @@
 package by.ilyin.web.dto.response;
 
 import by.ilyin.web.entity.Waybill;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class GetWaybillResponseDTO {
 
     private Long id;

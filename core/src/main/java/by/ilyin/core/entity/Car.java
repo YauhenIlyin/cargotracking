@@ -1,5 +1,6 @@
 package by.ilyin.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class Car extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
-
+    @JsonIgnore
     @OneToOne(mappedBy = "car")
     private Waybill waybill;
 

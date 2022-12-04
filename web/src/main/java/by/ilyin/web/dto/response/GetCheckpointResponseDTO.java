@@ -1,13 +1,12 @@
-package by.ilyin.web.entity;
+package by.ilyin.web.dto.response;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class Checkpoint {
+public class GetCheckpointResponseDTO {
 
-    private Long id;
     private String address;
     private LocalDateTime requiredArrivalDate;
     private LocalDateTime checkpointDate;
