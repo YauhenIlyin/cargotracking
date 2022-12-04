@@ -51,8 +51,9 @@ public class ClientService {
         CustomUser admin = client.getGeneralAdmin();
         client.setGeneralAdmin(null);
         client.setId(clientDTO.getAdminInfo().getClientId());
-        clientRepository.save(client);
+        Client realClient = clientRepository.save(client);
         admin.setUserRoles(customUserService.getRealUserRoleSet(clientDTO.getAdminInfo().getUserRoles()));
+        admin.setClient(realClient);
         customUserRepository.save(admin);
         client.setGeneralAdmin(admin);
         clientRepository.save(client);
