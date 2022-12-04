@@ -11,7 +11,7 @@ public class Car {
     private Float fuelConsumption;
     private Float loadCapacity;
     private Car.CarType carType;
-    private Long clientId;
+    private Client client;
 
     public enum CarType {
         REFRIGERATOR,

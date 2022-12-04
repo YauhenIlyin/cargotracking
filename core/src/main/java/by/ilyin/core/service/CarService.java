@@ -5,6 +5,7 @@ import by.ilyin.core.dto.mapper.CarDTOMapper;
 import by.ilyin.core.dto.request.UpdateCarDTO;
 import by.ilyin.core.dto.response.CreateCarResponseDTO;
 import by.ilyin.core.entity.Car;
+import by.ilyin.core.entity.Client;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CarRepository;
@@ -35,10 +36,12 @@ public class CarService {
 
     @Transactional
     public CreateCarResponseDTO createCar(CarDTO carDTO) {
-        clientRepository.findById(carDTO.getClientId())
+        Client client = clientRepository.findById(carDTO.getClientId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Client with id " + carDTO.getClientId() + " not found."));
-        Car car = carRepository.save(carDTOMapper.mapFromDto(carDTO));
+        Car car = carDTOMapper.mapFromDto(carDTO);
+        car.setClient(client);
+        car = carRepository.save(car);
         return new CreateCarResponseDTO(car.getId());
     }
 
