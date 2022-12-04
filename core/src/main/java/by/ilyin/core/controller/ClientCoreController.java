@@ -22,7 +22,6 @@ public class ClientCoreController {
 
     @PostMapping
     public CreateClientResponseDTO createClient(@RequestBody ClientDTO clientDTO) {
-        System.out.println(clientDTO);
         return clientService.createClient(clientDTO);
     }
 
