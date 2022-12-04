@@ -4,6 +4,7 @@ import by.ilyin.core.dto.StorageDTO;
 import by.ilyin.core.dto.mapper.StorageDTOMapper;
 import by.ilyin.core.dto.request.UpdateStorageRequestDTO;
 import by.ilyin.core.dto.response.CreateStorageResponseDTO;
+import by.ilyin.core.entity.Client;
 import by.ilyin.core.entity.Storage;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
@@ -35,10 +36,12 @@ public class StorageService {
     //todo location - address / link ???
     @Transactional
     public CreateStorageResponseDTO createStorage(StorageDTO storageDTO) {
-        clientRepository.findById(storageDTO.getClientId())
+        Client client = clientRepository.findById(storageDTO.getClientId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Client with id " + storageDTO.getClientId() + " not found."));
-        storageRepository.save(storageDTOMapper.mapFromDTO(storageDTO));
+        Storage storage = storageDTOMapper.mapFromDTO(storageDTO);
+        storage.setClient(client);
+        storageRepository.save(storage);
         return new CreateStorageResponseDTO(storageDTO.getAddress());
     }
 
