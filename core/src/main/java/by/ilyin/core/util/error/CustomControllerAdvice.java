@@ -109,99 +109,99 @@ public class CustomControllerAdvice {
         );
     }
 
-    @ExceptionHandler({
-            BindException.class,
-            HttpMessageNotReadableException.class,
-            MethodArgumentNotValidException.class,
-            MissingServletRequestParameterException.class,
-            MissingServletRequestPartException.class,
-            TypeMismatchException.class,
-            IncorrectValueFormatException.class
-    })
-    public ResponseEntity<ErrorResponse> handleBadRequestExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.BAD_REQUEST);
-    }
-
-    //todo add javadoc 401
-
-    @ExceptionHandler(UnauthorizedRequestException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedRequestExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.UNAUTHORIZED);
-    }
-
-    //todo add javadoc 403
-
-    @ExceptionHandler(CustomAccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleCustomAccessDeniedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.FORBIDDEN);
-    }
-
-    //todo add javadoc 404
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.NOT_FOUND);
-    }
-
-    //todo add javadoc 405
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.METHOD_NOT_ALLOWED);
-    }
-
-    //todo add javadoc 406
-
-    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotAcceptableExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.NOT_ACCEPTABLE);
-    }
-
-    //todo add javadoc 409
-
-    @ExceptionHandler(ResourceAlreadyExists.class)
-    public ResponseEntity<ErrorResponse> handleResourceAlreadyExists(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.CONFLICT);
-    }
-
-    //todo add javadoc 415
-
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
-    }
-
-    //todo add javadoc 500
-
-    @ExceptionHandler({
-            ConversionNotSupportedException.class,
-            HttpMessageNotWritableException.class,
-            Exception.class
-    })
-    public ResponseEntity<ErrorResponse> handleCInternalServerErrorExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    //todo add javadoc 501
-
-    @ExceptionHandler(NotImplementedMethodException.class)
-    public ResponseEntity<ErrorResponse> handleNotImplementedMethodExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    private ResponseEntity<ErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus) {
-        return buildSimpleErrorResponse(e, httpStatus, e.getMessage());
-    }
-
-    private ResponseEntity<ErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus, String message) {
-        return new ResponseEntity<>(
-                new ErrorResponse(
-                        e.getStackTrace(),
-                        httpStatus,
-                        message
-                ),
-                httpStatus
-        );
-    }
+//    @ExceptionHandler({
+//            BindException.class,
+//            HttpMessageNotReadableException.class,
+//            MethodArgumentNotValidException.class,
+//            MissingServletRequestParameterException.class,
+//            MissingServletRequestPartException.class,
+//            TypeMismatchException.class,
+//            IncorrectValueFormatException.class
+//    })
+//    public ResponseEntity<ErrorResponse> handleBadRequestExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.BAD_REQUEST);
+//    }
+//
+//    //todo add javadoc 401
+//
+//    @ExceptionHandler(UnauthorizedRequestException.class)
+//    public ResponseEntity<ErrorResponse> handleUnauthorizedRequestExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.UNAUTHORIZED);
+//    }
+//
+//    //todo add javadoc 403
+//
+//    @ExceptionHandler(CustomAccessDeniedException.class)
+//    public ResponseEntity<ErrorResponse> handleCustomAccessDeniedExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.FORBIDDEN);
+//    }
+//
+//    //todo add javadoc 404
+//
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorResponse> handleResourceNotFoundExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.NOT_FOUND);
+//    }
+//
+//    //todo add javadoc 405
+//
+//    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+//    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.METHOD_NOT_ALLOWED);
+//    }
+//
+//    //todo add javadoc 406
+//
+//    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+//    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotAcceptableExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.NOT_ACCEPTABLE);
+//    }
+//
+//    //todo add javadoc 409
+//
+//    @ExceptionHandler(ResourceAlreadyExists.class)
+//    public ResponseEntity<ErrorResponse> handleResourceAlreadyExists(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.CONFLICT);
+//    }
+//
+//    //todo add javadoc 415
+//
+//    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+//    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+//    }
+//
+//    //todo add javadoc 500
+//
+//    @ExceptionHandler({
+//            ConversionNotSupportedException.class,
+//            HttpMessageNotWritableException.class,
+//            Exception.class
+//    })
+//    public ResponseEntity<ErrorResponse> handleCInternalServerErrorExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+//
+//    //todo add javadoc 501
+//
+//    @ExceptionHandler(NotImplementedMethodException.class)
+//    public ResponseEntity<ErrorResponse> handleNotImplementedMethodExceptions(Exception e) {
+//        return buildSimpleErrorResponse(e, HttpStatus.NOT_IMPLEMENTED);
+//    }
+//
+//    private ResponseEntity<ErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus) {
+//        return buildSimpleErrorResponse(e, httpStatus, e.getMessage());
+//    }
+//
+//    private ResponseEntity<ErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus, String message) {
+//        return new ResponseEntity<>(
+//                new ErrorResponse(
+//                        e.getStackTrace(),
+//                        httpStatus,
+//                        message
+//                ),
+//                httpStatus
+//        );
+//    }
 
 }
