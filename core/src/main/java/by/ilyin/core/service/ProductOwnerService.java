@@ -4,6 +4,7 @@ import by.ilyin.core.dto.ProductOwnerDTO;
 import by.ilyin.core.dto.mapper.ProductOwnerDTOMapper;
 import by.ilyin.core.dto.request.UpdateProductOwnerDTO;
 import by.ilyin.core.dto.response.CreateProductOwnerResponseDTO;
+import by.ilyin.core.entity.Client;
 import by.ilyin.core.entity.ProductOwner;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
@@ -34,10 +35,12 @@ public class ProductOwnerService {
 
     @Transactional
     public CreateProductOwnerResponseDTO createProductOwner(ProductOwnerDTO productOwnerDTO) {
-        clientRepository.findById(productOwnerDTO.getClientId())
+        Client client = clientRepository.findById(productOwnerDTO.getClientId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Client with id " + productOwnerDTO.getClientId() + " not found."));
-        productOwnerRepository.save(productOwnerDTOMapper.mapFromDTO(productOwnerDTO));
+        ProductOwner productOwner = productOwnerDTOMapper.mapFromDTO(productOwnerDTO);
+        productOwner.setClient(client);
+        productOwnerRepository.save(productOwner);
         return new CreateProductOwnerResponseDTO(productOwnerDTO.getAddress());
     }
 
