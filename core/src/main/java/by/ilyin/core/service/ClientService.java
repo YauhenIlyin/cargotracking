@@ -38,6 +38,14 @@ public class ClientService {
     @Transactional
     public Long createClient(ClientDTO clientDTO) {
         Client client = clientDTOMapper.mapFromDto(clientDTO);
+        if (clientRepository.existsById(clientDTO.getAdminInfo().getClientId())) {
+            throw new ResourceAlreadyExists("Client with id " +
+                    clientDTO.getAdminInfo().getClientId() + " already exists.");
+        }
+        if (customUserRepository.existsByLogin(clientDTO.getAdminInfo().getLogin())) {
+            throw new ResourceAlreadyExists("User with login " +
+                    clientDTO.getAdminInfo().getLogin() + " already exists.");
+        }
         CustomUser admin = client.getGeneralAdmin();
         client.setGeneralAdmin(null);
         client.setId(clientDTO.getAdminInfo().getClientId());

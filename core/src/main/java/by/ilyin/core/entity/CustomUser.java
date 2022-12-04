@@ -48,7 +48,7 @@ public class CustomUser extends BaseEntity {
     @Column(name = "issued_by")
     private String issuedBy;
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Client client;
     @Size(min = 1)
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -57,11 +57,6 @@ public class CustomUser extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_role_id"))
     private Set<UserRole> userRoles;
-    @JsonIgnore
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Client client;
     @JsonIgnore
     @ToString.Exclude
     @OneToOne(mappedBy = "generalAdmin")
@@ -76,7 +71,6 @@ public class CustomUser extends BaseEntity {
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(surname, that.surname)) return false;
         if (!Objects.equals(patronymic, that.patronymic)) return false;
-        if (!Objects.equals(clientId, that.clientId)) return false;
         if (!Objects.equals(bornDate, that.bornDate)) return false;
         if (!Objects.equals(email, that.email)) return false;
         if (!Objects.equals(town, that.town)) return false;
@@ -97,7 +91,6 @@ public class CustomUser extends BaseEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
-        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
         result = 31 * result + (bornDate != null ? bornDate.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (town != null ? town.hashCode() : 0);
