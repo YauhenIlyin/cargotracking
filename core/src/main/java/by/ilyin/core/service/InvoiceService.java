@@ -3,11 +3,8 @@ package by.ilyin.core.service;
 import by.ilyin.core.dto.InvoiceDTO;
 import by.ilyin.core.dto.mapper.InvoiceDTOMapper;
 import by.ilyin.core.dto.request.UpdateInvoiceDTO;
-import by.ilyin.core.dto.request.UpdateProductDTO;
 import by.ilyin.core.dto.response.CreateInvoiceResponseDTO;
-import by.ilyin.core.entity.BaseEntity;
-import by.ilyin.core.entity.Invoice;
-import by.ilyin.core.entity.Product;
+import by.ilyin.core.entity.*;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.*;
@@ -40,35 +37,42 @@ public class InvoiceService {
 
     @Transactional
     public CreateInvoiceResponseDTO createInvoice(InvoiceDTO invoiceDTO) {
-        validateAndGetResourceById(storageRepository, invoiceDTO.getStorageId(), "Storage");
-        validateAndGetResourceById(productOwnerRepository, invoiceDTO.getProductOwnerId(), "ProductOwner");
-        validateAndGetResourceById(userRepository, invoiceDTO.getCreatorId(), "User-creator");
-        validateAndGetResourceById(userRepository, invoiceDTO.getDriverId(), "User-driver");
+        Storage storage = (Storage) validateAndGetResourceById(storageRepository,
+                invoiceDTO.getStorageId(), "Storage");
+        ProductOwner productOwner = (ProductOwner) validateAndGetResourceById(productOwnerRepository,
+                invoiceDTO.getProductOwnerId(), "ProductOwner");
+        CustomUser userCreator = (CustomUser) validateAndGetResourceById(userRepository,
+                invoiceDTO.getCreatorId(), "User-creator");
+        CustomUser userDriver = (CustomUser) validateAndGetResourceById(userRepository,
+                invoiceDTO.getDriverId(), "User-driver");
         Invoice currentInvoice = invoiceDTOMapper.mapFromDTO(invoiceDTO);
-        List<Product> productList = currentInvoice.getProducts();
+        currentInvoice.setStorage(storage);
+        currentInvoice.setProductOwner(productOwner);
+        currentInvoice.setCreator(userCreator);
+        currentInvoice.setDriver(userDriver);
         currentInvoice.setCreationDate(LocalDate.now());
+        List<Product> productList = currentInvoice.getProducts();
         currentInvoice.setProducts(null);
-        currentInvoice = invoiceRepository.save(currentInvoice);
-        long id = currentInvoice.getId();
+        final Invoice invoice = invoiceRepository.save(currentInvoice);
         currentInvoice.setProducts(
                 productList
                         .stream()
-                        .peek((o) -> o.setInvoiceId(id))
+                        .peek((o) -> o.setInvoice(invoice))
                         .collect(Collectors.toList()));
         invoiceRepository.save(currentInvoice);
-        return new CreateInvoiceResponseDTO(currentInvoice.getId());
+        return new CreateInvoiceResponseDTO(invoice.getId());
     }
 
     @Transactional
     public void updateInvoice(Long invoiceId, UpdateInvoiceDTO updateInvoiceDTO) {
-        validateAndGetResourceById(storageRepository, updateInvoiceDTO.getStorageId(), "Storage");
-        validateAndGetResourceById(productOwnerRepository, updateInvoiceDTO.getProductOwnerId(), "ProductOwner");
-        validateAndGetResourceById(userRepository, updateInvoiceDTO.getDriverId(), "User-driver");
+        Storage storage = (Storage) validateAndGetResourceById(storageRepository, updateInvoiceDTO.getStorageId(), "Storage");
+        ProductOwner productOwner = (ProductOwner) validateAndGetResourceById(productOwnerRepository, updateInvoiceDTO.getProductOwnerId(), "ProductOwner");
+        CustomUser userDriver = (CustomUser) validateAndGetResourceById(userRepository, updateInvoiceDTO.getDriverId(), "User-driver");
         Invoice invoice = (Invoice) validateAndGetResourceById(invoiceRepository, invoiceId, "Invoice");
         invoice.setNumber(updateInvoiceDTO.getNumber());
-        invoice.setStorageId(updateInvoiceDTO.getStorageId());
-        invoice.setProductOwnerId(updateInvoiceDTO.getProductOwnerId());
-        invoice.setDriverId(updateInvoiceDTO.getDriverId());
+        invoice.setStorage(storage);
+        invoice.setProductOwner(productOwner);
+        invoice.setDriver(userDriver);
         List<Product> productList = updateInvoiceDTO.getProducts()
                 .stream()
                 .map((o) -> {
@@ -76,7 +80,7 @@ public class InvoiceService {
                             productRepository, o.getId(), "Product");
                     product.setName(o.getName());
                     product.setAmount(o.getAmount());
-                    product.setInvoiceId(invoice.getId());
+                    product.setInvoice(invoice);
                     return product;
                 })
                 .collect(Collectors.toList());
