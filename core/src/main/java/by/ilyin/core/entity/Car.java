@@ -1,6 +1,5 @@
 package by.ilyin.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,14 +25,8 @@ public class Car extends BaseEntity {
     private Float loadCapacity;
     @Column(name = "car_type")
     private Car.CarType carType;
-    @Column(name = "client_id")
-    private Long clientId;
-    @JsonIgnore
-    @ToString.Exclude
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
     public enum CarType {
@@ -48,21 +41,22 @@ public class Car extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
         if (!Objects.equals(id, car.id)) return false;
-        if (!number.equals(car.number)) return false;
-        if (!fuelConsumption.equals(car.fuelConsumption)) return false;
-        if (!loadCapacity.equals(car.loadCapacity)) return false;
+        if (!Objects.equals(number, car.number)) return false;
+        if (!Objects.equals(fuelConsumption, car.fuelConsumption))
+            return false;
+        if (!Objects.equals(loadCapacity, car.loadCapacity)) return false;
         if (carType != car.carType) return false;
-        return Objects.equals(clientId, car.clientId);
+        return Objects.equals(client, car.client);
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + number.hashCode();
-        result = 31 * result + fuelConsumption.hashCode();
-        result = 31 * result + loadCapacity.hashCode();
-        result = 31 * result + carType.hashCode();
-        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (fuelConsumption != null ? fuelConsumption.hashCode() : 0);
+        result = 31 * result + (loadCapacity != null ? loadCapacity.hashCode() : 0);
+        result = 31 * result + (carType != null ? carType.hashCode() : 0);
+        result = 31 * result + (client != null ? client.hashCode() : 0);
         return result;
     }
 
@@ -74,8 +68,9 @@ public class Car extends BaseEntity {
         sb.append(", fuelConsumption=").append(fuelConsumption);
         sb.append(", loadCapacity=").append(loadCapacity);
         sb.append(", carType=").append(carType);
-        sb.append(", clientId=").append(clientId);
+        sb.append(", client=").append(client);
         sb.append('}');
         return sb.toString();
     }
+
 }
