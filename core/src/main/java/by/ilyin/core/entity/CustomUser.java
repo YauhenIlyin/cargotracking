@@ -1,10 +1,12 @@
 package by.ilyin.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "users")
 public class CustomUser extends BaseEntity {
@@ -27,8 +28,6 @@ public class CustomUser extends BaseEntity {
     private String surname;
     @Column(name = "patronymic")
     private String patronymic;
-    @Column(name = "client_id")
-    private long clientId;
     @Column(name = "born_date")
     private LocalDate bornDate;
     @Column(name = "email")
@@ -41,7 +40,7 @@ public class CustomUser extends BaseEntity {
     private String house;
     @Column(name = "flat")
     private String flat;
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     private String login;
     @Column(name = "user_password")
     private String password;
@@ -49,6 +48,9 @@ public class CustomUser extends BaseEntity {
     private String passportNum;
     @Column(name = "issued_by")
     private String issuedBy;
+    @ManyToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private Client client;
     @Size(min = 1)
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -56,17 +58,33 @@ public class CustomUser extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_role_id"))
     private Set<UserRole> userRoles;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToOne(mappedBy = "generalAdmin")
+    private Client client1;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "creator")
+    private List<Invoice> invoices;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "driver")
+    private List<Invoice> invoices1;
+    @JsonIgnore
+    @OneToOne(mappedBy = "verifier")
+    private Waybill waybill;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         CustomUser that = (CustomUser) o;
-        if (clientId != that.clientId) return false;
         if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(surname, that.surname)) return false;
@@ -81,7 +99,8 @@ public class CustomUser extends BaseEntity {
         if (!Objects.equals(password, that.password)) return false;
         if (!Objects.equals(passportNum, that.passportNum)) return false;
         if (!Objects.equals(issuedBy, that.issuedBy)) return false;
-        return Objects.equals(userRoles, that.userRoles);
+        if (!Objects.equals(userRoles, that.userRoles)) return false;
+        return Objects.equals(client, that.client);
     }
 
     @Override
@@ -90,7 +109,6 @@ public class CustomUser extends BaseEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
-        result = 31 * result + (int) (clientId ^ (clientId >>> 32));
         result = 31 * result + (bornDate != null ? bornDate.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (town != null ? town.hashCode() : 0);
@@ -102,7 +120,31 @@ public class CustomUser extends BaseEntity {
         result = 31 * result + (passportNum != null ? passportNum.hashCode() : 0);
         result = 31 * result + (issuedBy != null ? issuedBy.hashCode() : 0);
         result = 31 * result + (userRoles != null ? userRoles.hashCode() : 0);
+        result = 31 * result + (client != null ? client.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CustomUser{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", surname='").append(surname).append('\'');
+        sb.append(", patronymic='").append(patronymic).append('\'');
+        sb.append(", bornDate=").append(bornDate);
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", town='").append(town).append('\'');
+        sb.append(", street='").append(street).append('\'');
+        sb.append(", house='").append(house).append('\'');
+        sb.append(", flat='").append(flat).append('\'');
+        sb.append(", login='").append(login).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", passportNum='").append(passportNum).append('\'');
+        sb.append(", issuedBy='").append(issuedBy).append('\'');
+        sb.append(", userRoles=").append(userRoles);
+        sb.append(", clientId=");
+        sb.append(client != null ? client.getId().toString() : "null").append('}');
+        return sb.toString();
     }
 
 }
