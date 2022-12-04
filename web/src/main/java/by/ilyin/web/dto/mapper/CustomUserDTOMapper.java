@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface CustomUserDTOMapper {
 
     @Mapping(target = "userRoles", ignore = true)
+    @Mapping(source = "client.id", target = "clientId")
     CustomUserDTO mapToDto(CustomUser customUser);
 
     @Mapping(target = "userRoles", ignore = true)

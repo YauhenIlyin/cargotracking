@@ -7,6 +7,7 @@ import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.UserRole;
 import by.ilyin.core.evidence.KeyWords;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
+import by.ilyin.core.repository.ClientRepository;
 import by.ilyin.core.repository.CustomUserRepository;
 import by.ilyin.core.repository.UserRoleRepository;
 import by.ilyin.core.repository.filtration.FiltrationBuilder;
@@ -28,6 +29,7 @@ public class CustomUserService {
 
     private final CustomUserRepository customUserRepository;
     private final UserRoleRepository userRoleRepository;
+    private final ClientRepository clientRepository;
     private final CustomUserDTOMapper customUserDTOMapper;
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
@@ -46,7 +48,6 @@ public class CustomUserService {
         customUser.setName(updateUserRequestDTO.getName());
         customUser.setSurname(updateUserRequestDTO.getSurname());
         customUser.setPatronymic(updateUserRequestDTO.getPatronymic());
-        customUser.setClientId(updateUserRequestDTO.getClientId());
         customUser.setBornDate(updateUserRequestDTO.getBornDate());
         customUser.setEmail(updateUserRequestDTO.getEmail());
         customUser.setTown(updateUserRequestDTO.getTown());
