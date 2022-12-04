@@ -8,6 +8,6 @@ public class ProductOwner {
     private Long id;
     private String name;
     private String address;
-    private Long clientId;
+    private Client client;
 
 }
