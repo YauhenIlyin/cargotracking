@@ -67,14 +67,7 @@ public class CustomUserService {
         }
         customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
         customUser.setIssuedBy(updateUserRequestDTO.getIssuedBy());
-<<<<<<< HEAD
         customUser.setUserRoles(getRealUserRoleSet(updateUserRequestDTO.getUserRoles()));
-=======
-        customUser.setUserRoles(realRolesSet);
-        customUser.setClient(clientRepository.findById(updateUserRequestDTO.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
-                        updateUserRequestDTO.getClientId() + " not found.")));
->>>>>>> 254b4ac (CTB-9 small fix for hibernate entities)
         customUserRepository.save(customUser);
         //todo info log
     }
