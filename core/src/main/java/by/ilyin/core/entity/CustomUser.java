@@ -74,7 +74,7 @@ public class CustomUser extends BaseEntity {
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "driver")
     private List<Invoice> invoices1;
-
+    @JsonIgnore
     @OneToOne(mappedBy = "verifier")
     private Waybill waybill;
 
