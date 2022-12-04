@@ -40,15 +40,17 @@ public class ClientService {
     @Transactional
     public CreateClientResponseDTO createClient(ClientDTO clientDTO) {
         Client client = clientDTOMapper.mapFromDto(clientDTO);
+        if (clientRepository.existsById(clientDTO.getAdminInfo().getClientId())) {
+            throw new ResourceAlreadyExists("Client with id " +
+                    clientDTO.getAdminInfo().getClientId() + " already exists.");
+        }
+        if (customUserRepository.existsByLogin(clientDTO.getAdminInfo().getLogin())) {
+            throw new ResourceAlreadyExists("User with login " +
+                    clientDTO.getAdminInfo().getLogin() + " already exists.");
+        }
         CustomUser admin = client.getGeneralAdmin();
-        if (clientRepository.existsById(admin.getClientId())) {
-            throw new ResourceAlreadyExists("Client with id " + admin.getClientId() + " already exists.");
-        }
-        if (customUserRepository.existsByLogin(admin.getLogin())) {
-            throw new ResourceAlreadyExists("User with login " + admin.getLogin() + " already exists.");
-        }
         client.setGeneralAdmin(null);
-        client.setId(admin.getClientId());
+        client.setId(clientDTO.getAdminInfo().getClientId());
         clientRepository.save(client);
         admin.setUserRoles(customUserService.getRealUserRoleSet(clientDTO.getAdminInfo().getUserRoles()));
         customUserRepository.save(admin);
@@ -74,10 +76,10 @@ public class ClientService {
     }
 
     public Page<Client> getClients(String name, Client.ClientStatus status, Pageable pageable) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("status", status);
-        Specification<Client> specification = takeGetClientsSpecification(map);
+        HashMap<String, Object> filterValues = new HashMap<>();
+        filterValues.put("name", name);
+        filterValues.put("status", status);
+        Specification<Client> specification = takeGetClientsSpecification(filterValues);
         return clientRepository.findAll(specification, pageable);
     }
 

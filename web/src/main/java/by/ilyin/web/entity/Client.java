@@ -10,8 +10,8 @@ public class Client {
     private Long id;
     private String name;
     private ClientStatus status;
-    private CustomUser generalAdmin;
     private LocalDateTime deleteDate;
+    private CustomUser generalAdmin;
 
     public enum ClientStatus {
         PRIVATE,

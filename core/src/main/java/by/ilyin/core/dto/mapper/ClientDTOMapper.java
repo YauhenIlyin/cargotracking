@@ -15,7 +15,6 @@ public interface ClientDTOMapper {
     @Mapping(target = "client1", ignore = true)
     CustomUser mapFromCustomUserDto(CustomUserDTO customUserDTO);
 
-    @Mapping(target = "customUsers", ignore = true)
     @Mapping(source = "adminInfo", target = "generalAdmin")
     Client mapFromDto(ClientDTO clientDTO);
 
