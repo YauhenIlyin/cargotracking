@@ -17,18 +17,14 @@ public class Storage extends BaseEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "client_id")
-    private Long clientId;
     @Column(name = "storage_name")
     private String name;
     @Column(name = "address")
     private String address;
     @JsonIgnore
     @ToString.Exclude
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
 }

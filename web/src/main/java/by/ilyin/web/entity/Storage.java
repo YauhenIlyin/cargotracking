@@ -6,8 +6,8 @@ import lombok.*;
 public class Storage {
 
     private Long id;
-    private Long clientId;
     private String name;
     private String address;
+    private Client client;
 
 }
