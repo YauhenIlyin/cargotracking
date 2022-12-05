@@ -13,7 +13,6 @@ public class CustomUser {
     private String name;
     private String surname;
     private String patronymic;
-    private Long clientId;
     private LocalDate bornDate;
     private String email;
     private String town;
@@ -25,5 +24,6 @@ public class CustomUser {
     private String passportNum;
     private String issuedBy;
     private Set<UserRole> userRoles;
+    private Client client;
 
 }
