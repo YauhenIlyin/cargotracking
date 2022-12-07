@@ -29,6 +29,10 @@ public class ProductWriteOff extends BaseEntity {
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private CustomUser creator;
 
+    @ManyToOne
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    private Invoice invoice;
+
     public enum Status {
         LOST,
         STOLEN,
