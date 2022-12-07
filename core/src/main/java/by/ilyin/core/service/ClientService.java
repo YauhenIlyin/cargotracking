@@ -105,7 +105,7 @@ public class ClientService {
         clientRepository.saveAll(clientList);
     }
 
-    private Specification<Client> takeGetClientsSpecification(Map<String, Object> filterValues) {
+    public Specification<Client> takeGetClientsSpecification(Map<String, Object> filterValues) {
         FiltrationBuilder<Client> clientFiltrationBuilder = new FiltrationBuilder<>();
         clientFiltrationBuilder
                 .addCriteria(

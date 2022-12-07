@@ -1,7 +1,7 @@
 package by.ilyin.core.controller;
 
 import by.ilyin.core.dto.report.GetClientReportResponseDTO;
-import by.ilyin.core.entity.Client;
+import by.ilyin.core.dto.report.GetSysadminReportResponseDTO;
 import by.ilyin.core.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +21,12 @@ public class ReportCoreController {
                                                       @RequestParam(required = false) String initialDate,
                                                       @RequestParam(required = false) String finalDate) {
         return reportService.getClientReport(clientId, initialDate, finalDate);
+    }
+
+    @GetMapping(value = "/sysadmin")
+    public GetSysadminReportResponseDTO getSysadminReport(@RequestParam(required = false) String initialDate,
+                                                          @RequestParam(required = false) String finalDate) {
+        return reportService.getSysadminReport(initialDate, finalDate);
     }
 
 }
