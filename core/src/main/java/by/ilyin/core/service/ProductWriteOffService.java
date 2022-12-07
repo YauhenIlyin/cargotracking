@@ -3,10 +3,7 @@ package by.ilyin.core.service;
 import by.ilyin.core.dto.ProductWriteOffDTO;
 import by.ilyin.core.dto.mapper.ProductWriteOffDTOMapper;
 import by.ilyin.core.dto.request.UpdateProductWriteOffDTO;
-import by.ilyin.core.entity.BaseEntity;
-import by.ilyin.core.entity.CustomUser;
-import by.ilyin.core.entity.Product;
-import by.ilyin.core.entity.ProductWriteOff;
+import by.ilyin.core.entity.*;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUserRepository;
 import by.ilyin.core.repository.InvoiceRepository;
@@ -34,9 +31,12 @@ public class ProductWriteOffService {
         if (productWriteOffDTO.getCreatorId() != null) {
             creator = (CustomUser) validateAndGetResourceById(customUserRepository, productWriteOffDTO.getCreatorId(), "Creator");
         }
+        Invoice invoice = invoiceRepository.findByDriver(creator)
+                .orElseThrow(() -> new ResourceNotFoundException("The driver does not meet any invoice."));
         ProductWriteOff productWriteOff = productWriteOffDTOMapper.mapFromDTO(productWriteOffDTO);
         productWriteOff.setProduct(product);
         productWriteOff.setCreator(creator);
+        productWriteOff.setInvoice(invoice);
         productWriteOffRepository.save(productWriteOff);
     }
 

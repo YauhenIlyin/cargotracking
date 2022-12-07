@@ -72,7 +72,7 @@ public class Client extends BaseEntity {
         if (!Objects.equals(name, client.name)) return false;
         if (status != client.status) return false;
         if (!Objects.equals(deleteDate, client.deleteDate)) return false;
-        return Objects.equals(generalAdmin, client.generalAdmin);
+        return Objects.equals(generalAdmin.getId(), client.generalAdmin.getId());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Client extends BaseEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (deleteDate != null ? deleteDate.hashCode() : 0);
-        result = 31 * result + (generalAdmin != null ? generalAdmin.hashCode() : 0);
+        result = 31 * result + (generalAdmin != null ? generalAdmin.getId().hashCode() : 0);
         return result;
     }
 

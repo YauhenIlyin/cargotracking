@@ -88,6 +88,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/product-writeoffs/{id}").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/product-writeoffs").permitAll()
 
+                .antMatchers(HttpMethod.GET, "/api/reports/client").hasRole("ADMIN")
+
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
 

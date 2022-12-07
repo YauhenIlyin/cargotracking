@@ -46,6 +46,9 @@ public class Invoice extends BaseEntity {
     @JsonIgnore
     @OneToOne(mappedBy = "invoice")
     private Waybill waybill;
+    @JsonIgnore
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<ProductWriteOff> productWriteOffs;
 
     public enum Status {
         MADE_OUT,

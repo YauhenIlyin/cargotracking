@@ -10,6 +10,8 @@ CREATE TABLE public.product_writeoffs
     status     VARCHAR(25),
     product_id BIGINT,
     creator_id BIGINT,
+    invoice_id BIGINT,
     FOREIGN KEY (product_id) REFERENCES public.products (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (creator_id) REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (creator_id) REFERENCES public.users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (invoice_id) REFERENCES public.invoices (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
