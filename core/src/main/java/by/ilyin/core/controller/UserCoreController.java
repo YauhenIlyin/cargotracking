@@ -5,6 +5,8 @@ import by.ilyin.core.dto.request.UpdateUserRequestDTO;
 import by.ilyin.core.dto.response.*;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.service.CustomUserService;
+import by.ilyin.core.util.validation.custom.ValidCustomUserDTO;
+import by.ilyin.core.util.validation.custom.ConsistentUpdateUserParameters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +24,12 @@ public class UserCoreController {
     private final CustomUserService customUserService;
 
     @PostMapping
-    public CreateUserResponseDTO createUser(@RequestBody CustomUserDTO customUserDTO) {
+    public CreateUserResponseDTO createUser(@RequestBody @ValidCustomUserDTO CustomUserDTO customUserDTO) {
         return customUserService.createUser(customUserDTO);
     }
 
     @PutMapping("/{id}")
+    @ConsistentUpdateUserParameters
     public ResponseEntity<Void> updateUser(@PathVariable Long id,
                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         customUserService.updateUser(id, updateUserRequestDTO);

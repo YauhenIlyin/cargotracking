@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class RealErrorResponse {
+public class CustomErrorResponse {
 
     private String timestamp;
     private Integer status;

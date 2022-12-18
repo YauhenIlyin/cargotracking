@@ -7,13 +7,11 @@ import by.ilyin.core.dto.response.*;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.UserRole;
 import by.ilyin.core.evidence.KeyWords;
-import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUserRepository;
 import by.ilyin.core.repository.UserRoleRepository;
 import by.ilyin.core.repository.filtration.FiltrationBuilder;
 import by.ilyin.core.repository.filtration.specification.FieldCriteriaTypes;
-import by.ilyin.core.util.validation.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -32,32 +30,20 @@ public class CustomUserService {
     private final CustomUserRepository customUserRepository;
     private final UserRoleRepository userRoleRepository;
     private final CustomUserDTOMapper customUserDTOMapper;
-    private final UserValidator userValidator;
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
     public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
         CustomUser customUser = customUserDTOMapper.mapFromDto(customUserDTO);
         customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
-        boolean isLoginExists = userValidator.isUserLoginAlreadyExists(customUserDTO.getLogin());
-        if (isLoginExists) {
-            throw new ResourceAlreadyExists("Login " + customUserDTO.getLogin() + " already exists.");
-        }
         CustomUser realUser = customUserRepository.save(customUser);
+        //todo info log
         return new CreateUserResponseDTO(realUser.getId());
     }
 
     @Transactional
     public void updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO) {
-        Optional<CustomUser> currentOptionalUser = customUserRepository.findById(id);
-        currentOptionalUser.orElseThrow(() -> new ResourceNotFoundException("Update failed. User with id " + id + " was not found."));
-        Optional<CustomUser> optionalUserByLogin = customUserRepository.findByLogin(updateUserRequestDTO.getLogin());
-        boolean isCorrect = userValidator.isCorrectLoginWithId(currentOptionalUser, optionalUserByLogin);
-        if (!isCorrect) {
-            throw new ResourceAlreadyExists("Login " + updateUserRequestDTO.getLogin() + " already exists for another user.");
-        }
-        CustomUser customUser = currentOptionalUser.get();
-        Set<UserRole> realRolesSet = getRealUserRoleSet(updateUserRequestDTO.getUserRoles());
+        CustomUser customUser = customUserRepository.findById(id).orElseThrow();
         customUser.setName(updateUserRequestDTO.getName());
         customUser.setSurname(updateUserRequestDTO.getSurname());
         customUser.setPatronymic(updateUserRequestDTO.getPatronymic());
@@ -74,7 +60,7 @@ public class CustomUserService {
         }
         customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
         customUser.setIssuedBy(updateUserRequestDTO.getIssuedBy());
-        customUser.setUserRoles(realRolesSet);
+        customUser.setUserRoles(getRealUserRoleSet(updateUserRequestDTO.getUserRoles()));
         customUserRepository.save(customUser);
         //todo info log
     }
@@ -127,8 +113,9 @@ public class CustomUserService {
     }
 
     public CustomUser getUser(Long id) {
-        Optional<CustomUser> optionalUser = customUserRepository.findById(id);
-        return optionalUser.orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " was not found."));
+        return customUserRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " +
+                        id + " was not found."));
     }
 
     private Specification<CustomUser> takeGetUsersSpecification(Map<String, Object> filterValues) {

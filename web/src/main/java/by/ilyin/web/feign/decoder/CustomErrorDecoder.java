@@ -18,9 +18,9 @@ public class CustomErrorDecoder implements ErrorDecoder {
     public Exception decode(String methodKey, Response response) {
         FeignErrorResponse feignErrorResponse;
         try {
-            InputStream bodyIs = response.body().asInputStream();
+            InputStream responseBodyIS = response.body().asInputStream();
             ObjectMapper mapper = new ObjectMapper();
-            feignErrorResponse = mapper.readValue(bodyIs, FeignErrorResponse.class);
+            feignErrorResponse = mapper.readValue(responseBodyIS, FeignErrorResponse.class);
         } catch (IOException e) {
             //todo log
             return errorDecoder.decode(methodKey, response);

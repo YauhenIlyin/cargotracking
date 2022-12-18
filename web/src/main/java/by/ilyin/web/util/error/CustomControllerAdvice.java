@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,6 +20,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import java.net.BindException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 //todo add logs
@@ -35,24 +34,28 @@ public class CustomControllerAdvice {
     @ExceptionHandler({
             BindException.class,
             HttpMessageNotReadableException.class,
-            MethodArgumentNotValidException.class,
+            IncorrectValueFormatException.class,
             MissingServletRequestParameterException.class,
             MissingServletRequestPartException.class,
             TypeMismatchException.class,
     })
-    public ResponseEntity<RealErrorResponse> handleBadRequestExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleBadRequestExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     //todo javadoc 400 with message list
 
-    @ExceptionHandler({
-            IncorrectValueFormatException.class
-    })
-    public ResponseEntity<RealErrorResponse> handleIncorrectValueFormatExceptions(IncorrectValueFormatException e) {
-        ResponseEntity<RealErrorResponse> result;
-        List<String> errorMessages = e.getErrorMessages();
-        if (errorMessages != null && errorMessages.size() > 0) {
+    @ExceptionHandler(
+            MethodArgumentNotValidException.class
+    )
+    public ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidExceptions(MethodArgumentNotValidException e) {
+        ResponseEntity<CustomErrorResponse> result;
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+        List<String> errorMessages = new ArrayList<>();
+        for (ObjectError currentError : errors) {
+            errorMessages.add(currentError.getDefaultMessage());
+        }
+        if (errorMessages.size() > 0) {
             result = buildSimpleErrorResponse(LocalDateTime.now().format(formatter),
                     HttpStatus.BAD_REQUEST,
                     errorMessages);
@@ -65,50 +68,29 @@ public class CustomControllerAdvice {
     //todo add javadoc 401
 
     @ExceptionHandler(UnauthorizedRequestException.class)
-    public ResponseEntity<RealErrorResponse> handleUnauthorizedRequestExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleUnauthorizedRequestExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.UNAUTHORIZED);
     }
 
     //todo add javadoc 403
 
     @ExceptionHandler(CustomAccessDeniedException.class)
-    public ResponseEntity<RealErrorResponse> handleCustomAccessDeniedExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleCustomAccessDeniedExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.FORBIDDEN);
     }
 
     //todo add javadoc 404
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<RealErrorResponse> handleResourceNotFoundExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleResourceNotFoundExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.NOT_FOUND);
-    }
-
-    //todo add javadoc 405
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<RealErrorResponse> handleHttpRequestMethodNotSupportedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.METHOD_NOT_ALLOWED);
-    }
-
-    //todo add javadoc 406
-
-    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ResponseEntity<RealErrorResponse> handleHttpMediaTypeNotAcceptableExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.NOT_ACCEPTABLE);
     }
 
     //todo add javadoc 409
 
     @ExceptionHandler(ResourceAlreadyExists.class)
-    public ResponseEntity<RealErrorResponse> handleResourceAlreadyExists(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleResourceAlreadyExists(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.CONFLICT);
-    }
-
-    //todo add javadoc 415
-
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<RealErrorResponse> handleHttpMediaTypeNotSupportedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     //todo add javadoc 500
@@ -117,7 +99,7 @@ public class CustomControllerAdvice {
             ConversionNotSupportedException.class,
             HttpMessageNotWritableException.class,
     })
-    public ResponseEntity<RealErrorResponse> handleCInternalServerErrorExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleCInternalServerErrorExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -126,7 +108,7 @@ public class CustomControllerAdvice {
     @ExceptionHandler({
             Exception.class
     })
-    public ResponseEntity<RealErrorResponse> handleGeneralExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleGeneralExceptions(Exception e) {
         return buildSimpleErrorResponse(
                 LocalDateTime.now().format(formatter),
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -136,14 +118,14 @@ public class CustomControllerAdvice {
     //todo add javadoc 501
 
     @ExceptionHandler(NotImplementedMethodException.class)
-    public ResponseEntity<RealErrorResponse> handleNotImplementedMethodExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleNotImplementedMethodExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.NOT_IMPLEMENTED);
     }
 
     //todo add javadoc wrapper exception of core
 
     @ExceptionHandler(ErrorResponseWrapperException.class)
-    public ResponseEntity<RealErrorResponse> handleErrorResponseWrapper(ErrorResponseWrapperException e) {
+    public ResponseEntity<CustomErrorResponse> handleErrorResponseWrapper(ErrorResponseWrapperException e) {
         FeignErrorResponse feignError = e.getFeignErrorResponse();
         return buildSimpleErrorResponse(
                 feignError.getTimestamp(),
@@ -151,16 +133,16 @@ public class CustomControllerAdvice {
                 feignError.getErrors());
     }
 
-    private ResponseEntity<RealErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus) {
+    private ResponseEntity<CustomErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus) {
         return buildSimpleErrorResponse(
                 LocalDateTime.now().format(formatter),
                 httpStatus,
                 List.of(e.getMessage()));
     }
 
-    private ResponseEntity<RealErrorResponse> buildSimpleErrorResponse(String timestamp, HttpStatus httpStatus, List<String> messages) {
+    private ResponseEntity<CustomErrorResponse> buildSimpleErrorResponse(String timestamp, HttpStatus httpStatus, List<String> messages) {
         return new ResponseEntity<>(
-                new RealErrorResponse(
+                new CustomErrorResponse(
                         timestamp,
                         httpStatus.value(),
                         messages

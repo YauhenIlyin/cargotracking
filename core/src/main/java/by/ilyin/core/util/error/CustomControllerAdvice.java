@@ -8,9 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -58,32 +55,11 @@ public class CustomControllerAdvice {
         return buildSimpleErrorResponse(e, HttpStatus.NOT_FOUND);
     }
 
-    //todo add javadoc 405
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.METHOD_NOT_ALLOWED);
-    }
-
-    //todo add javadoc 406
-
-    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotAcceptableExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.NOT_ACCEPTABLE);
-    }
-
     //todo add javadoc 409
 
     @ExceptionHandler(ResourceAlreadyExists.class)
     public ResponseEntity<ErrorResponse> handleResourceAlreadyExists(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.CONFLICT);
-    }
-
-    //todo add javadoc 415
-
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedExceptions(Exception e) {
-        return buildSimpleErrorResponse(e, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     //todo add javadoc 500
