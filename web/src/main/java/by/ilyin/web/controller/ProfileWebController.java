@@ -19,13 +19,13 @@ public class ProfileWebController {
     private final UserProfileService userProfileService;
 
     @GetMapping
-    public UserProfileDTO show() {
+    public UserProfileDTO getCurrentProfile() {
         return userProfileService.getCurrentUserProfile();
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid UpdateUserProfileDTO updateUserProfileDTO,
-                                       BindingResult bindingResult) {
+    public ResponseEntity<Void> updateCurrentProfile(@RequestBody @Valid UpdateUserProfileDTO updateUserProfileDTO,
+                                                     BindingResult bindingResult) {
         userProfileService.updateCurrentUserProfile(updateUserProfileDTO, bindingResult);
         return ResponseEntity
                 .ok()
