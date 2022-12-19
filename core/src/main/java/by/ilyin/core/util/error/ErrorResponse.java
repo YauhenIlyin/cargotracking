@@ -18,7 +18,6 @@ public class ErrorResponse {
     private final LocalDateTime timestamp;
     private HttpStatus httpStatus;
     private List<String> errors = new ArrayList<>();
-    private StackTraceElement[] stackTrace;
 
     public ErrorResponse() {
         timestamp = LocalDateTime.now();
@@ -29,13 +28,6 @@ public class ErrorResponse {
         this();
         this.httpStatus = httpStatus;
         Collections.addAll(this.errors, messages);
-    }
-
-    public ErrorResponse(StackTraceElement[] stackTrace,
-                         HttpStatus httpStatus,
-                         String... messages) {
-        this(httpStatus, messages);
-        this.stackTrace = stackTrace;
     }
 
 }

@@ -1,5 +1,7 @@
 package by.ilyin.core.util.error;
 
+import by.ilyin.core.evidence.DefaultExceptionMessages;
+import by.ilyin.core.exception.http.CustomConstraintValidationException;
 import by.ilyin.core.exception.http.client.*;
 import by.ilyin.core.exception.http.server.NotImplementedMethodException;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -73,6 +75,20 @@ public class CustomControllerAdvice {
         return buildSimpleErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    //todo add javadoc ConstraintValidator impl custom annotation exception
+
+    @ExceptionHandler(CustomConstraintValidationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationExceptions(CustomConstraintValidationException e) {
+        HttpStatus httpStatus = e.getHttpStatus();
+        if (httpStatus == null) {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        if (e.getMessages() == null || e.getMessages().length == 0) {
+            e.setMessages(DefaultExceptionMessages.INTERNAL_SERVER_ERROR);
+        }
+        return buildSimpleErrorResponse(e, httpStatus, e.getMessages());
+    }
+
     //todo add javadoc 501
 
     @ExceptionHandler(NotImplementedMethodException.class)
@@ -84,10 +100,9 @@ public class CustomControllerAdvice {
         return buildSimpleErrorResponse(e, httpStatus, e.getMessage());
     }
 
-    private ResponseEntity<ErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus, String message) {
+    private ResponseEntity<ErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus, String... message) {
         return new ResponseEntity<>(
                 new ErrorResponse(
-                        e.getStackTrace(),
                         httpStatus,
                         message
                 ),

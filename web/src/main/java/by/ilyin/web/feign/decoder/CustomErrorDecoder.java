@@ -1,7 +1,6 @@
 package by.ilyin.web.feign.decoder;
 
-import by.ilyin.web.exception.http.ErrorResponseWrapperException;
-import by.ilyin.web.util.error.FeignErrorResponse;
+import by.ilyin.web.exception.http.CustomFeignException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -16,18 +15,16 @@ public class CustomErrorDecoder implements ErrorDecoder {
     private final ErrorDecoder errorDecoder = new Default();
 
     public Exception decode(String methodKey, Response response) {
-        FeignErrorResponse feignErrorResponse;
+        CustomFeignException customFeignException;
         try {
-            InputStream responseBodyIS = response.body().asInputStream();
+            InputStream responseBodyInputStream = response.body().asInputStream();
             ObjectMapper mapper = new ObjectMapper();
-            feignErrorResponse = mapper.readValue(responseBodyIS, FeignErrorResponse.class);
+            customFeignException = mapper.readValue(responseBodyInputStream, CustomFeignException.class);
         } catch (IOException e) {
             //todo log
             return errorDecoder.decode(methodKey, response);
         }
-        ErrorResponseWrapperException currentWrapper = new ErrorResponseWrapperException();
-        currentWrapper.setFeignErrorResponse(feignErrorResponse);
-        return currentWrapper;
+        return customFeignException;
     }
 
 }

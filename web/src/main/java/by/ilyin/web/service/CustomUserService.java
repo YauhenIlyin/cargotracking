@@ -9,10 +9,11 @@ import by.ilyin.web.entity.CustomUser;
 import by.ilyin.web.entity.UserRole;
 import by.ilyin.web.feign.UsersCoreFeignClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,23 +25,15 @@ public class CustomUserService {
 
     private final UsersCoreFeignClient usersCoreFeignClient;
     private final CustomUserDTOMapper customUserDTOMapper;
-    @Value("${server.address}")
-    private String serverAddress;
-    @Value("${server.port}")
-    private String serverPort;
 
-    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
-        CreateUserResponseDTO createUserResponseDTO = usersCoreFeignClient.createUser(customUserDTO);
-        String currentUrn = createUserResponseDTO.getCurrentUserURI();
-        StringBuilder currentUrlSB = new StringBuilder();
-        currentUrlSB
-                .append("http://")
-                .append(serverAddress)
-                .append(":")
-                .append(serverPort)
-                .append(currentUrn);
-        createUserResponseDTO.setCurrentUserURI(currentUrlSB.toString());
-        return createUserResponseDTO;
+    public ResponseEntity<URI> createUser(CustomUserDTO customUserDTO) {
+        Long userId = usersCoreFeignClient.createUser(customUserDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(userId).toUri();
+        return ResponseEntity
+                .created(location)
+                .body(location);
     }
 
     public ResponseEntity<Void> updateUser(Long id,

@@ -9,14 +9,13 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Constraint(validatedBy = UserUpdateParametersValidator.class)
+@Constraint(validatedBy = UserCreateParametersValidator.class)
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Documented
-public @interface ValidCustomUserDTO {
+public @interface ValidCreateUserData {
 
-    String message() default
-            "Incorrect user create parameters.";
+    String message() default "Incorrect user create parameters.";
 
     Class<?>[] groups() default {};
 

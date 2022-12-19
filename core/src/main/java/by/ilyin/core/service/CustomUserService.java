@@ -3,7 +3,6 @@ package by.ilyin.core.service;
 import by.ilyin.core.dto.CustomUserDTO;
 import by.ilyin.core.dto.mapper.CustomUserDTOMapper;
 import by.ilyin.core.dto.request.UpdateUserRequestDTO;
-import by.ilyin.core.dto.response.*;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.UserRole;
 import by.ilyin.core.evidence.KeyWords;
@@ -33,12 +32,12 @@ public class CustomUserService {
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
-    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
+    public Long createUser(CustomUserDTO customUserDTO) {
         CustomUser customUser = customUserDTOMapper.mapFromDto(customUserDTO);
         customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
         CustomUser realUser = customUserRepository.save(customUser);
         //todo info log
-        return new CreateUserResponseDTO(realUser.getId());
+        return realUser.getId();
     }
 
     @Transactional
@@ -114,8 +113,7 @@ public class CustomUserService {
 
     public CustomUser getUser(Long id) {
         return customUserRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " +
-                        id + " was not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " was not found."));
     }
 
     private Specification<CustomUser> takeGetUsersSpecification(Map<String, Object> filterValues) {

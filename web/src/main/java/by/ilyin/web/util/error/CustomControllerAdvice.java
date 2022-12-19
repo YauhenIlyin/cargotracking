@@ -1,7 +1,7 @@
 package by.ilyin.web.util.error;
 
 import by.ilyin.web.evidence.DefaultExceptionMessages;
-import by.ilyin.web.exception.http.ErrorResponseWrapperException;
+import by.ilyin.web.exception.http.CustomFeignException;
 import by.ilyin.web.exception.http.client.*;
 import by.ilyin.web.exception.http.server.NotImplementedMethodException;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -45,9 +45,7 @@ public class CustomControllerAdvice {
 
     //todo javadoc 400 with message list
 
-    @ExceptionHandler(
-            MethodArgumentNotValidException.class
-    )
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidExceptions(MethodArgumentNotValidException e) {
         ResponseEntity<CustomErrorResponse> result;
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
@@ -89,7 +87,7 @@ public class CustomControllerAdvice {
     //todo add javadoc 409
 
     @ExceptionHandler(ResourceAlreadyExists.class)
-    public ResponseEntity<CustomErrorResponse> handleResourceAlreadyExists(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleResourceAlreadyExistsExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.CONFLICT);
     }
 
@@ -99,15 +97,13 @@ public class CustomControllerAdvice {
             ConversionNotSupportedException.class,
             HttpMessageNotWritableException.class,
     })
-    public ResponseEntity<CustomErrorResponse> handleCInternalServerErrorExceptions(Exception e) {
+    public ResponseEntity<CustomErrorResponse> handleInternalServerErrorExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //todo add javadoc general-500
 
-    @ExceptionHandler({
-            Exception.class
-    })
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomErrorResponse> handleGeneralExceptions(Exception e) {
         return buildSimpleErrorResponse(
                 LocalDateTime.now().format(formatter),
@@ -124,13 +120,12 @@ public class CustomControllerAdvice {
 
     //todo add javadoc wrapper exception of core
 
-    @ExceptionHandler(ErrorResponseWrapperException.class)
-    public ResponseEntity<CustomErrorResponse> handleErrorResponseWrapper(ErrorResponseWrapperException e) {
-        FeignErrorResponse feignError = e.getFeignErrorResponse();
+    @ExceptionHandler(CustomFeignException.class)
+    public ResponseEntity<CustomErrorResponse> handleFeignErrorResponse(CustomFeignException e) {
         return buildSimpleErrorResponse(
-                feignError.getTimestamp(),
-                feignError.getHttpStatus(),
-                feignError.getErrors());
+                e.getTimestamp(),
+                e.getHttpStatus(),
+                e.getErrors());
     }
 
     private ResponseEntity<CustomErrorResponse> buildSimpleErrorResponse(Exception e, HttpStatus httpStatus) {

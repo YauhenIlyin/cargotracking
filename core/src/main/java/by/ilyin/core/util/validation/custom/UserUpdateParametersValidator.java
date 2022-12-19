@@ -2,10 +2,11 @@ package by.ilyin.core.util.validation.custom;
 
 import by.ilyin.core.dto.request.UpdateUserRequestDTO;
 import by.ilyin.core.entity.CustomUser;
-import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
-import by.ilyin.core.exception.http.client.ResourceNotFoundException;
+import by.ilyin.core.evidence.DefaultExceptionMessages;
+import by.ilyin.core.exception.http.CustomConstraintValidationException;
 import by.ilyin.core.repository.CustomUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -21,19 +22,32 @@ public class UserUpdateParametersValidator implements ConstraintValidator<Consis
 
     @Override
     public boolean isValid(Object[] value, ConstraintValidatorContext context) {
-        if (value[0] != null && value[1] != null &&
+        boolean isConsistentParameters = Boolean.TRUE;
+        String errorMessage = null;
+        HttpStatus httpStatus = null;
+        if (value.length >= 2 &&
                 value[0] instanceof Long &&
                 value[1] instanceof UpdateUserRequestDTO) {
             Long id = (Long) value[0];
             UpdateUserRequestDTO updateUserRequestDTO = (UpdateUserRequestDTO) value[1];
-            if (!customUserRepository.existsById(id)) {
-                throw new ResourceNotFoundException("User with id " + id + " not found.");
+            Optional<CustomUser> optionalUserById = customUserRepository.findById(id);
+            if (optionalUserById.isEmpty()) {
+                errorMessage = "User with id " + id + " not found.";
+                httpStatus = HttpStatus.NOT_FOUND;
+                isConsistentParameters = Boolean.FALSE;
+            } else if (!optionalUserById.get().getLogin().equals(updateUserRequestDTO.getLogin()) &&
+                    customUserRepository.existsByLogin(updateUserRequestDTO.getLogin())) {
+                errorMessage = "Login " + updateUserRequestDTO.getLogin() + " is occupied by another user.";
+                httpStatus = HttpStatus.CONFLICT;
+                isConsistentParameters = Boolean.FALSE;
             }
-            Optional<CustomUser> optionalUserByLogin = customUserRepository.findByLogin(updateUserRequestDTO.getLogin());
-            if (optionalUserByLogin.isPresent() && !optionalUserByLogin.get().getId().equals(id)) {
-                throw new ResourceAlreadyExists(
-                        "Login " + updateUserRequestDTO.getLogin() + " is occupied by another user.");
-            }
+        } else {
+            errorMessage = DefaultExceptionMessages.INCORRECT_VALUE;
+            httpStatus = HttpStatus.BAD_REQUEST;
+            isConsistentParameters = Boolean.FALSE;
+        }
+        if (!isConsistentParameters) {
+            throw new CustomConstraintValidationException(httpStatus, errorMessage);
         }
         return Boolean.TRUE;
     }
