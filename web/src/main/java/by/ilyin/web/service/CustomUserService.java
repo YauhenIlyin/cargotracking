@@ -31,9 +31,7 @@ public class CustomUserService {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(userId).toUri();
-        return ResponseEntity
-                .created(location)
-                .body(location);
+        return ResponseEntity.ok(location);
     }
 
     public ResponseEntity<Void> updateUser(Long id,
