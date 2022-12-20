@@ -48,5 +48,4 @@ public class WaybillWebController {
         return waybillService.getCheckpoints(id);
     }
 
-
 }
