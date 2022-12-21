@@ -1,6 +1,7 @@
 package by.ilyin.web.util.error;
 
 import by.ilyin.web.evidence.DefaultExceptionMessages;
+import by.ilyin.web.exception.CustomConstraintValidationException;
 import by.ilyin.web.exception.http.CustomFeignException;
 import by.ilyin.web.exception.http.client.*;
 import by.ilyin.web.exception.http.server.NotImplementedMethodException;
@@ -21,6 +22,7 @@ import java.net.BindException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //todo add logs
@@ -116,6 +118,18 @@ public class CustomControllerAdvice {
     @ExceptionHandler(NotImplementedMethodException.class)
     public ResponseEntity<CustomErrorResponse> handleNotImplementedMethodExceptions(Exception e) {
         return buildSimpleErrorResponse(e, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @ExceptionHandler(CustomConstraintValidationException.class)
+    public ResponseEntity<CustomErrorResponse> handleConstraintViolationExceptions(CustomConstraintValidationException e) {
+        HttpStatus httpStatus = e.getHttpStatus();
+        if (httpStatus == null) {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        if (e.getMessages() == null || e.getMessages().length == 0) {
+            e.setMessages(DefaultExceptionMessages.INTERNAL_SERVER_ERROR);
+        }
+        return buildSimpleErrorResponse(LocalDateTime.now().toString(), httpStatus, Arrays.asList(e.getMessages()));
     }
 
     //todo add javadoc wrapper exception of core

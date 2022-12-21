@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
                         .allowedHeaders(
                                 "Content-Type",
                                 "Authenticated")
-                        .allowedOrigins("*");
+                        .allowedOrigins("/*");
             }
         };
     }

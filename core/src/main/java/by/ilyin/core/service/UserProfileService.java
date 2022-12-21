@@ -2,7 +2,6 @@ package by.ilyin.core.service;
 
 import by.ilyin.core.dto.request.UpdateUserProfileDTO;
 import by.ilyin.core.entity.CustomUser;
-import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,7 @@ public class UserProfileService {
 
     //todo check if return null field, save null / old value?
     public void updateCurrentUserProfile(Long userId, UpdateUserProfileDTO updateProfileDTO) {
-        CustomUser customUser = customUserRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile update failed. User was not found."));
+        CustomUser customUser = customUserRepository.findById(userId).orElseThrow();
         if (updateProfileDTO.getName() != null) {
             customUser.setName(updateProfileDTO.getName());
         }
@@ -44,9 +42,7 @@ public class UserProfileService {
     }
 
     public void changePassword(String updatedPassword, Long userId) {
-        CustomUser customUser = customUserRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Password change process failed. Profile with id " +
-                        userId + " was not found."));
+        CustomUser customUser = customUserRepository.findById(userId).orElseThrow();
         customUser.setPassword(updatedPassword);
         customUserRepository.save(customUser);
     }
