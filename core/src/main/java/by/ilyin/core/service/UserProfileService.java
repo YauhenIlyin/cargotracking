@@ -14,30 +14,14 @@ public class UserProfileService {
     //todo check if return null field, save null / old value?
     public void updateCurrentUserProfile(Long userId, UpdateUserProfileDTO updateProfileDTO) {
         CustomUser customUser = customUserRepository.findById(userId).orElseThrow();
-        if (updateProfileDTO.getName() != null) {
-            customUser.setName(updateProfileDTO.getName());
-        }
-        if (updateProfileDTO.getSurname() != null) {
-            customUser.setSurname(updateProfileDTO.getSurname());
-        }
-        if (updateProfileDTO.getPatronymic() != null) {
-            customUser.setPatronymic(updateProfileDTO.getPatronymic());
-        }
-        if (updateProfileDTO.getBornDate() != null) {
-            customUser.setBornDate(updateProfileDTO.getBornDate());
-        }
-        if (updateProfileDTO.getTown() != null) {
-            customUser.setTown(updateProfileDTO.getTown());
-        }
-        if (updateProfileDTO.getStreet() != null) {
-            customUser.setStreet(updateProfileDTO.getStreet());
-        }
-        if (updateProfileDTO.getHouse() != null) {
-            customUser.setHouse(updateProfileDTO.getHouse());
-        }
-        if (updateProfileDTO.getFlat() != null) {
-            customUser.setFlat(updateProfileDTO.getFlat());
-        }
+        customUser.setName(updateProfileDTO.getName());
+        customUser.setSurname(updateProfileDTO.getSurname());
+        customUser.setPatronymic(updateProfileDTO.getPatronymic());
+        customUser.setBornDate(updateProfileDTO.getBornDate());
+        customUser.setTown(updateProfileDTO.getTown());
+        customUser.setStreet(updateProfileDTO.getStreet());
+        customUser.setHouse(updateProfileDTO.getHouse());
+        customUser.setFlat(updateProfileDTO.getFlat());
         customUserRepository.save(customUser);
     }
 
