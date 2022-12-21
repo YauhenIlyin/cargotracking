@@ -1,6 +1,5 @@
 package by.ilyin.web.security;
 
-import by.ilyin.web.entity.CustomJWT;
 import by.ilyin.web.entity.CustomUser;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,19 +40,8 @@ public class JwtUtil {
                 .withClaim("userId", userId)
                 .withIssuedAt(new Date())
                 .withIssuer("Cargo tracking app")
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .sign(Algorithm.HMAC256(secret));
-    }
-
-    public CustomJWT buildCustomJwt(String token) {
-        DecodedJWT decodedJWT = decodeValidateToken(token);
-        return new CustomJWT(
-                decodedJWT.getClaim("userId").as(Long.class),
-                decodedJWT.getClaim("iat").asInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                decodedJWT.getClaim("exp").asInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                token,
-                Boolean.TRUE
-        );
     }
 
     public DecodedJWT decodeValidateToken(String token) {

@@ -26,8 +26,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/users").hasAnyRole("ADMIN", "DISPATCHER")
                 .antMatchers(HttpMethod.POST, "/api/users/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("ADMIN")
-                .antMatchers("api/logout").authenticated()
-                .antMatchers("/api/sign-in", "/api/refresh").permitAll()
+                .antMatchers("/api/sign-in", "api/logout", "/api/refresh").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

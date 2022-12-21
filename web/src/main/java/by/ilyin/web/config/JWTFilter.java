@@ -2,10 +2,9 @@ package by.ilyin.web.config;
 
 import by.ilyin.web.security.JwtUtil;
 import by.ilyin.web.service.auth.CustomUserDetailsService;
-import by.ilyin.web.security.JwtBlackListManager;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,26 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
 
-    private JwtUtil jwtUtil;
-    private CustomUserDetailsService customUserDetailsService;
-    private JwtBlackListManager jwtBlackListManager;
-
-    @Autowired
-    public void setJwtUtil(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
-
-    @Autowired
-    public void setCustomUserDetailsService(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
-    }
-
-    @Autowired
-    public void setJwtBlackListManager(JwtBlackListManager jwtBlackListManager) {
-        this.jwtBlackListManager = jwtBlackListManager;
-    }
+    private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -48,7 +32,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
-            if (jwt.isBlank() && !jwtBlackListManager.isValid(jwt)) {
+            if (jwt.isBlank()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "Invalid JWT Token in Bearer Header");
             } else {
