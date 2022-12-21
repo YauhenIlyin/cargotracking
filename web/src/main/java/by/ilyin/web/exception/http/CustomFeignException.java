@@ -1,11 +1,14 @@
 package by.ilyin.web.exception.http;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomFeignException extends RuntimeException {
 
     private String timestamp;

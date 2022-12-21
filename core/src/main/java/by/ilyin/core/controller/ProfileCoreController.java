@@ -2,6 +2,7 @@ package by.ilyin.core.controller;
 
 import by.ilyin.core.dto.request.UpdateUserProfileDTO;
 import by.ilyin.core.service.UserProfileService;
+import by.ilyin.core.util.validation.custom.ValidIdByUserExists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ public class ProfileCoreController {
     private final UserProfileService userProfileService;
 
     @PutMapping
-    void updateCurrentProfile(@RequestParam("userId") Long userId,
+    void updateCurrentProfile(@RequestParam("userId") @ValidIdByUserExists Long userId,
                               @RequestBody UpdateUserProfileDTO updateUserProfileDTO) {
         userProfileService.updateCurrentUserProfile(userId, updateUserProfileDTO);
     }
@@ -21,7 +22,7 @@ public class ProfileCoreController {
     //todo char[] password
     @PutMapping("/change-password")
     void changePassword(@RequestParam("updatedPassword") String updatedPassword,
-                        @RequestParam("userId") Long userId) {
+                        @RequestParam("userId") @ValidIdByUserExists Long userId) {
         userProfileService.changePassword(updatedPassword, userId);
     }
 

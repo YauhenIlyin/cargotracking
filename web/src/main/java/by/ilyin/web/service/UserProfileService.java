@@ -5,14 +5,11 @@ import by.ilyin.web.dto.request.UpdateUserProfileDTO;
 import by.ilyin.web.dto.UserProfileDTO;
 import by.ilyin.web.dto.mapper.CustomUserDTOMapper;
 import by.ilyin.web.entity.CustomUser;
-import by.ilyin.web.exception.http.client.IncorrectValueFormatException;
 import by.ilyin.web.feign.ProfileCoreFeignClient;
 import by.ilyin.web.security.CustomUserDetails;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +17,6 @@ public class UserProfileService {
 
     private final CustomUserDTOMapper customUserDTOMapper;
     private final CustomUserService customUserService;
-    private final CustomBindingResultValidator bindingResultValidator;
     private final ProfileCoreFeignClient profileCoreFeignClient;
 
     public UserProfileDTO getCurrentUserProfile() {
@@ -32,17 +28,12 @@ public class UserProfileService {
     }
 
     //todo check if return null field, save null / old value
-    public void updateCurrentUserProfile(UpdateUserProfileDTO updateUserProfileDTO, BindingResult bindingResult) {
-        bindingResultValidator.validationProcess(bindingResult);
+    public void updateCurrentUserProfile(UpdateUserProfileDTO updateUserProfileDTO) {
         profileCoreFeignClient.updateCurrentProfile(getCurrentCustomUser().getId(), updateUserProfileDTO);
     }
 
     //todo add an encryption mechanism and correct validation process for it
-    public void changePassword(ChangePassProfileDTO changePassProfileDTO, BindingResult bindingResult) {
-        bindingResultValidator.validationProcess(bindingResult);
-        if (!getCurrentCustomUser().getPassword().equals(changePassProfileDTO.getOldPassword())) {
-            throw new IncorrectValueFormatException("Incorrect old password");
-        }
+    public void changePassword(ChangePassProfileDTO changePassProfileDTO) {
         profileCoreFeignClient.changePassword(changePassProfileDTO.getNewPassword(), getCurrentCustomUser().getId());
     }
 
