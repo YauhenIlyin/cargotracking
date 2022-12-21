@@ -1,6 +1,9 @@
 package by.ilyin.web.feign;
 
+<<<<<<< HEAD
 import by.ilyin.web.dto.ChangeEmailDTO;
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import org.springframework.cloud.openfeign.FeignClient;

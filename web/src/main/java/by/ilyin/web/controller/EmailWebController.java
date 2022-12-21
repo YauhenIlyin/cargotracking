@@ -1,6 +1,9 @@
 package by.ilyin.web.controller;
 
+<<<<<<< HEAD
 import by.ilyin.web.dto.ChangeEmailDTO;
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import by.ilyin.web.service.EmailService;
@@ -40,6 +43,7 @@ public class EmailWebController {
     public ResponseEntity<Void> restoreAccount(@PathVariable("uuid") String uuid,
                                                @RequestBody @Valid RestoreAccountDTO restoreAccountDTO) {
         emailService.restoreAccount(uuid, restoreAccountDTO);
+<<<<<<< HEAD
         return ResponseEntity
                 .ok()
                 .build();
@@ -56,6 +60,8 @@ public class EmailWebController {
     @GetMapping("/profile/confirm-change-email/{uuid}")
     public ResponseEntity<Void> confirmEmail(@PathVariable("uuid") String uuid) {
         emailService.confirmEmail(uuid);
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
         return ResponseEntity
                 .ok()
                 .build();
