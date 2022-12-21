@@ -1,5 +1,6 @@
 package by.ilyin.core.controller;
 
+import by.ilyin.core.dto.RestoreAccountDTO;
 import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +30,10 @@ public class EmailCoreController {
                 .build();
     }
 
-    @GetMapping("/restore/{uuid}")
+    @PutMapping("/restore/{uuid}")
     public ResponseEntity<Void> restoreAccount(@PathVariable("uuid") String uuid,
-                                               @RequestParam("password") String password) {
-        emailService.restoreAccount(uuid, password);
+                                               @RequestBody RestoreAccountDTO restoreAccountDTO) {
+        emailService.restoreAccount(uuid, restoreAccountDTO);
         return ResponseEntity
                 .ok()
                 .build();
