@@ -1,7 +1,14 @@
 package by.ilyin.core.service;
 
+import by.ilyin.core.dto.RestoreAccountDTO;
 import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.dto.mapper.EmailDTOMapper;
+import by.ilyin.core.entity.CustomUser;
+import by.ilyin.core.entity.uuid.CustomUUID;
+import by.ilyin.core.exception.http.client.ResourceNotFoundException;
+import by.ilyin.core.repository.CustomUUIDRepository;
+import by.ilyin.core.repository.CustomUserRepository;
+import by.ilyin.core.util.email.EmailDetails;
 import by.ilyin.core.util.email.EmailProcessManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,16 +59,16 @@ public class EmailService {
                 .append(uuid);
         EmailDetails emailDetails = emailDTOMapper.mapFromDto(sendEmailDTO);
         emailDetails.setText(messageSB.toString());
-        emailProcessService.sendSimpleMail(emailDetails);
+        emailProcessManager.sendSimpleMail(emailDetails);
     }
 
     @Transactional
-    public void restoreAccount(String uuid, String password) {
+    public void restoreAccount(String uuid, RestoreAccountDTO restoreAccountDTO) {
         CustomUUID customUUID = customUUIDRepository.findByUuidValueAndExpiredDateAfter(uuid, LocalDateTime.now())
                 .orElseThrow(() -> new ResourceNotFoundException("Incorrect UUID."));
         CustomUser customUser = customUserRepository.findById(customUUID.getUserId())
                 .orElseThrow(() -> new RuntimeException("Internal server error. Account not found."));
-        customUser.setPassword(password);
+        customUser.setPassword(restoreAccountDTO.getPassword());
         customUserRepository.save(customUser);
     }
 

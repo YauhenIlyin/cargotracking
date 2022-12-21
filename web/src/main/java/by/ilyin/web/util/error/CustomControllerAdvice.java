@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //todo add logs
 @ControllerAdvice
@@ -67,11 +68,11 @@ public class CustomControllerAdvice {
         return result;
     }
 
-    //todo add javadoc 400 for requestParameters
+    //todo add javadoc 400 for requestParameters (handle exception of @RequestParam @Size etc.)
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<RealErrorResponse> handleConstraintViolationExceptions(ConstraintViolationException e) {
-        ResponseEntity<RealErrorResponse> result;
+    public ResponseEntity<CustomErrorResponse> handleConstraintViolationExceptions(ConstraintViolationException e) {
+        ResponseEntity<CustomErrorResponse> result;
         List<String> errorMessages = e.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());
         if (errorMessages.size() > 0) {
