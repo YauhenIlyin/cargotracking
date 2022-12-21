@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 public @interface ValidIdByUserExists {
-    
+
     String message() default "Incorrect user parameters.";
 
     Class<?>[] groups() default {};

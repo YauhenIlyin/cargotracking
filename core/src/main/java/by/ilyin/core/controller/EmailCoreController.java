@@ -1,6 +1,9 @@
 package by.ilyin.core.controller;
 
+<<<<<<< HEAD
 import by.ilyin.core.dto.ChangeEmailDTO;
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
 import by.ilyin.core.dto.RestoreAccountDTO;
 import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.service.EmailService;
@@ -40,6 +43,7 @@ public class EmailCoreController {
     public ResponseEntity<Void> restoreAccount(@PathVariable("uuid") String uuid,
                                                @RequestBody RestoreAccountDTO restoreAccountDTO) {
         emailService.restoreAccount(uuid, restoreAccountDTO);
+<<<<<<< HEAD
         return ResponseEntity
                 .ok()
                 .build();
@@ -59,6 +63,8 @@ public class EmailCoreController {
     public ResponseEntity<Void> confirmEmail(@RequestParam("userId") @ValidIdByUserExists Long userId,
                                              @PathVariable("uuid") String uuid) {
         emailService.confirmEmail(userId, uuid);
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
         return ResponseEntity
                 .ok()
                 .build();
