@@ -6,7 +6,6 @@ import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.dto.mapper.EmailDTOMapper;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.uuid.CustomUUID;
-import by.ilyin.core.exception.http.client.IncorrectValueFormatException;
 import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUUIDRepository;
@@ -76,14 +75,7 @@ public class EmailService {
 
     @Transactional
     public void changeEmail(Long userId, ChangeEmailDTO changeEmailDTO) {
-        CustomUser customUser = customUserRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Account not found by id. Internal server error"));
-        if (customUserRepository.existsByEmail(changeEmailDTO.getRecipient())) {
-            throw new ResourceAlreadyExists("Email " + changeEmailDTO.getRecipient() + " is not free.");
-        }
-        if (!customUser.getPassword().equals(changeEmailDTO.getPassword())) {
-            throw new IncorrectValueFormatException("Incorrect password.");
-        }
+        CustomUser customUser = customUserRepository.findById(userId).orElseThrow();
         String uuidStr = UUID.randomUUID().toString();
         customUUIDRepository.deleteByUserIdAndDestination(customUser.getId(), CustomUUID.Destination.CHANGE_EMAIL);
         customUUIDRepository.save(
@@ -96,7 +88,7 @@ public class EmailService {
         StringBuilder messageSB = new StringBuilder();
         messageSB.append(changeEmailDTO.getText())
                 .append(" ")
-                .append("http://") //todo https ?
+                .append("http://")
                 .append(webAddress)
                 .append(":")
                 .append(webPort)
@@ -107,11 +99,17 @@ public class EmailService {
         emailProcessManager.sendSimpleMail(emailDetails);
     }
 
+    @Transactional
     public void confirmEmail(Long userId, String uuid) {
         CustomUUID customUUID = customUUIDRepository.findByUuidValueAndExpiredDateAfter(uuid, LocalDateTime.now())
-                .orElseThrow(() -> new ResourceNotFoundException("Your request has expired"));
-        CustomUser customUser = customUserRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Account not found by id. Internal server error"));
+                .orElseThrow(() -> {
+                    customUUIDRepository.deleteByUserIdAndDestination(userId, CustomUUID.Destination.CHANGE_EMAIL);
+                    return new ResourceNotFoundException("Your request has expired.");
+                });
+        if (customUserRepository.existsByEmail(customUUID.getEmail())) {
+            throw new ResourceAlreadyExists("The email was taken before you confirmed.");
+        }
+        CustomUser customUser = customUserRepository.findById(userId).orElseThrow();
         customUser.setEmail(customUUID.getEmail());
         customUserRepository.save(customUser);
     }

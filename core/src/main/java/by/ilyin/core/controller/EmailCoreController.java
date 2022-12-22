@@ -4,7 +4,9 @@ import by.ilyin.core.dto.ChangeEmailDTO;
 import by.ilyin.core.dto.RestoreAccountDTO;
 import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.service.EmailService;
+import by.ilyin.core.util.validation.custom.ConsistentChangeEmailParameters;
 import by.ilyin.core.util.validation.custom.ValidEmailRepairData;
+import by.ilyin.core.util.validation.custom.ValidIdByUserExists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,6 +46,7 @@ public class EmailCoreController {
     }
 
     @PostMapping("/profile/change-email")
+    @ConsistentChangeEmailParameters
     public ResponseEntity<Void> changeEmail(@RequestParam("userId") Long userId,
                                             @RequestBody ChangeEmailDTO changeEmailDTO) {
         emailService.changeEmail(userId, changeEmailDTO);
@@ -53,7 +56,7 @@ public class EmailCoreController {
     }
 
     @GetMapping("/profile/confirm-change-email/{uuid}")
-    public ResponseEntity<Void> confirmEmail(@RequestParam("userId") Long userId,
+    public ResponseEntity<Void> confirmEmail(@RequestParam("userId") @ValidIdByUserExists Long userId,
                                              @PathVariable("uuid") String uuid) {
         emailService.confirmEmail(userId, uuid);
         return ResponseEntity
