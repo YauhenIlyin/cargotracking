@@ -1,5 +1,6 @@
 package by.ilyin.web.feign;
 
+import by.ilyin.web.dto.ChangeEmailDTO;
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import org.springframework.cloud.openfeign.FeignClient;

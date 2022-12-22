@@ -104,7 +104,7 @@ public class EmailService {
                 .append(uuidStr);
         EmailDetails emailDetails = emailDTOMapper.mapFromDto(changeEmailDTO);
         emailDetails.setText(messageSB.toString());
-        emailProcessService.sendSimpleMail(emailDetails);
+        emailProcessManager.sendSimpleMail(emailDetails);
     }
 
     public void confirmEmail(Long userId, String uuid) {

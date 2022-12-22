@@ -1,5 +1,6 @@
 package by.ilyin.web.controller;
 
+import by.ilyin.web.dto.ChangeEmailDTO;
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import by.ilyin.web.service.EmailService;
@@ -9,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 
 
 @RequiredArgsConstructor
@@ -45,31 +45,9 @@ public class EmailWebController {
                 .build();
     }
 
-    @PostMapping("/email/repairing")
-    public ResponseEntity<Void> repairEmail(@RequestBody @Valid SendEmailDTO sendEmailDTO,
-                                            BindingResult bindingResult) {
-        emailService.repairEmail(sendEmailDTO, bindingResult);
-        return ResponseEntity
-                .ok()
-                .build();
-    }
-
-    //todo password as char[]
-    @GetMapping("/restore/{uuid}")
-    public ResponseEntity<Void> restoreAccount(@PathVariable("uuid") String uuid,
-                                               @RequestParam("password")
-                                               @Size(min = 5, max = 20, message = "Password length " +
-                                                       "must be between 5 and 20 characters") String password) {
-        emailService.restoreAccount(uuid, password);
-        return ResponseEntity
-                .ok()
-                .build();
-    }
-
     @PostMapping("/profile/change-email")
-    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ChangeEmailDTO changeEmailDTO,
-                                            BindingResult bindingResult) {
-        emailService.changeEmail(changeEmailDTO, bindingResult);
+    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
+        emailService.changeEmail(changeEmailDTO);
         return ResponseEntity
                 .ok()
                 .build();
