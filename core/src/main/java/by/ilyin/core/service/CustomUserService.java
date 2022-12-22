@@ -3,10 +3,10 @@ package by.ilyin.core.service;
 import by.ilyin.core.dto.CustomUserDTO;
 import by.ilyin.core.dto.mapper.CustomUserDTOMapper;
 import by.ilyin.core.dto.request.UpdateUserRequestDTO;
-import by.ilyin.core.dto.response.*;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.UserRole;
 import by.ilyin.core.evidence.KeyWords;
+import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.CustomUserRepository;
 import by.ilyin.core.repository.UserRoleRepository;
 import by.ilyin.core.repository.filtration.FiltrationBuilder;
@@ -16,11 +16,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.InvalidClassException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -34,19 +32,17 @@ public class CustomUserService {
     private final @Qualifier("userFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
-    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO) {
+    public Long createUser(CustomUserDTO customUserDTO) {
         CustomUser customUser = customUserDTOMapper.mapFromDto(customUserDTO);
         customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
         CustomUser realUser = customUserRepository.save(customUser);
-        return new CreateUserResponseDTO(realUser.getId());
+        //todo info log
+        return realUser.getId();
     }
 
     @Transactional
     public void updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO) {
-        Optional<CustomUser> optionalCustomUser;
-        optionalCustomUser = customUserRepository.findById(id);
-        CustomUser customUser = optionalCustomUser.orElseThrow(); //todo catch this exception
-        Set<UserRole> realRolesSet = getRealUserRoleSet(updateUserRequestDTO.getUserRoles());
+        CustomUser customUser = customUserRepository.findById(id).orElseThrow();
         customUser.setName(updateUserRequestDTO.getName());
         customUser.setSurname(updateUserRequestDTO.getSurname());
         customUser.setPatronymic(updateUserRequestDTO.getPatronymic());
@@ -63,7 +59,7 @@ public class CustomUserService {
         }
         customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
         customUser.setIssuedBy(updateUserRequestDTO.getIssuedBy());
-        customUser.setUserRoles(realRolesSet);
+        customUser.setUserRoles(getRealUserRoleSet(updateUserRequestDTO.getUserRoles()));
         customUserRepository.save(customUser);
         //todo info log
     }
@@ -116,8 +112,8 @@ public class CustomUserService {
     }
 
     public CustomUser getUser(Long id) {
-        Optional<CustomUser> optionalUser = customUserRepository.findById(id);
-        return optionalUser.orElseThrow(); //todo catch this exception
+        return customUserRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " was not found."));
     }
 
     private Specification<CustomUser> takeGetUsersSpecification(Map<String, Object> filterValues) {

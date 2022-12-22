@@ -1,5 +1,6 @@
 package by.ilyin.core.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Bean
@@ -15,7 +17,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/about", "/api/users", "/api/users/*").permitAll();
+                .antMatchers("api/*", "/api/about", "/api/users", "/api/users/*").permitAll();
         return http.build();
     }
 
