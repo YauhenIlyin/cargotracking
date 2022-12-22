@@ -38,9 +38,7 @@ public class EmailService {
 
     @Transactional
     public void repairEmail(SendEmailDTO sendEmailDTO) {
-        CustomUser customUser = customUserRepository.findByEmail(sendEmailDTO.getRecipient())
-                .orElseThrow(() -> new ResourceNotFoundException("Email " +
-                        sendEmailDTO.getRecipient() + " not found"));
+        CustomUser customUser = customUserRepository.findByEmail(sendEmailDTO.getRecipient()).orElseThrow();
         UUID uuid = UUID.randomUUID();
         customUUIDRepository.save(
                 new CustomUUID(customUser.getId(),
