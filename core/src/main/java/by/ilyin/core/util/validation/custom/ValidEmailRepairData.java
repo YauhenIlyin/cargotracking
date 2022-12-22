@@ -9,13 +9,13 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Constraint(validatedBy = UserCreateParametersValidator.class)
+@Constraint(validatedBy = EmailRepairParameterDataValidator.class)
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Documented
-public @interface ValidIdByUserExists {
+public @interface ValidEmailRepairData {
 
-    String message() default "Incorrect user parameters.";
+    String message() default "Incorrect email.";
 
     Class<?>[] groups() default {};
 
