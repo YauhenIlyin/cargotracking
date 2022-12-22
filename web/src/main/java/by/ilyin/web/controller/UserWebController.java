@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -20,13 +21,13 @@ public class UserWebController {
     private final CustomUserService customUserService;
 
     @PostMapping
-    public String createUser(@RequestBody @Valid CustomUserDTO customUserDTO) {
-        return customUserService.createUser(customUserDTO).getCurrentUserURI();
+    public ResponseEntity<URI> createUser(@RequestBody @Valid CustomUserDTO customUserDTO) {
+        return customUserService.createUser(customUserDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id,
-                                           @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+                                           @RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO) {
         return customUserService.updateUser(id, updateUserRequestDTO);
     }
 

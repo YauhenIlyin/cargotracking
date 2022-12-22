@@ -5,6 +5,5 @@ feign:
   client:
     core:
       url: localhost:8090
-cors:
-  allowed:
-    origins: localhost:8080, localhost:8181
+jwt:
+  secret: d5BysJjA1.=(sbBO8Tk&EEa5%XN8o%aFtL(iCelh9($pQDWV$g1v0J7)$xB@O=yCfGZ!c=!x1#@&7JX*nPZ(rzZuXtF^dAOG&Wqr61CSBZCybd.YbjyteFEJJdI@(zEw
