@@ -2,17 +2,16 @@ package by.ilyin.web.controller;
 
 import by.ilyin.web.dto.ClientDTO;
 import by.ilyin.web.dto.request.UpdateClientDTO;
-import by.ilyin.web.dto.response.CreateClientResponseDTO;
 import by.ilyin.web.dto.response.GetClientByIdResponseDTO;
 import by.ilyin.web.dto.response.GetClientsResponseDTO;
 import by.ilyin.web.entity.Client;
 import by.ilyin.web.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,16 +22,14 @@ public class ClientWebController {
     private final ClientService clientService;
 
     @PostMapping
-    public CreateClientResponseDTO createClient(@RequestBody @Valid ClientDTO clientDTO,
-                                                BindingResult bindingResult) {
-        return clientService.createUser(clientDTO, bindingResult);
+    public ResponseEntity<URI> createClient(@RequestBody @Valid ClientDTO clientDTO) {
+        return clientService.createClient(clientDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateClient(@PathVariable("id") Long clientId,
-                                             @RequestBody @Valid UpdateClientDTO updateClientDTO,
-                                             BindingResult bindingResult) {
-        clientService.updateClient(clientId, updateClientDTO, bindingResult);
+                                             @RequestBody @Valid UpdateClientDTO updateClientDTO) {
+        clientService.updateClient(clientId, updateClientDTO);
         return ResponseEntity
                 .ok()
                 .build();
