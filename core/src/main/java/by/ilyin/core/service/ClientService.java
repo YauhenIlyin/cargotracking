@@ -3,11 +3,9 @@ package by.ilyin.core.service;
 import by.ilyin.core.dto.ClientDTO;
 import by.ilyin.core.dto.mapper.ClientDTOMapper;
 import by.ilyin.core.dto.request.UpdateClientDTO;
-import by.ilyin.core.dto.response.CreateClientResponseDTO;
 import by.ilyin.core.entity.Client;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.evidence.KeyWords;
-import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.ClientRepository;
 import by.ilyin.core.repository.CustomUserRepository;
@@ -38,16 +36,8 @@ public class ClientService {
     private final @Qualifier("clientFieldCriteriaTypesImpl") FieldCriteriaTypes fieldCriteriaTypes;
 
     @Transactional
-    public CreateClientResponseDTO createClient(ClientDTO clientDTO) {
+    public Long createClient(ClientDTO clientDTO) {
         Client client = clientDTOMapper.mapFromDto(clientDTO);
-        if (clientRepository.existsById(clientDTO.getAdminInfo().getClientId())) {
-            throw new ResourceAlreadyExists("Client with id " +
-                    clientDTO.getAdminInfo().getClientId() + " already exists.");
-        }
-        if (customUserRepository.existsByLogin(clientDTO.getAdminInfo().getLogin())) {
-            throw new ResourceAlreadyExists("User with login " +
-                    clientDTO.getAdminInfo().getLogin() + " already exists.");
-        }
         CustomUser admin = client.getGeneralAdmin();
         client.setGeneralAdmin(null);
         client.setId(clientDTO.getAdminInfo().getClientId());
@@ -57,14 +47,12 @@ public class ClientService {
         customUserRepository.save(admin);
         client.setGeneralAdmin(admin);
         clientRepository.save(client);
-        return new CreateClientResponseDTO(client.getId());
+        return client.getId();
     }
 
     @Transactional
     public void updateClient(Long clientId, UpdateClientDTO updateClientDTO) {
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
-                        clientId + " not found."));
+        Client client = clientRepository.findById(clientId).orElseThrow();
         client.setName(updateClientDTO.getName());
         client.setStatus(updateClientDTO.getStatus());
         clientRepository.save(client);
@@ -86,9 +74,7 @@ public class ClientService {
 
     @Transactional
     public void activateClient(Long clientId) {
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
-                        clientId + " not found."));
+        Client client = clientRepository.findById(clientId).orElseThrow();
         client.setStatus(Client.ClientStatus.LEGAL);
         clientRepository.save(client);
     }

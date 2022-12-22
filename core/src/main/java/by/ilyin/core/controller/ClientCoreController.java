@@ -2,9 +2,10 @@ package by.ilyin.core.controller;
 
 import by.ilyin.core.dto.ClientDTO;
 import by.ilyin.core.dto.request.UpdateClientDTO;
-import by.ilyin.core.dto.response.CreateClientResponseDTO;
 import by.ilyin.core.entity.Client;
 import by.ilyin.core.service.ClientService;
+import by.ilyin.core.util.validation.custom.ValidIdByClientExists;
+import by.ilyin.core.util.validation.custom.ValidCreateClientData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +22,12 @@ public class ClientCoreController {
     private final ClientService clientService;
 
     @PostMapping
-    public CreateClientResponseDTO createClient(@RequestBody ClientDTO clientDTO) {
+    public Long createClient(@RequestBody @ValidCreateClientData ClientDTO clientDTO) {
         return clientService.createClient(clientDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateClient(@PathVariable("id") Long clientId,
+    public ResponseEntity<Void> updateClient(@PathVariable("id") @ValidIdByClientExists Long clientId,
                                              @RequestBody UpdateClientDTO updateClientDTO) {
         clientService.updateClient(clientId, updateClientDTO);
         return ResponseEntity
@@ -47,7 +48,7 @@ public class ClientCoreController {
     }
 
     @PutMapping("/activate/{clientId}")
-    public ResponseEntity<Void> activateClient(@PathVariable Long clientId) {
+    public ResponseEntity<Void> activateClient(@PathVariable @ValidIdByClientExists Long clientId) {
         clientService.activateClient(clientId);
         return ResponseEntity
                 .ok()

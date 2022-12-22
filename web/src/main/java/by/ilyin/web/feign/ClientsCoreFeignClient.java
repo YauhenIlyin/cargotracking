@@ -3,7 +3,6 @@ package by.ilyin.web.feign;
 import by.ilyin.web.dto.ClientDTO;
 import by.ilyin.web.dto.page.PageDTO;
 import by.ilyin.web.dto.request.UpdateClientDTO;
-import by.ilyin.web.dto.response.CreateClientResponseDTO;
 import by.ilyin.web.entity.Client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,7 @@ import java.util.List;
 public interface ClientsCoreFeignClient {
 
     @PostMapping(value = "/api/clients", consumes = "application/json")
-    CreateClientResponseDTO updateClient(ClientDTO clientDTO); //todo add clients path builder
+    Long createClient(ClientDTO clientDTO); //todo add clients path builder
 
     @PutMapping(value = "/api/clients/{id}", consumes = "application/json")
     void updateClient(@PathVariable("id") Long clientId, UpdateClientDTO updateClientDTO);
