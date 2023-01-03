@@ -44,7 +44,7 @@ public class EmailCoreController {
                 .ok()
                 .build();
     }
-    
+
     @PostMapping("/profile/change-email")
     @ConsistentChangeEmailParameters
     public ResponseEntity<Void> changeEmail(@RequestParam("userId") Long userId,
@@ -59,6 +59,15 @@ public class EmailCoreController {
     public ResponseEntity<Void> confirmEmail(@RequestParam("userId") @ValidIdByUserExists Long userId,
                                              @PathVariable("uuid") String uuid) {
         emailService.confirmEmail(userId, uuid);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @PostMapping("/template")
+    public ResponseEntity<Void> addHappyBirthdayTemplate(@RequestBody String template,
+                                                         @RequestParam Long clientId) {
+        emailService.addHappyBirthdayTemplate(template, clientId);
         return ResponseEntity
                 .ok()
                 .build();

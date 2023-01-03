@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/restore").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/profile/change-email").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.GET, "/api/profile/confirm-change-email/{uuid}").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
+                .antMatchers(HttpMethod.POST, "/api/template").hasRole("ADMIN")
 
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

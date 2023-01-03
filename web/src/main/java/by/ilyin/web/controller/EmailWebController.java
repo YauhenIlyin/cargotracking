@@ -60,4 +60,12 @@ public class EmailWebController {
                 .build();
     }
 
+    @PostMapping("/template")
+    public ResponseEntity<Void> addHappyBirthdayTemplate(@RequestBody String template) {
+        emailService.addHappyBirthdayTemplate(template);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
 }
