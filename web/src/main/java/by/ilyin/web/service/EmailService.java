@@ -34,4 +34,9 @@ public class EmailService {
         emailCoreFeignClient.confirmEmail(userProfileService.getCurrentCustomUser().getId(), uuid);
     }
 
+    public void addHappyBirthdayTemplate(String template) {
+        Long clientId = userProfileService.getCurrentCustomUser().getClient().getId();
+        emailCoreFeignClient.addHappyBirthdayTemplate(template, clientId);
+    }
+
 }

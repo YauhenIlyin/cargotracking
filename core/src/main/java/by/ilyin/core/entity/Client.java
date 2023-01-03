@@ -37,6 +37,12 @@ public class Client extends BaseEntity {
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "client")
     private List<CustomUser> customUsers;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToOne(mappedBy = "client")
+    private HappyBirthdayTemplate happyBirthdayTemplate;
 
     public enum ClientStatus {
         PRIVATE,

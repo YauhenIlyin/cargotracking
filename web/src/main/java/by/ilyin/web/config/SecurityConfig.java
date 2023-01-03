@@ -39,6 +39,7 @@ public class SecurityConfig {
 
                 .antMatchers(HttpMethod.POST, "/api/profile/change-email").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.GET, "/api/profile/confirm-change-email/{uuid}").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
+                .antMatchers(HttpMethod.POST, "/api/template").hasRole("ADMIN")
 
                 .antMatchers("api/logout").authenticated()
                 .antMatchers("/api/sign-in", "/api/refresh").permitAll()

@@ -35,3 +35,9 @@ databaseChangeLog:
   - include:
       - file: 004_crud_clients.postgresql.sql
       - relativeToChangelogFile: true
+  - changeSet:
+      - id: 13
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 013_happy_birthday_template.postgresql.sql
+      - relativeToChangelogFile: true

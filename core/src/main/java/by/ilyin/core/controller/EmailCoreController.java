@@ -48,7 +48,7 @@ public class EmailCoreController {
                 .ok()
                 .build();
     }
-    
+
     @PostMapping("/profile/change-email")
     @ConsistentChangeEmailParameters
     public ResponseEntity<Void> changeEmail(@RequestParam("userId") Long userId,
@@ -65,6 +65,15 @@ public class EmailCoreController {
         emailService.confirmEmail(userId, uuid);
 =======
 >>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @PostMapping("/template")
+    public ResponseEntity<Void> addHappyBirthdayTemplate(@RequestBody String template,
+                                                         @RequestParam Long clientId) {
+        emailService.addHappyBirthdayTemplate(template, clientId);
         return ResponseEntity
                 .ok()
                 .build();

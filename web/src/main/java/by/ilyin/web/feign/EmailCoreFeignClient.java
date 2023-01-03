@@ -27,4 +27,8 @@ public interface EmailCoreFeignClient {
     void confirmEmail(@RequestParam("userId") Long userId,
                       @PathVariable("uuid") String uuid);
 
+    @PostMapping(value = "/api/template")
+    void addHappyBirthdayTemplate(@RequestBody String template,
+                                  @RequestParam Long clientId);
+
 }
