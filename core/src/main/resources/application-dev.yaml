@@ -17,10 +17,15 @@ spring:
           auth: true
           starttls:
             enable: true
-        debug : true
+        debug: true
 
 liquibase:
   changelog-file: classpath:/db/changelog/db.changelog-master.yaml generate-changelog
 server:
   port: 8090
   address: localhost
+external:
+  web:
+    server:
+      port: 8080
+      address: localhost
