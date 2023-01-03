@@ -2,13 +2,15 @@ package by.ilyin.core.controller;
 
 import by.ilyin.core.dto.CustomUserDTO;
 import by.ilyin.core.dto.request.UpdateUserRequestDTO;
-import by.ilyin.core.dto.response.*;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.service.CustomUserService;
+import by.ilyin.core.util.validation.custom.ValidCreateUserData;
+import by.ilyin.core.util.validation.custom.ConsistentUpdateUserParameters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,16 +19,18 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@Validated
 public class UserCoreController {
 
     private final CustomUserService customUserService;
 
     @PostMapping
-    public CreateUserResponseDTO createUser(@RequestBody CustomUserDTO customUserDTO) {
+    public Long createUser(@RequestBody @ValidCreateUserData CustomUserDTO customUserDTO) {
         return customUserService.createUser(customUserDTO);
     }
 
     @PutMapping("/{id}")
+    @ConsistentUpdateUserParameters
     public ResponseEntity<Void> updateUser(@PathVariable Long id,
                                            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         customUserService.updateUser(id, updateUserRequestDTO);

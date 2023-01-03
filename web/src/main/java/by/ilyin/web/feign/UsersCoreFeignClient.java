@@ -3,7 +3,6 @@ package by.ilyin.web.feign;
 import by.ilyin.web.dto.CustomUserDTO;
 import by.ilyin.web.dto.PageDTO;
 import by.ilyin.web.dto.request.*;
-import by.ilyin.web.dto.response.*;
 import by.ilyin.web.entity.CustomUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import java.util.Set;
 public interface UsersCoreFeignClient {
 
     @PostMapping(value = "/api/users", consumes = "application/json")
-    CreateUserResponseDTO createUser(CustomUserDTO customUserDTO);
+    Long createUser(CustomUserDTO customUserDTO);
 
     @PutMapping(value = "/api/users/{id}", consumes = "application/json")
     ResponseEntity<Void> updateUser(@PathVariable("id") Long id,

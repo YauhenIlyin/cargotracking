@@ -10,4 +10,6 @@ public interface CustomUserRepository extends JpaRepository<CustomUser, Long>, J
 
     void deleteByIdIsIn(List<Long> idList);
 
+    Boolean existsByLogin(String login);
+
 }
