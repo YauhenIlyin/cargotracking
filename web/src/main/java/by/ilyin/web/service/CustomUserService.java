@@ -1,7 +1,7 @@
 package by.ilyin.web.service;
 
 import by.ilyin.web.dto.CustomUserDTO;
-import by.ilyin.web.dto.PageDTO;
+import by.ilyin.web.dto.page.PageDTO;
 import by.ilyin.web.dto.mapper.CustomUserDTOMapper;
 import by.ilyin.web.dto.request.*;
 import by.ilyin.web.dto.response.*;
@@ -89,7 +89,7 @@ public class CustomUserService {
         return userDto;
     }
 
-    private Set<UserRole.UserRoleType> convertRoleSetToTypeSet(Set<UserRole> userRoleSet) {
+    public Set<UserRole.UserRoleType> convertRoleSetToTypeSet(Set<UserRole> userRoleSet) {
         Set<UserRole.UserRoleType> userRoleTypeSet = null;
         if (userRoleSet != null) {
             userRoleTypeSet = new HashSet<>();

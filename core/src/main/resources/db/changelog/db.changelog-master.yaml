@@ -5,3 +5,9 @@ databaseChangeLog:
   - include:
     - file: 001_crud_users.postgresql.sql
     - relativeToChangelogFile: true
+  - changeSet:
+      - id: 12
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 012_clear_db.postgresql.sql
+      - relativeToChangelogFile: true
