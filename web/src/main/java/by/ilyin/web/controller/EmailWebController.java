@@ -1,5 +1,6 @@
 package by.ilyin.web.controller;
 
+import by.ilyin.web.dto.ChangeEmailDTO;
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import by.ilyin.web.service.EmailService;
@@ -9,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 
 
 @RequiredArgsConstructor
@@ -40,6 +40,22 @@ public class EmailWebController {
     public ResponseEntity<Void> restoreAccount(@PathVariable("uuid") String uuid,
                                                @RequestBody @Valid RestoreAccountDTO restoreAccountDTO) {
         emailService.restoreAccount(uuid, restoreAccountDTO);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @PostMapping("/profile/change-email")
+    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
+        emailService.changeEmail(changeEmailDTO);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @GetMapping("/profile/confirm-change-email/{uuid}")
+    public ResponseEntity<Void> confirmEmail(@PathVariable("uuid") String uuid) {
+        emailService.confirmEmail(uuid);
         return ResponseEntity
                 .ok()
                 .build();
