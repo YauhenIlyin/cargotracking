@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -61,6 +62,18 @@ public class CustomUser extends BaseEntity {
     @ToString.Exclude
     @OneToOne(mappedBy = "generalAdmin")
     private Client client1;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "creator")
+    private List<Invoice> invoices;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "driver")
+    private List<Invoice> invoices1;
 
     @Override
     public boolean equals(Object o) {

@@ -59,25 +59,23 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PUT, "/api/storages").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/storages").hasRole("ADMIN")
 
-<<<<<<< HEAD
                 .antMatchers(HttpMethod.POST, "/api/product-owners").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/product-owners").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/product-owners/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/product-owners").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/product-owners").hasRole("ADMIN")
-=======
-                .antMatchers(HttpMethod.POST, "/api/product-owners").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/product-owners").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/product-owners/{id}").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/product-owners").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/product-owners").permitAll()
->>>>>>> dd56a77 (CTB-11 CRUD product owners added)
 
                 .antMatchers(HttpMethod.POST, "/api/cars").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/cars").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/cars/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/cars").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/cars").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/invoices").hasRole("DISPATCHER")
+                .antMatchers(HttpMethod.GET, "/api/invoices").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER")
+                .antMatchers(HttpMethod.GET, "/api/invoices/{id}").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER")
+                .antMatchers(HttpMethod.PUT, "/api/invoices").hasRole("DISPATCHER")
+                .antMatchers(HttpMethod.DELETE, "/api/invoices").hasAnyRole("DISPATCHER", "MANAGER")
 
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
