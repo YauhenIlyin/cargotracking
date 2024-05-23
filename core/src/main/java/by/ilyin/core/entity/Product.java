@@ -26,6 +26,9 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
+    @JsonIgnore
+    @OneToOne(mappedBy = "product")
+    private ProductWriteOff productWriteOff;
 
     @Override
     public boolean equals(Object o) {

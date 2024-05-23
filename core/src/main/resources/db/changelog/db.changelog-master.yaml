@@ -80,3 +80,9 @@ databaseChangeLog:
   - include:
       - file: 010_crud_waybills.postgresql.sql
       - relativeToChangelogFile: true
+  - changeSet:
+      - id: 11
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 011_crud_product_writeoffs.postgresql.sql
+      - relativeToChangelogFile: true

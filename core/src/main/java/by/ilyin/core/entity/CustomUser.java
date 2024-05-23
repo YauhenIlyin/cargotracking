@@ -1,6 +1,8 @@
 package by.ilyin.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import liquibase.repackaged.org.apache.commons.lang3.builder.EqualsExclude;
+import liquibase.repackaged.org.apache.commons.lang3.builder.HashCodeExclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -77,6 +79,9 @@ public class CustomUser extends BaseEntity {
     @JsonIgnore
     @OneToOne(mappedBy = "verifier")
     private Waybill waybill;
+    @JsonIgnore
+    @OneToOne(mappedBy = "creator")
+    private ProductWriteOff productWriteOff;
 
     @Override
     public boolean equals(Object o) {
