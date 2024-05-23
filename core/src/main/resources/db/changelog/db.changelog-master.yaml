@@ -42,8 +42,8 @@ databaseChangeLog:
       - file: 013_happy_birthday_template.postgresql.sql
       - relativeToChangelogFile: true
   - include:
-    - file: 002_jwt_authentication.postgresql.sql
-    - relativeToChangelogFile: true
+      - file: 002_jwt_authentication.postgresql.sql
+      - relativeToChangelogFile: true
   - changeSet:
       - id: 4
       - author: Ilyin_Yauhen
@@ -55,4 +55,10 @@ databaseChangeLog:
       - author: Ilyin_Yauhen
   - include:
       - file: 006_crud_storages.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 7
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 007_crud_product_owners.postgresql.sql
       - relativeToChangelogFile: true

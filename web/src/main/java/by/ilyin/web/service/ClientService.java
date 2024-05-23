@@ -17,6 +17,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
