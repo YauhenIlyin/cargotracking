@@ -1,9 +1,6 @@
 package by.ilyin.web.feign;
 
-<<<<<<< HEAD
 import by.ilyin.web.dto.ChangeEmailDTO;
-=======
->>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -29,4 +26,9 @@ public interface EmailCoreFeignClient {
     @GetMapping(value = "/api/profile/confirm-change-email/{uuid}", consumes = "application/json")
     void confirmEmail(@RequestParam("userId") Long userId,
                       @PathVariable("uuid") String uuid);
+
+    @PostMapping(value = "/api/template")
+    void addHappyBirthdayTemplate(@RequestBody String template,
+                                  @RequestParam Long clientId);
+
 }

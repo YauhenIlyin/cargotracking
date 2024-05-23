@@ -4,12 +4,16 @@ import by.ilyin.core.dto.ChangeEmailDTO;
 import by.ilyin.core.dto.RestoreAccountDTO;
 import by.ilyin.core.dto.SendEmailDTO;
 import by.ilyin.core.dto.mapper.EmailDTOMapper;
+import by.ilyin.core.entity.Client;
 import by.ilyin.core.entity.CustomUser;
+import by.ilyin.core.entity.HappyBirthdayTemplate;
 import by.ilyin.core.entity.uuid.CustomUUID;
 import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
+import by.ilyin.core.repository.ClientRepository;
 import by.ilyin.core.repository.CustomUUIDRepository;
 import by.ilyin.core.repository.CustomUserRepository;
+import by.ilyin.core.repository.HappyBirthdayTemplateRepository;
 import by.ilyin.core.util.email.EmailDetails;
 import by.ilyin.core.util.email.EmailProcessManager;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +21,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
+    private String DEFAULT_HAPPY_BIRTH_SUBJECT = "This beautiful day!";
+    private String DEFAULT_HAPPY_BIRTH_TEXT = "HappyBirthday! Cheers, ";
     private final EmailProcessManager emailProcessManager;
     private final EmailDTOMapper emailDTOMapper;
     private final CustomUserRepository customUserRepository;
     private final CustomUUIDRepository customUUIDRepository;
+    private final HappyBirthdayTemplateRepository happyBirthdayRepository;
+    private final ClientRepository clientRepository;
     @Value("${external.web.server.address}")
     private String webAddress;
     @Value("${external.web.server.port}")
@@ -112,6 +122,36 @@ public class EmailService {
         CustomUser customUser = customUserRepository.findById(userId).orElseThrow();
         customUser.setEmail(customUUID.getEmail());
         customUserRepository.save(customUser);
+    }
+
+    public void addHappyBirthdayTemplate(String template, Long clientId) {
+        //todo exists client by id ? throw @ nullpointer in custom valid? 500 ?
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        HappyBirthdayTemplate happyBirthdayTemplate = new HappyBirthdayTemplate();
+        happyBirthdayTemplate.setTemplate(template);
+        happyBirthdayTemplate.setClient(client);
+        happyBirthdayRepository.save(happyBirthdayTemplate);
+    }
+
+    public void happyBirthday(LocalDate fromBornDate, LocalDate toBornDate) {
+        customUserRepository.findAllByBornDateAfterAndBornDateBefore(fromBornDate, toBornDate)
+                .stream()
+                .map(o -> {
+                    Optional<HappyBirthdayTemplate> optionalTemplate =
+                            happyBirthdayRepository.findByClient_Id(o.getClient().getId());
+                    return new EmailDetails(
+                            o.getEmail(),
+                            DEFAULT_HAPPY_BIRTH_SUBJECT,
+                            optionalTemplate.isPresent() ?
+                                    optionalTemplate.get().getTemplate() :
+                                    DEFAULT_HAPPY_BIRTH_TEXT + o.getName() + "!"
+                    );
+                })
+                .map(e -> {
+                            emailProcessManager.sendSimpleMail(e);
+                            return null;
+                        }
+                ).close();
     }
 
 }
