@@ -1,9 +1,16 @@
 package by.ilyin.core.entity;
 
+<<<<<<< HEAD
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
+=======
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
+import javax.persistence.*;
+>>>>>>> dd56a77 (CTB-11 CRUD product owners added)
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +28,7 @@ public class ProductOwner extends BaseEntity {
     private String name;
     @Column(name = "address")
     private String address;
+<<<<<<< HEAD
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
@@ -57,4 +65,16 @@ public class ProductOwner extends BaseEntity {
         return sb.toString();
     }
 
+=======
+    @Column(name = "client_id")
+    private Long clientId;
+    @JsonIgnore
+    @ToString.Exclude
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @ManyToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Client client;
+
+>>>>>>> dd56a77 (CTB-11 CRUD product owners added)
 }

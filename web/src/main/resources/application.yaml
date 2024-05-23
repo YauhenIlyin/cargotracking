@@ -3,7 +3,11 @@ spring:
     active: dev
   main:
 <<<<<<< HEAD
+<<<<<<< HEAD
     allow-circular-references: true
+=======
+    allow-circular-references: true
+>>>>>>> b5f572a (CTB-6_JWT_authentication is created)
 =======
     allow-circular-references: true
 >>>>>>> b5f572a (CTB-6_JWT_authentication is created)

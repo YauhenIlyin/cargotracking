@@ -62,3 +62,9 @@ databaseChangeLog:
   - include:
       - file: 007_crud_product_owners.postgresql.sql
       - relativeToChangelogFile: true
+  - changeSet:
+      - id: 8
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 008_crud_cars.postgresql.sql
+      - relativeToChangelogFile: true
