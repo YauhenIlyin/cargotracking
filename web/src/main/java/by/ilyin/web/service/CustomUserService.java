@@ -8,9 +8,11 @@ import by.ilyin.web.dto.response.*;
 import by.ilyin.web.entity.CustomUser;
 import by.ilyin.web.entity.UserRole;
 import by.ilyin.web.feign.UsersCoreFeignClient;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -25,17 +27,32 @@ public class CustomUserService {
 
     private final UsersCoreFeignClient usersCoreFeignClient;
     private final CustomUserDTOMapper customUserDTOMapper;
+    private final CustomBindingResultValidator customBindingResultValidator;
 
-    public ResponseEntity<URI> createUser(CustomUserDTO customUserDTO) {
-        Long userId = usersCoreFeignClient.createUser(customUserDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(userId).toUri();
-        return ResponseEntity.ok(location);
+    @Value("${server.address}")
+    private String serverAddress;
+    @Value("${server.port}")
+    private String serverPort;
+
+    public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO, BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
+        CreateUserResponseDTO createUserResponseDTO = usersCoreFeignClient.createUser(customUserDTO);
+        String currentUrn = createUserResponseDTO.getCurrentUserURI();
+        StringBuilder currentUrlSB = new StringBuilder();
+        currentUrlSB
+                .append("http://")
+                .append(serverAddress)
+                .append(":")
+                .append(serverPort)
+                .append(currentUrn);
+        createUserResponseDTO.setCurrentUserURI(currentUrlSB.toString());
+        return createUserResponseDTO;
     }
 
     public ResponseEntity<Void> updateUser(Long id,
-                                           UpdateUserRequestDTO updateUserRequestDTO) {
+                                           UpdateUserRequestDTO updateUserRequestDTO,
+                                           BindingResult bindingResult) {
+        customBindingResultValidator.validationProcess(bindingResult);
         return usersCoreFeignClient.updateUser(id, updateUserRequestDTO);
     }
 

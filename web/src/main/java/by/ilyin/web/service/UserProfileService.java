@@ -28,16 +28,21 @@ public class UserProfileService {
     }
 
     //todo check if return null field, save null / old value
-    public void updateCurrentUserProfile(UpdateUserProfileDTO updateUserProfileDTO) {
-        profileCoreFeignClient.updateCurrentProfile(getCurrentCustomUser().getId(), updateUserProfileDTO);
+    public void updateCurrentUserProfile(UpdateUserProfileDTO updateUserProfileDTO, BindingResult bindingResult) {
+        bindingResultValidator.validationProcess(bindingResult);
+        profileFeignClient.updateCurrentProfile(getCurrentCustomUser().getId(), updateUserProfileDTO);
     }
 
     //todo add an encryption mechanism and correct validation process for it
-    public void changePassword(ChangePassProfileDTO changePassProfileDTO) {
-        profileCoreFeignClient.changePassword(changePassProfileDTO.getNewPassword(), getCurrentCustomUser().getId());
+    public void changePassword(ChangePassProfileDTO changePassProfileDTO, BindingResult bindingResult) {
+        bindingResultValidator.validationProcess(bindingResult);
+        if (!getCurrentCustomUser().getPassword().equals(changePassProfileDTO.getOldPassword())) {
+            throw new IncorrectValueFormatException("Incorrect old password");
+        }
+        profileFeignClient.changePassword(changePassProfileDTO.getNewPassword(), getCurrentCustomUser().getId());
     }
 
-    CustomUser getCurrentCustomUser() {
+    private CustomUser getCurrentCustomUser() {
         return ((CustomUserDetails) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getCustomUser();
     }

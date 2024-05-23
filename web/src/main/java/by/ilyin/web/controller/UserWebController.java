@@ -21,8 +21,9 @@ public class UserWebController {
     private final CustomUserService customUserService;
 
     @PostMapping
-    public ResponseEntity<URI> createUser(@RequestBody @Valid CustomUserDTO customUserDTO) {
-        return customUserService.createUser(customUserDTO);
+    public CreateUserResponseDTO createUser(@RequestBody @Valid CustomUserDTO customUserDTO,
+                                            BindingResult bindingResult) {
+        return customUserService.createUser(customUserDTO, bindingResult);
     }
 
     @PutMapping("/{id}")

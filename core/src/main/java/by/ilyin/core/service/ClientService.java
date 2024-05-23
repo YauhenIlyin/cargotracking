@@ -38,6 +38,14 @@ public class ClientService {
     @Transactional
     public Long createClient(ClientDTO clientDTO) {
         Client client = clientDTOMapper.mapFromDto(clientDTO);
+        if (clientRepository.existsById(clientDTO.getAdminInfo().getClientId())) {
+            throw new ResourceAlreadyExists("Client with id " +
+                    clientDTO.getAdminInfo().getClientId() + " already exists.");
+        }
+        if (customUserRepository.existsByLogin(clientDTO.getAdminInfo().getLogin())) {
+            throw new ResourceAlreadyExists("User with login " +
+                    clientDTO.getAdminInfo().getLogin() + " already exists.");
+        }
         CustomUser admin = client.getGeneralAdmin();
         client.setGeneralAdmin(null);
         client.setId(clientDTO.getAdminInfo().getClientId());
@@ -52,7 +60,9 @@ public class ClientService {
 
     @Transactional
     public void updateClient(Long clientId, UpdateClientDTO updateClientDTO) {
-        Client client = clientRepository.findById(clientId).orElseThrow();
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
+                        clientId + " not found."));
         client.setName(updateClientDTO.getName());
         client.setStatus(updateClientDTO.getStatus());
         clientRepository.save(client);
@@ -74,7 +84,9 @@ public class ClientService {
 
     @Transactional
     public void activateClient(Long clientId) {
-        Client client = clientRepository.findById(clientId).orElseThrow();
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
+                        clientId + " not found."));
         client.setStatus(Client.ClientStatus.LEGAL);
         clientRepository.save(client);
     }

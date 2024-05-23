@@ -37,6 +37,13 @@ public class CustomUserService {
     public Long createUser(CustomUserDTO customUserDTO) {
         CustomUser customUser = customUserDTOMapper.mapFromDto(customUserDTO);
         customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
+        boolean isLoginExists = userValidator.isUserLoginAlreadyExists(customUserDTO.getLogin());
+        if (isLoginExists) {
+            throw new ResourceAlreadyExists("Login " + customUserDTO.getLogin() + " already exists.");
+        }
+        customUser.setClient(clientRepository.findById(customUserDTO.getClientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Client with id "
+                        + customUserDTO.getClientId() + " not found.")));
         CustomUser realUser = customUserRepository.save(customUser);
         //todo info log
         return realUser.getId();
@@ -60,7 +67,14 @@ public class CustomUserService {
         }
         customUser.setPassportNum(updateUserRequestDTO.getPassportNum());
         customUser.setIssuedBy(updateUserRequestDTO.getIssuedBy());
+<<<<<<< HEAD
         customUser.setUserRoles(getRealUserRoleSet(updateUserRequestDTO.getUserRoles()));
+=======
+        customUser.setUserRoles(realRolesSet);
+        customUser.setClient(clientRepository.findById(updateUserRequestDTO.getClientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Client with id " +
+                        updateUserRequestDTO.getClientId() + " not found.")));
+>>>>>>> 254b4ac (CTB-9 small fix for hibernate entities)
         customUserRepository.save(customUser);
         //todo info log
     }

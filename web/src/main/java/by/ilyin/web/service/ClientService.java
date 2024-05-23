@@ -4,6 +4,7 @@ import by.ilyin.web.dto.ClientDTO;
 import by.ilyin.web.dto.mapper.ClientDTOMapper;
 import by.ilyin.web.dto.page.PageDTO;
 import by.ilyin.web.dto.request.UpdateClientDTO;
+import by.ilyin.web.dto.response.CreateClientResponseDTO;
 import by.ilyin.web.dto.response.GetClientByIdResponseDTO;
 import by.ilyin.web.dto.response.GetClientsResponseDTO;
 import by.ilyin.web.entity.Client;
@@ -23,18 +24,30 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClientService {
 
+    @Value("${server.port}")
+    private String serverPort;
+    @Value("${server.address}")
+    private String serverAddress;
+    private final CustomBindingResultValidator bindingResultValidator;
     private final ClientsCoreFeignClient clientsCoreFeignClient;
     private final ClientDTOMapper clientDTOMapper;
 
-    public ResponseEntity<URI> createClient(ClientDTO clientDTO) {
-        Long clientId = clientsCoreFeignClient.createClient(clientDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(clientId).toUri();
-        return ResponseEntity.ok(location);
+    public CreateClientResponseDTO createUser(ClientDTO clientDTO, BindingResult bindingResult) {
+        bindingResultValidator.validationProcess(bindingResult);
+        CreateClientResponseDTO createClientResponseDTO = clientsCoreFeignClient.updateClient(clientDTO);
+        StringBuilder currentUrlSB = new StringBuilder();
+        currentUrlSB
+                .append("http://")
+                .append(serverAddress)
+                .append(":")
+                .append(serverPort)
+                .append(createClientResponseDTO.getCurrentClientURI());
+        createClientResponseDTO.setCurrentClientURI(currentUrlSB.toString());
+        return createClientResponseDTO;
     }
 
-    public void updateClient(Long clientId, UpdateClientDTO updateClientDTO) {
+    public void updateClient(Long clientId, UpdateClientDTO updateClientDTO, BindingResult bindingResult) {
+        bindingResultValidator.validationProcess(bindingResult);
         clientsCoreFeignClient.updateClient(clientId, updateClientDTO);
     }
 

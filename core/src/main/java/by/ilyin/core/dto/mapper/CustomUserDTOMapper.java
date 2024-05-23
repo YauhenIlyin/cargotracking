@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 public interface CustomUserDTOMapper {
 
     @Mapping(target = "userRoles", ignore = true)
-    @Mapping(target = "client", ignore = true)
     CustomUser mapFromDto(CustomUserDTO customUserDTO);
 
     @Mapping(target = "userRoles", ignore = true)

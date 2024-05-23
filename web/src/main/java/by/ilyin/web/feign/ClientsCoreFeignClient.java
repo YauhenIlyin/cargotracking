@@ -3,6 +3,7 @@ package by.ilyin.web.feign;
 import by.ilyin.web.dto.ClientDTO;
 import by.ilyin.web.dto.page.PageDTO;
 import by.ilyin.web.dto.request.UpdateClientDTO;
+import by.ilyin.web.dto.response.CreateClientResponseDTO;
 import by.ilyin.web.entity.Client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

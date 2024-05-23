@@ -24,7 +24,7 @@ public interface UsersCoreFeignClient {
     @DeleteMapping("/api/users")
     ResponseEntity<Void> deleteUser(List<Long> userIdList);
 
-    @GetMapping("api/users")
+    @GetMapping("/api/users")
     PageDTO<CustomUser> getUsers(@RequestParam(required = false, value = "name") String name,
                                  @RequestParam(required = false, value = "surname") String surname,
                                  @RequestParam(required = false, value = "patronymic") String patronymic,

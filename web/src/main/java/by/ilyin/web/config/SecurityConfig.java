@@ -46,6 +46,22 @@ public class SecurityConfig {
 
                 .antMatchers("api/logout").authenticated()
                 .antMatchers("/api/sign-in", "/api/refresh").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/api/clients").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/clients/{id}").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/clients").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/clients/activate/{clientId}").hasRole("SYS_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/clients").hasRole("SYS_ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/storages").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/storages").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/storages/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/storages").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/storages").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/refresh").permitAll()
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
