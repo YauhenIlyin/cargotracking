@@ -20,6 +20,8 @@ import by.ilyin.web.security.JwtBlackListManager;
 import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import by.ilyin.web.security.JwtBlackListManager;
 import by.ilyin.web.util.validator.CustomBindingResultValidator;
+import by.ilyin.web.security.JwtBlackListManager;
+import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

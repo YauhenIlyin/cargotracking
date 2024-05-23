@@ -1,5 +1,6 @@
 package by.ilyin.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,6 +43,9 @@ public class Invoice extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private CustomUser driver;
+    @JsonIgnore
+    @OneToOne(mappedBy = "invoice")
+    private Waybill waybill;
 
     public enum Status {
         MADE_OUT,

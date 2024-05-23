@@ -29,6 +29,9 @@ public class Car extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
+    @JsonIgnore
+    @OneToOne(mappedBy = "car")
+    private Waybill waybill;
 
     public enum CarType {
         REFRIGERATOR,

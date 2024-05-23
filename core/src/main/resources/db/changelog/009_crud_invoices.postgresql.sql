@@ -30,6 +30,5 @@ CREATE TABLE public.products
     name       VARCHAR(50),
     amount     INTEGER NOT NULL,
     invoice_id BIGINT,
-
     FOREIGN KEY (invoice_id) REFERENCES public.invoices (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
