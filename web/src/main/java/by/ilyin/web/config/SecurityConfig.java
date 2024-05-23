@@ -30,15 +30,18 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.PUT, "/api/profile/change-password").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
-                
+
                 .antMatchers("/api/sign-in", "api/logout", "/api/refresh").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/email").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/email/repairing").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/restore").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/profile/change-email").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
                 .antMatchers(HttpMethod.GET, "/api/profile/confirm-change-email/{uuid}").hasAnyRole("COMPANY_OWNER", "DISPATCHER", "MANAGER", "DRIVER")
 
+                .antMatchers("api/logout").authenticated()
+                .antMatchers("/api/sign-in", "/api/refresh").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

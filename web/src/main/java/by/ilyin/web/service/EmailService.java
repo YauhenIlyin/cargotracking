@@ -1,6 +1,9 @@
 package by.ilyin.web.service;
 
+<<<<<<< HEAD
 import by.ilyin.web.dto.ChangeEmailDTO;
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
 import by.ilyin.web.dto.RestoreAccountDTO;
 import by.ilyin.web.dto.SendEmailDTO;
 import by.ilyin.web.feign.EmailCoreFeignClient;
@@ -24,6 +27,7 @@ public class EmailService {
 
     public void restoreAccount(String uuid, RestoreAccountDTO restoreAccountDTO) {
         emailCoreFeignClient.restoreAccount(uuid, restoreAccountDTO);
+<<<<<<< HEAD
     }
 
     public void changeEmail(ChangeEmailDTO changeEmailDTO) {
@@ -32,6 +36,8 @@ public class EmailService {
 
     public void confirmEmail(String uuid) {
         emailCoreFeignClient.confirmEmail(userProfileService.getCurrentCustomUser().getId(), uuid);
+=======
+>>>>>>> d3f0bb6 (CTB-16 code cleaned, restore-account request changed GET -> PUT restore method)
     }
 
 }

@@ -58,3 +58,4 @@ INSERT INTO public.user_roles (role_name)
 values ('DRIVER');
 INSERT INTO public.user_roles (role_name)
 values ('COMPANY_OWNER');
+

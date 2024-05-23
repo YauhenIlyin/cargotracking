@@ -1,18 +1,20 @@
 package by.ilyin.core.dto.mapper;
 
+import by.ilyin.core.dto.ClientDTO;
 import by.ilyin.core.dto.CustomUserDTO;
+import by.ilyin.core.entity.Client;
 import by.ilyin.core.entity.CustomUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface CustomUserDTOMapper {
+public interface ClientDTOMapper {
 
     @Mapping(target = "userRoles", ignore = true)
     @Mapping(target = "client", ignore = true)
-    CustomUser mapFromDto(CustomUserDTO customUserDTO);
+    CustomUser mapFromCustomUserDto(CustomUserDTO customUserDTO);
 
-    @Mapping(target = "userRoles", ignore = true)
-    CustomUserDTO mapToDto(CustomUser customUser);
+    @Mapping(source = "adminInfo", target = "generalAdmin")
+    Client mapFromDto(ClientDTO clientDTO);
 
 }

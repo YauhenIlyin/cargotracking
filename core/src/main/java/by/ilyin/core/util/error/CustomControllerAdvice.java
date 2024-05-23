@@ -22,7 +22,7 @@ import java.net.BindException;
 public class CustomControllerAdvice {
 
     //todo add javadoc 400
-
+    
     @ExceptionHandler({
             BindException.class,
             HttpMessageNotReadableException.class,
