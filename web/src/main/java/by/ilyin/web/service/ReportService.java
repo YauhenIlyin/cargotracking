@@ -1,7 +1,7 @@
 package by.ilyin.web.service;
 
 import by.ilyin.web.dto.report.GetClientReportResponseDTO;
-import by.ilyin.web.entity.Client;
+import by.ilyin.web.dto.report.GetSysadminReportResponseDTO;
 import by.ilyin.web.entity.CustomUser;
 import by.ilyin.web.feign.ReportCoreFeignClient;
 import by.ilyin.web.security.CustomUserDetails;
@@ -18,10 +18,14 @@ public class ReportService {
     public GetClientReportResponseDTO getClientReport(String initialDate, String finalDate) {
         CustomUser customUser = ((CustomUserDetails) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getCustomUser();
-       return reportCoreFeignClient.getClientReport(
+        return reportCoreFeignClient.getClientReport(
                 customUser.getClient().getId(),
                 initialDate,
                 finalDate);
+    }
+
+    public GetSysadminReportResponseDTO getSysadminReport(String initialDate, String finalDate) {
+        return reportCoreFeignClient.getSysadminReport(initialDate, finalDate);
     }
 
 }
