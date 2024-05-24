@@ -1,5 +1,6 @@
 package by.ilyin.core.controller;
 
+import by.ilyin.core.dto.ReachedCheckpointInfoDTO;
 import by.ilyin.core.dto.WaybillDTO;
 import by.ilyin.core.dto.response.CreateWaybillResponseDTO;
 import by.ilyin.core.entity.Checkpoint;
@@ -8,7 +9,6 @@ import by.ilyin.core.service.WaybillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,11 +33,8 @@ public class WaybillCoreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> reachCheckpoint(@PathVariable Long id) {
-        waybillService.reachCheckpoint(id);
-        return ResponseEntity
-                .ok()
-                .build();
+    public ReachedCheckpointInfoDTO reachCheckpoint(@PathVariable Long id) {
+        return waybillService.reachCheckpoint(id);
     }
 
     @GetMapping("/{id}")

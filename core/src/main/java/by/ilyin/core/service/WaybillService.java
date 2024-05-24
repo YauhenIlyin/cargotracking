@@ -1,5 +1,6 @@
 package by.ilyin.core.service;
 
+import by.ilyin.core.dto.ReachedCheckpointInfoDTO;
 import by.ilyin.core.dto.WaybillDTO;
 import by.ilyin.core.dto.mapper.WaybillDTOMapper;
 import by.ilyin.core.dto.response.CreateWaybillResponseDTO;
@@ -70,11 +71,13 @@ public class WaybillService {
     }
 
     @Transactional
-    public void reachCheckpoint(Long id) {
+    public ReachedCheckpointInfoDTO reachCheckpoint(Long id) {
         validateAndGetResourceById(waybillRepository, id, "Waybill");
         Checkpoint checkpoint = checkpointRepository.findFirstByWaybillIdAndCheckpointDate(id, null);
-        checkpoint.setCheckpointDate(LocalDateTime.now());
+        LocalDateTime reachCheckpointDate = LocalDateTime.now();
+        checkpoint.setCheckpointDate(reachCheckpointDate);
         checkpointRepository.save(checkpoint);
+        return new ReachedCheckpointInfoDTO(reachCheckpointDate, checkpoint.getAddress());
     }
 
     public List<Checkpoint> getCheckpoints(Long waybillId) {
