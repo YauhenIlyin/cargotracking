@@ -1,14 +1,15 @@
 package by.ilyin.web.controller;
 
-import by.ilyin.web.dto.auth.LogoutDTO;
-import by.ilyin.web.dto.auth.RefreshJwtDTO;
 import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,17 +21,20 @@ public class AuthWebController {
     //todo add @Valid
     //todo string to byte[];
     @PostMapping("/sign-in")
-    public String signIn(@RequestBody @Valid SignInDTO signInDTO) {
-        return authService.signInProcess(signInDTO);
+    public String signIn(@RequestBody @Valid SignInDTO signInDTO,
+                         BindingResult bindingResult) {
+        return authService.signInProcess(signInDTO, bindingResult);
     }
 
     @PostMapping("/refresh")
-    public String refresh(@RequestBody @Valid RefreshJwtDTO refreshJwtDTO) {
-        return authService.refreshProcess(refreshJwtDTO);
+    public String refresh(@RequestParam(value = "userId") @NotNull Long userId,
+                          @RequestParam(value = "token") String token) {
+        return authService.refreshProcess(userId, token);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody @Valid LogoutDTO logoutDTO) {
+    public ResponseEntity<Void> logout(@RequestParam(value = "userId") Long userId) {
+        authService.logoutProcess(userId);
         return ResponseEntity
                 .ok()
                 .build();

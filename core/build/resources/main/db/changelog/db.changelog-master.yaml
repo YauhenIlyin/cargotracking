@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      - id: 1
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 001_crud_users.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 2
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 002_jwt_authentication.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 3
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 003_custom_uuid.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 12
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 012_clear_db.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 5
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 005_alter_custom_uuid.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 4
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 004_crud_clients.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 13
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 013_happy_birthday_template.postgresql.sql
+      - relativeToChangelogFile: true
+  - include:
+      - file: 002_jwt_authentication.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 4
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 004_crud_clients.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 6
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 006_crud_storages.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 7
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 007_crud_product_owners.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 8
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 008_crud_cars.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 9
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 009_crud_invoices.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 10
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 010_crud_waybills.postgresql.sql
+      - relativeToChangelogFile: true
+  - changeSet:
+      - id: 11
+      - author: Ilyin_Yauhen
+  - include:
+      - file: 011_crud_product_writeoffs.postgresql.sql
+      - relativeToChangelogFile: true
+

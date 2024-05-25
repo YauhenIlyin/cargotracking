@@ -6,6 +6,7 @@ import by.ilyin.core.dto.request.UpdateUserRequestDTO;
 import by.ilyin.core.entity.CustomUser;
 import by.ilyin.core.entity.UserRole;
 import by.ilyin.core.evidence.KeyWords;
+import by.ilyin.core.exception.http.client.ResourceAlreadyExists;
 import by.ilyin.core.exception.http.client.ResourceNotFoundException;
 import by.ilyin.core.repository.ClientRepository;
 import by.ilyin.core.repository.CustomUserRepository;
@@ -37,7 +38,7 @@ public class CustomUserService {
     public Long createUser(CustomUserDTO customUserDTO) {
         CustomUser customUser = customUserDTOMapper.mapFromDto(customUserDTO);
         customUser.setUserRoles(getRealUserRoleSet(customUserDTO.getUserRoles()));
-        boolean isLoginExists = userValidator.isUserLoginAlreadyExists(customUserDTO.getLogin());
+        boolean isLoginExists = customUserRepository.existsByLogin(customUserDTO.getLogin());
         if (isLoginExists) {
             throw new ResourceAlreadyExists("Login " + customUserDTO.getLogin() + " already exists.");
         }

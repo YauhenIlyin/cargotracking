@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class CreateClientResponseDTO {
 
-    private String currentClientURI;
+//    private String currentClientURI;
+    private Long id;
 
 }

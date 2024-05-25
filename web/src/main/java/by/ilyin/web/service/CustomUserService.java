@@ -10,12 +10,11 @@ import by.ilyin.web.entity.UserRole;
 import by.ilyin.web.feign.UsersCoreFeignClient;
 import by.ilyin.web.util.validator.CustomBindingResultValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,16 +34,17 @@ public class CustomUserService {
 
     public CreateUserResponseDTO createUser(CustomUserDTO customUserDTO, BindingResult bindingResult) {
         customBindingResultValidator.validationProcess(bindingResult);
-        CreateUserResponseDTO createUserResponseDTO = usersCoreFeignClient.createUser(customUserDTO);
-        String currentUrn = createUserResponseDTO.getCurrentUserURI();
-        StringBuilder currentUrlSB = new StringBuilder();
-        currentUrlSB
-                .append("http://")
-                .append(serverAddress)
-                .append(":")
-                .append(serverPort)
-                .append(currentUrn);
-        createUserResponseDTO.setCurrentUserURI(currentUrlSB.toString());
+        Long userId = usersCoreFeignClient.createUser(customUserDTO);
+        CreateUserResponseDTO createUserResponseDTO = new CreateUserResponseDTO(userId);
+//        String currentUrn = createUserResponseDTO.getCurrentUserURI();
+//        StringBuilder currentUrlSB = new StringBuilder();
+//        currentUrlSB
+//                .append("http://")
+//                .append(serverAddress)
+//                .append(":")
+//                .append(serverPort)
+//                .append(currentUrn);
+//        createUserResponseDTO.setCurrentUserURI(currentUrlSB.toString());
         return createUserResponseDTO;
     }
 

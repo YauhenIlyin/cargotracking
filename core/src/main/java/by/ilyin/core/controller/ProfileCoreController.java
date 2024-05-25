@@ -3,8 +3,6 @@ package by.ilyin.core.controller;
 import by.ilyin.core.dto.request.UpdateUserProfileDTO;
 import by.ilyin.core.service.UserProfileService;
 import by.ilyin.core.util.validation.custom.ValidIdByUserExists;
-import by.ilyin.core.dto.UpdateUserProfileDTO;
-import by.ilyin.core.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

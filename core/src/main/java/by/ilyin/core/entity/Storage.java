@@ -18,8 +18,8 @@ public class Storage extends BaseEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "client_id")
-    private Long clientId;
+//    @Column(name = "client_id")
+//    private Long clientId;
     @Column(name = "storage_name")
     private String name;
     @Column(name = "address")

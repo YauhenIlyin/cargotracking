@@ -6,6 +6,7 @@ import by.ilyin.web.dto.response.*;
 import by.ilyin.web.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,8 +29,9 @@ public class UserWebController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id,
-                                           @RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO) {
-        return customUserService.updateUser(id, updateUserRequestDTO);
+                                           @RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO,
+                                           BindingResult bindingResult) {
+        return customUserService.updateUser(id, updateUserRequestDTO, bindingResult);
     }
 
     @DeleteMapping

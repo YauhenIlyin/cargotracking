@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +28,16 @@ public class ClientWebController {
     private final ClientService clientService;
 
     @PostMapping
-    public ResponseEntity<URI> createClient(@RequestBody @Valid ClientDTO clientDTO) {
-        return clientService.createClient(clientDTO);
+    public CreateClientResponseDTO createClient(@RequestBody @Valid ClientDTO clientDTO,
+                                                BindingResult bindingResult) {
+        return clientService.createClient(clientDTO, bindingResult);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateClient(@PathVariable("id") Long clientId,
-                                             @RequestBody @Valid UpdateClientDTO updateClientDTO) {
-        clientService.updateClient(clientId, updateClientDTO);
+                                             @RequestBody @Valid UpdateClientDTO updateClientDTO,
+                                             BindingResult bindingResult) {
+        clientService.updateClient(clientId, updateClientDTO, bindingResult);
         return ResponseEntity
                 .ok()
                 .build();

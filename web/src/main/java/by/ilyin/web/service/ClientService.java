@@ -11,17 +11,10 @@ import by.ilyin.web.entity.Client;
 import by.ilyin.web.feign.ClientsCoreFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,17 +31,21 @@ public class ClientService {
     private final ClientsCoreFeignClient clientsCoreFeignClient;
     private final ClientDTOMapper clientDTOMapper;
 
-    public CreateClientResponseDTO createUser(ClientDTO clientDTO, BindingResult bindingResult) {
+    public CreateClientResponseDTO createClient(ClientDTO clientDTO, BindingResult bindingResult) {
         bindingResultValidator.validationProcess(bindingResult);
-        CreateClientResponseDTO createClientResponseDTO = clientsCoreFeignClient.updateClient(clientDTO);
-        StringBuilder currentUrlSB = new StringBuilder();
-        currentUrlSB
-                .append("http://")
-                .append(serverAddress)
-                .append(":")
-                .append(serverPort)
-                .append(createClientResponseDTO.getCurrentClientURI());
-        createClientResponseDTO.setCurrentClientURI(currentUrlSB.toString());
+//        CreateClientResponseDTO createClientResponseDTO = clientsCoreFeignClient.updateClient(clientDTO.getAdminInfo().getClientId(), clientDTO);
+        Long clientId = clientsCoreFeignClient.createClient(clientDTO);
+//        StringBuilder currentUrlSB = new StringBuilder();
+//        currentUrlSB
+//                .append("http://")
+//                .append(serverAddress)
+//                .append(":")
+//                .append(serverPort)
+//                .append(createClientResponseDTO.getCurrentClientURI());
+//        createClientResponseDTO.setCurrentClientURI(currentUrlSB.toString());
+//        return createClientResponseDTO;
+        CreateClientResponseDTO createClientResponseDTO = new CreateClientResponseDTO();
+        createClientResponseDTO.setId(clientId);
         return createClientResponseDTO;
     }
 

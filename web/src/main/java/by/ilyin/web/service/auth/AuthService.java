@@ -1,7 +1,5 @@
 package by.ilyin.web.service.auth;
 
-import by.ilyin.web.dto.auth.RefreshJwtDTO;
-import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.dto.auth.SignInDTO;
 import by.ilyin.web.entity.CustomJWT;
 import by.ilyin.web.entity.CustomUser;
@@ -14,26 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import by.ilyin.web.security.JwtBlackListManager;
 import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import by.ilyin.web.security.JwtBlackListManager;
-import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.Set;
@@ -44,10 +23,6 @@ public class AuthService {
 
     private final AuthCoreFeignClient authCoreFeignClient;
     private final JwtUtil jwtUtil;
-    private final UsersCoreFeignClient usersCoreFeignClient;
-    private final CustomBindingResultValidator customBindingResultValidator;
-    private JwtBlackListManager jwtBlackListManager;
-    private JwtBlackListManager jwtBlackListManager;
     private final UsersCoreFeignClient usersCoreFeignClient;
     private final CustomBindingResultValidator customBindingResultValidator;
     private JwtBlackListManager jwtBlackListManager;

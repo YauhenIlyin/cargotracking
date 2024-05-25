@@ -10,17 +10,8 @@ import by.ilyin.web.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import by.ilyin.web.dto.UpdateUserProfileDTO;
-import by.ilyin.web.dto.UserProfileDTO;
-import by.ilyin.web.dto.mapper.CustomUserDTOMapper;
-import by.ilyin.web.entity.CustomUser;
 import by.ilyin.web.exception.http.client.IncorrectValueFormatException;
-import by.ilyin.web.feign.ProfileFeignClient;
-import by.ilyin.web.security.CustomUserDetails;
 import by.ilyin.web.util.validator.CustomBindingResultValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 @Service
@@ -30,7 +21,7 @@ public class UserProfileService {
     private final CustomUserDTOMapper customUserDTOMapper;
     private final CustomUserService customUserService;
     private final CustomBindingResultValidator bindingResultValidator;
-    private final ProfileFeignClient profileFeignClient;
+    private final ProfileCoreFeignClient profileFeignClient;
 
     public UserProfileDTO getCurrentUserProfile() {
         CustomUser customUser = getCurrentCustomUser();
@@ -55,7 +46,7 @@ public class UserProfileService {
         profileFeignClient.changePassword(changePassProfileDTO.getNewPassword(), getCurrentCustomUser().getId());
     }
 
-    private CustomUser getCurrentCustomUser() {
+    public CustomUser getCurrentCustomUser() {
         return ((CustomUserDetails) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getCustomUser();
     }
